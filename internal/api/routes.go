@@ -9,9 +9,9 @@ var router = gin.Default()
 
 func Start() {
 	// Load Templates
-	router.LoadHTMLGlob("templates/*.html")
+	router.LoadHTMLGlob("public/templates/*.html")
 	// Load Static Files
-	router.Static("/static", "./static")
+	router.Static("/static", "public/static")
 	// Middleware
 	// Setup Routes
 	setupHomepageRoutes()
