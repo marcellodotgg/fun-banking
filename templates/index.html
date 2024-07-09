@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fun Banking | Your Online Banking Simulator</title>
+    <base href="/" />
+    <meta name="description" content="Fun Banking - TODO" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link href="/static/styles.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://unpkg.com/htmx.org@2.0.0"
+      integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="clicked">{{ template "click" . }}</div>
+    <button hx-post="/click" hx-target="#clicked">Click Me!</button>
+  </body>
+</html>
+
+{{ define "click" }} Clicked {{ .Times }} times {{ end }}
