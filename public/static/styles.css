@@ -1,8 +1,75 @@
+:root {
+  --color-default: #222;
+  --color-info: hsl(120, 20%, 82%);
+  --pill-rounded: 20px;
+  --pill-padding: 10px 20px;
+  --card-padding: 20px;
+}
+
+:disabled {
+  cursor: not-allowed;
+}
+
 html,
 body {
   height: 100%;
+  color: var(--color-default);
+  background: hsl(120, 20%, 93%);
+}
+
+nav {
+  background: hsl(120, 20%, 93%);
 }
 
 footer {
+  color: hsl(120, 20%, 25%);
   margin-top: auto;
+  border-top: 1px solid hsl(120, 20%, 85%);
+  background: hsl(120, 20%, 90%);
+}
+
+/** Transitions */
+a,
+button {
+  transition: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+  cursor: pointer;
+}
+
+/** Utilities */
+.pill {
+  padding: var(--pill-padding);
+  border-radius: var(--pill-rounded);
+}
+
+/* Custom Components */
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: var(--pill-padding);
+  border-radius: var(--pill-rounded);
+}
+
+.alert-banner.info {
+  background: var(--color-info);
+}
+
+.card {
+  padding: var(--card-padding);
+  border-radius: var(--pill-rounded);
+  background: purple;
+}
+
+.card.filled {
+  background: hsl(120, 20%, 88%);
+}
+
+section#on-the-go {
+  background: hsl(120, 20%, 88%);
+}
+
+section#on-the-go .eyebrow {
+  color: hsl(120, 20%, 30%);
 }

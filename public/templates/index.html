@@ -18,11 +18,103 @@
   </head>
   <body class="flex flex-col h-full pt-[50px]">
     {{ template "app_navbar" . }}
-    <main>
-      <div class="container">
-        <div id="clicked">{{ template "click" . }}</div>
-        <button hx-post="/click" hx-target="#clicked">Click Me!</button>
+    <header
+      hx-boost="true"
+      class="container flex flex-col items-center gap-4 py-10 mb-16 text-center max-w-4xl"
+    >
+      <div class="alert-banner info mb-6">
+        Fun Banking is an online simulator. Do not enter real banking information into our website.
       </div>
+      <h1 class="text-4xl font-extrabold">Where Money Makes Cents</h1>
+      <p>
+        Empowering families, teachers and organizations to raise financial wizards through
+        interactive banking simulations.
+      </p>
+      <a href="/" class="pill bg-emerald-700 text-white font-bold hover:bg-emerald-800 w-fit">
+        Get Started Today
+      </a>
+      <div class="text-gray-500 text-xs">
+        No credit card needed &middot; Unlimited time on the free plan
+      </div>
+    </header>
+    <main class="flex flex-col gap-16 mb-16">
+      <section class="container max-w-4xl">
+        <h1 class="font-extrabold text-3xl mb-2">What is Fun Banking?</h1>
+        <p>
+          Fun Banking is an innovative online banking simulator designed to provide an engaging and
+          informative platform for individuals to learn about the intricacies of banking. It's a
+          unique educational/record keeping tool that combines the practicality of financial
+          management contained in the security of a simulation.
+        </p>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+          <li class="card filled">
+            <h2 class="font-bold text-lg">Be The Banker</h2>
+            Fun Banking tailors the banking experience to suit different age groups and learning
+            objectives. Create your bank's name and mission statement with ease from scratch.
+          </li>
+          <li class="card filled">
+            <h2 class="font-bold text-lg">Support Customers</h2>
+            Manage your customers by approving or denying their pending transactions. You have
+            complete control while they learn. You can even create transactions on their behalf. Try
+            enhancing learning through strategic decision-making and service offerings.
+          </li>
+          <li class="card filled">
+            <h2 class="font-bold text-lg">Experience Banking</h2>
+            Get hands-on experience conducting a variety of financial transactions, including
+            deposits, withdrawals, and transfers. Learn the impact of financial decisions in a
+            risk-free, simulated environment.
+          </li>
+          <li class="card filled">
+            <h2 class="font-bold text-lg">Master Banking Through Play</h2>
+            Keep the experience engaging and interactive with your customers. Although we are a
+            banking simulator; try to create real-world incentives, such as reward programs.
+          </li>
+        </ul>
+      </section>
+      <section class="container flex flex-col items-center text-center">
+        <h1 class="text-3xl font-extrabold text-emerald-900 mb-4">We Are Serving</h1>
+        <ul class="flex w-fit gap-8">
+          <li>
+            <div class="text-2xl font-extrabold">6.0K</div>
+            <div class="text-base font-semibold">Users</div>
+          </li>
+          <li>
+            <div class="text-2xl font-extrabold">9.6K</div>
+            <div class="text-base font-semibold">Customers</div>
+          </li>
+          <li>
+            <div class="text-2xl font-extrabold">5.2K</div>
+            <div class="text-base font-semibold">Banks</div>
+          </li>
+          <li>
+            <div class="text-2xl font-extrabold">64.8K</div>
+            <div class="text-base font-semibold">Transactions</div>
+          </li>
+        </ul>
+      </section>
+      <section id="on-the-go" class="py-16">
+        <div class="container max-w-4xl">
+          <p class="eyebrow font-bold text-xl">On the Move</p>
+          <h1 class="font-extrabold text-3xl mb-2">Fun Banking on the Go</h1>
+          <p>
+            We believe in learning on the go! Fun Banking is fully optimized for mobile devices,
+            allowing learners to access their virtual banks and financial simulations anytime,
+            anywhere. Whether you're on a smartphone, tablet, or computer, our platform ensures a
+            seamless learning experience across all devices. Empower financial education on your
+            terms &mdash; be it at home, in the classroom, or on the move! Try it for yourself on
+            your mobile phone, tablet, or desktop.
+          </p>
+        </div>
+      </section>
+      <section class="flex flex-col gap-8 max-w-4xl container">
+        <h1 class="text-[96px] text-emerald-900 text-center leading-none">&hearts;</h1>
+        <p class="text-center">
+          Fun Banking was born from a partnership with special education teachers, aiming to
+          cultivate a rewarding experience for students while imparting essential banking skills.
+          While initially designed for maintaining a student rewards program, the versatility of Fun
+          Banking extends far beyond, opening up limitless possibilities.
+        </p>
+      </section>
     </main>
     {{ template "app_footer" . }}
   </body>
