@@ -9,15 +9,22 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link href="/static/styles.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/static/tailwind.config.js"></script>
     <script
       src="https://unpkg.com/htmx.org@2.0.0"
       integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
       crossorigin="anonymous"
     ></script>
   </head>
-  <body>
-    <div id="clicked">{{ template "click" . }}</div>
-    <button hx-post="/click" hx-target="#clicked">Click Me!</button>
+  <body class="flex flex-col h-full pt-[50px]">
+    {{ template "app_navbar" . }}
+    <main>
+      <div class="container">
+        <div id="clicked">{{ template "click" . }}</div>
+        <button hx-post="/click" hx-target="#clicked">Click Me!</button>
+      </div>
+    </main>
+    {{ template "app_footer" . }}
   </body>
 </html>
 
