@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/bytebury/fun-banking/internal/api/handler"
+	"github.com/bytebury/fun-banking/api/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +15,7 @@ func Start() {
 	// Middleware
 	// Setup Routes
 	setupHomepageRoutes()
+	setupUserRoutes()
 	// Run the application
 	router.Run()
 }
@@ -25,4 +26,12 @@ func setupHomepageRoutes() {
 	router.
 		GET("", handler.Index).
 		POST("click", handler.Click)
+}
+
+func setupUserRoutes() {
+	handler := handler.NewUserHandler()
+
+	router.
+		Group("users").
+		GET("count", handler.Count)
 }

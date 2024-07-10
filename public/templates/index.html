@@ -33,7 +33,7 @@
       <a href="/" class="pill bg-emerald-700 text-white font-bold hover:bg-emerald-800 w-fit">
         Get Started Today
       </a>
-      <div class="text-gray-500 text-xs">
+      <div class="text-gray-600 text-xs">
         No credit card needed &middot; Unlimited time on the free plan
       </div>
     </header>
@@ -75,7 +75,7 @@
         <h1 class="text-3xl font-extrabold text-emerald-900 mb-4">We Are Serving</h1>
         <ul class="flex w-fit gap-8">
           <li>
-            <div class="text-2xl font-extrabold">6.0K</div>
+            <div class="text-2xl font-extrabold">{{ template "user_count" . }}</div>
             <div class="text-base font-semibold">Users</div>
           </li>
           <li>
@@ -120,4 +120,5 @@
   </body>
 </html>
 
-{{ define "click" }} Clicked {{ .Times }} times {{ end }}
+{{ define "click" }} Clicked {{ .Times }} times {{ end }} {{ define "user_count" }} {{
+.SiteInfo.UserCount }} {{ end }}
