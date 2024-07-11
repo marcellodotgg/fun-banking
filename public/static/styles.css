@@ -1,9 +1,9 @@
 :root {
   --color-default: #222;
-  --color-info: hsl(120, 20%, 82%);
-  --color-warning: hsl(9, 69%, 83%);
-  --color-success: hsl(133, 75%, 80%);
-  --color-danger: hsl(0, 100%, 83%);
+  --color-info: hsl(120, 20%, 88%);
+  --color-warning: hsl(9, 69%, 88%);
+  --color-success: hsl(133, 75%, 88%);
+  --color-danger: hsl(0, 100%, 90%);
   --color-ghost: hsl(120, 20%, 88%);
   --color-bg: hsl(120, 20%, 93%);
   --color-link: hsl(120, 20%, 25%);

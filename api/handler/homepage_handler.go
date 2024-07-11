@@ -36,23 +36,6 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", h)
 }
 
-func (h homepageHandler) SignIn(c *gin.Context) {
-	c.HTML(http.StatusOK, "signin.html", h)
-}
-
-func (h homepageHandler) CreateSession(c *gin.Context) {
-	c.Request.ParseForm()
-
-	emailOrUsername := c.PostForm("email_or_username")
-	password := c.PostForm("password")
-
-	if emailOrUsername == "marcello" && password == "password" {
-		c.Header("HX-Redirect", "/")
-	}
-
-	c.HTML(http.StatusUnauthorized, "index", nil)
-}
-
 func (h homepageHandler) SignUp(c *gin.Context) {
 	c.HTML(http.StatusOK, "signup.html", h)
 }

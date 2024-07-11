@@ -16,6 +16,7 @@ func Start() {
 	// Setup Routes
 	setupHomepageRoutes()
 	setupUserRoutes()
+	setupSessionRoutes()
 	// Run the application
 	router.Run()
 }
@@ -25,9 +26,15 @@ func setupHomepageRoutes() {
 
 	router.
 		GET("", handler.Homepage).
-		GET("signin", handler.SignIn).
-		POST("signin", handler.CreateSession).
 		GET("signup", handler.SignUp)
+}
+
+func setupSessionRoutes() {
+	handler := &handler.SessionHandler{}
+
+	router.
+		GET("signin", handler.SignIn).
+		POST("signin", handler.CreateSession)
 }
 
 func setupUserRoutes() {
