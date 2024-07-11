@@ -39,6 +39,8 @@ func (h userHandler) Create(c *gin.Context) {
 		}
 	}
 
+	// TODO: we need to validate the form at this point
+
 	if formData.Data["password"] != formData.Data["password_confirmation"] {
 		formData.Errors["general"] = "Passwords provided do not match"
 		formData.Errors["passwords_dont_match"] = "Passwords provided do not match"
@@ -47,10 +49,10 @@ func (h userHandler) Create(c *gin.Context) {
 	}
 
 	if err := persistence.DB.Create(&domain.User{
-		FirstName: formData.Data["first_name"],
-		LastName:  formData.Data["last_name"],
-		Email:     formData.Data["email"],
-		Username:  formData.Data["username"],
+		FirstName: strings.ToLower(formData.Data["first_name"]),
+		LastName:  strings.ToLower(formData.Data["last_name"]),
+		Email:     strings.ToLower(formData.Data["email"]),
+		Username:  strings.ToLower(formData.Data["username"]),
 		Password:  formData.Data["password"],
 	}).Error; err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") {
