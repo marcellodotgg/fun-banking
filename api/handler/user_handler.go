@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
-	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/bytebury/fun-banking/internal/service"
 	"github.com/gin-gonic/gin"
 )
@@ -39,8 +38,6 @@ func (h userHandler) Create(c *gin.Context) {
 		}
 	}
 
-	// TODO: we need to validate the form at this point
-
 	if formData.Data["password"] != formData.Data["password_confirmation"] {
 		formData.Errors["general"] = "Passwords provided do not match"
 		formData.Errors["passwords_dont_match"] = "Passwords provided do not match"
@@ -48,13 +45,14 @@ func (h userHandler) Create(c *gin.Context) {
 		return
 	}
 
-	if err := persistence.DB.Create(&domain.User{
-		FirstName: strings.ToLower(formData.Data["first_name"]),
-		LastName:  strings.ToLower(formData.Data["last_name"]),
-		Email:     strings.ToLower(formData.Data["email"]),
-		Username:  strings.ToLower(formData.Data["username"]),
+	user := domain.User{
+		FirstName: formData.Data["first_name"],
+		LastName:  formData.Data["last_name"],
+		Email:     formData.Data["email"],
+		Username:  formData.Data["username"],
 		Password:  formData.Data["password"],
-	}).Error; err != nil {
+	}
+	if err := h.userService.Create(&user); err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") {
 			formData.Errors["general"] = "An account with that username or e-mail already exists"
 		} else {
