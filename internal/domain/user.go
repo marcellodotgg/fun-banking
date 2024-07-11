@@ -9,8 +9,3 @@ type User struct {
 	Role      string `gorm:"not null; default:FREE"`
 	Password  string `json:"-" gorm:"not null"`
 }
-
-type UserSignInRequest struct {
-	UsernameOrEmail string
-	Password        string
-}

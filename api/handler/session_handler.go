@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/auth"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/gin-gonic/gin"
 )
@@ -30,11 +31,14 @@ func (h SessionHandler) CreateSession(c *gin.Context) {
 		return
 	}
 
-	if user.Password != password {
+	token, err := auth.NewUserAuth().Login(username, password)
+
+	if err != nil || token == "" {
 		formData.Errors["email_or_username"] = "Unable to sign you in. Invalid credentials."
 		c.HTML(http.StatusUnauthorized, "sessions/signin_form", formData)
 		return
 	}
 
+	c.Header("FB-Auth-Token", token)
 	c.Header("HX-Redirect", "/")
 }

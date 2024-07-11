@@ -6,5 +6,15 @@
       evt.detail.isError = false;
     }
   });
+
+  // Include tokens when they are available
+  document.body.addEventListener("htmx:configRequest", function (evt) {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      event.detail.headers["Authorization"] = `Bearer ${token}`;
+    }
+  });
+
+  // TODO - we need to figure out guards.
 </script>
 {{ end }}
