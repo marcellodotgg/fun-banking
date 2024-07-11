@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/bytebury/fun-banking/api/handler"
+	"github.com/bytebury/fun-banking/api/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,7 +26,7 @@ func setupHomepageRoutes() {
 	handler := handler.NewHomePageHandler()
 
 	router.
-		GET("", handler.Homepage)
+		GET("", middleware.Authenticated(), handler.Homepage)
 }
 
 func setupSessionRoutes() {

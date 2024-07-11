@@ -22,7 +22,7 @@ func (h SessionHandler) CreateSession(c *gin.Context) {
 	username := c.PostForm("email_or_username")
 	password := c.PostForm("password")
 
-	formData := newFormData()
+	formData := NewFormData()
 
 	var user domain.User
 	if err := persistence.DB.First(&user, "username = ? OR email = ?", username, username).Error; err != nil {
@@ -39,6 +39,6 @@ func (h SessionHandler) CreateSession(c *gin.Context) {
 		return
 	}
 
-	c.Header("FB-Auth-Token", token)
+	c.SetCookie("auth_token", token, 3_600*24*365, "/", "localhost:8080", true, true)
 	c.Header("HX-Redirect", "/")
 }

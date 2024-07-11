@@ -9,12 +9,14 @@
   <body>
     {{ template "layout/navbar" . }}
     <main class="flex flex-col items-center container my-4">
-      <section class="card bg-white border max-w-xl w-full">
-        <h1 class="font-extrabold text-xl">Sign in to Fun Banking</h1>
-        <div hx-boost="true" class="mb-4">
-          Need an account? <a class="link" href="signup">Create one</a>.
+      <section class="flex flex-col gap-4 card bg-white border max-w-xl w-full">
+        <div>
+          <h1 class="font-extrabold text-xl">Sign in to Fun Banking</h1>
+          <div hx-boost="true">Need an account? <a class="link" href="signup">Create one</a>.</div>
         </div>
-        {{ template "sessions/signin_form" . }}
+        {{ if and . .Errors.general }}
+        <div class="alert-banner bg-warning">{{ .Errors.general }}</div>
+        {{ end }} {{ template "sessions/signin_form" . }}
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}

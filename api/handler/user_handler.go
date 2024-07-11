@@ -30,7 +30,7 @@ func (h userHandler) SignUp(c *gin.Context) {
 func (h userHandler) Create(c *gin.Context) {
 	c.Request.ParseForm()
 
-	formData := newFormData()
+	formData := NewFormData()
 
 	for key, values := range c.Request.PostForm {
 		if len(values) > 0 {

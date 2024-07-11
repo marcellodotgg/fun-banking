@@ -5,7 +5,7 @@ type FormData struct {
 	Errors map[string]string
 }
 
-func newFormData() FormData {
+func NewFormData() FormData {
 	return FormData{
 		Data:   make(map[string]string),
 		Errors: make(map[string]string),
