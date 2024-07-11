@@ -1,0 +1,23 @@
+{{ define "signin.html" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | Sign in to your Account</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col items-center container my-4">
+      <section class="card bg-white border max-w-xl w-full">
+        <h1 class="font-extrabold text-xl">Sign in to Fun Banking</h1>
+        <div hx-boost="true" class="mb-4">
+          Need an account? <a class="link" href="signup">Create one</a>.
+        </div>
+        {{ template "signin_form" . }}
+      </section>
+    </main>
+    {{ template "layout/footer" . }}
+  </body>
+</html>
+{{ end }}

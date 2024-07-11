@@ -1,24 +1,38 @@
 :root {
   --color-default: #222;
   --color-info: hsl(120, 20%, 82%);
+  --color-warning: hsl(9, 69%, 83%);
+  --color-success: hsl(133, 75%, 80%);
+  --color-danger: hsl(0, 100%, 83%);
+  --color-ghost: hsl(120, 20%, 88%);
+  --color-bg: hsl(120, 20%, 93%);
+  --color-link: hsl(120, 20%, 25%);
   --pill-rounded: 20px;
   --pill-padding: 10px 20px;
   --card-padding: 20px;
 }
 
-:disabled {
+button:disabled,
+input:disabled {
   cursor: not-allowed;
 }
 
 html,
 body {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   color: var(--color-default);
-  background: hsl(120, 20%, 93%);
+  background: var(--color-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  padding-top: 50px;
 }
 
 nav {
-  background: hsl(120, 20%, 93%);
+  background: var(--color-bg);
 }
 
 footer {
@@ -28,10 +42,58 @@ footer {
   background: hsl(120, 20%, 90%);
 }
 
+a.link {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  outline-color: var(--color-link);
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  border-width: 1px;
+  padding: 8px 20px;
+  border-radius: var(--pill-rounded);
+}
+
+button[type="submit"],
+button[type="reset"] {
+  border-radius: var(--pill-rounded);
+  padding: 8px 16px;
+}
+
+.htmx-indicator {
+  display: none;
+}
+
+.htmx-toggle {
+  display: block;
+}
+
+.htmx-request .htmx-toggle {
+  display: none;
+}
+
+.htmx-request .htmx-indicator {
+  display: block;
+}
+
 /** Transitions */
 a,
 button {
-  transition: all;
+  transition-property: color, background;
   transition-duration: 300ms;
   transition-timing-function: ease;
   cursor: pointer;
@@ -44,7 +106,7 @@ button {
 }
 
 .ghost:hover {
-  background: hsl(120, 20%, 88%);
+  background: var(--color-ghost);
 }
 
 /* Custom Components */
@@ -54,10 +116,7 @@ button {
   gap: 16px;
   padding: var(--pill-padding);
   border-radius: var(--pill-rounded);
-}
-
-.alert-banner.info {
-  background: var(--color-info);
+  font-size: 0.9rem;
 }
 
 .card {
@@ -66,13 +125,5 @@ button {
 }
 
 .card.filled {
-  background: hsl(120, 20%, 88%);
-}
-
-section#on-the-go {
-  background: hsl(120, 20%, 88%);
-}
-
-section#on-the-go .eyebrow {
-  color: hsl(120, 20%, 30%);
+  background: var(--color-ghost);
 }

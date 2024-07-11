@@ -1,0 +1,23 @@
+{{ define "signup.html" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | Create an Account with Us</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col items-center container my-4">
+      <section class="card bg-white border max-w-xl w-full">
+        <h1>Create a Fun Banking Account</h1>
+        <div hx-boost="true">
+          Create an account with us for free. Already have an account? <a href="signin">Sign in</a>.
+        </div>
+        {{ template "signin_form" . }}
+      </section>
+    </main>
+    {{ template "layout/footer" . }}
+  </body>
+</html>
+{{ end }}

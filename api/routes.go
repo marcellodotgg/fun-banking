@@ -9,7 +9,7 @@ var router = gin.Default()
 
 func Start() {
 	// Load Templates
-	router.LoadHTMLGlob("public/templates/*.html")
+	router.LoadHTMLGlob("public/templates/**/*")
 	// Load Static Files
 	router.Static("/static", "public/static")
 	// Middleware
@@ -24,8 +24,10 @@ func setupHomepageRoutes() {
 	handler := handler.NewHomePageHandler()
 
 	router.
-		GET("", handler.Index).
-		POST("click", handler.Click)
+		GET("", handler.Homepage).
+		GET("signin", handler.SignIn).
+		POST("signin", handler.CreateSession).
+		GET("signup", handler.SignUp)
 }
 
 func setupUserRoutes() {

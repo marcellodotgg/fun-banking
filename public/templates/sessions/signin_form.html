@@ -1,0 +1,37 @@
+{{ define "signin_form" }}
+<form hx-post="signin" hx-disabled-elt="button, input" class="flex flex-col gap-5">
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-1">
+      <label for="username">E-mail or Username</label>
+      <input
+        id="username"
+        name="email_or_username"
+        type="text"
+        autocomplete="username"
+        placeholder="E-mail or Username"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Password"
+      />
+    </div>
+  </div>
+  <div class="flex gap-2">
+    <button
+      id="submit"
+      class="bg-emerald-700 font-extrabold text-white hover:bg-emerald-800 disabled:bg-gray-200"
+      type="submit"
+    >
+      <div class="htmx-toggle">Sign In</div>
+      <div class="htmx-indicator text-gray-600">Signing in...</div>
+    </button>
+    <button class="ghost" type="reset">Cancel</button>
+  </div>
+</form>
+{{ end }}

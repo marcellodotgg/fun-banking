@@ -1,36 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
     <title>Fun Banking | Your Online Banking Simulator</title>
-    <base href="/" />
     <meta name="description" content="Fun Banking - TODO" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link href="/static/styles.css" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/static/tailwind.config.js"></script>
-    <script
-      src="https://unpkg.com/htmx.org@2.0.0"
-      integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
-      crossorigin="anonymous"
-    ></script>
+    {{ template "layout/head" . }}
   </head>
-  <body class="flex flex-col h-full pt-[50px]">
-    {{ template "app_navbar" . }}
+  <body>
+    {{ template "layout/navbar" . }}
     <header
       hx-boost="true"
-      class="container flex flex-col items-center gap-4 py-10 mb-16 text-center max-w-4xl"
+      class="container flex flex-col items-center gap-4 pt-4 pb-10 mb-8 text-center max-w-3xl"
     >
-      <div class="alert-banner info mb-6">
+      <div class="alert-banner bg-warning mb-6">
         Fun Banking is an online simulator. Do not enter real banking information into our website.
       </div>
       <h1 class="text-4xl font-extrabold">Where Money Makes Cents</h1>
-      <p>
+      <p class="text-xl">
         Empowering families, teachers and organizations to raise financial wizards through
         interactive banking simulations.
       </p>
-      <a href="/" class="pill bg-emerald-700 text-white font-bold hover:bg-emerald-800 w-fit">
+      <a
+        href="/"
+        class="pill bg-emerald-700 text-white font-bold hover:bg-emerald-800 w-fit text-xl"
+      >
         Get Started Today
       </a>
       <div class="text-gray-600 text-xs">
@@ -46,7 +38,7 @@
           unique educational/record keeping tool that combines the practicality of financial
           management contained in the security of a simulation.
         </p>
-        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
           <li class="card filled">
             <h2 class="font-bold text-lg">Be The Banker</h2>
             Fun Banking tailors the banking experience to suit different age groups and learning
@@ -75,26 +67,26 @@
         <h1 class="text-3xl font-extrabold text-emerald-900 mb-4">We Are Serving</h1>
         <ul class="flex w-fit gap-8">
           <li>
-            <div class="text-2xl font-extrabold">{{ template "user_count" . }}</div>
+            <div class="text-2xl font-extrabold">{{ .SiteInfo.UserCount }}</div>
             <div class="text-base font-semibold">Users</div>
           </li>
           <li>
-            <div class="text-2xl font-extrabold">9.6K</div>
+            <div class="text-2xl font-extrabold">{{ .SiteInfo.CustomerCount }}</div>
             <div class="text-base font-semibold">Customers</div>
           </li>
           <li>
-            <div class="text-2xl font-extrabold">5.2K</div>
+            <div class="text-2xl font-extrabold">{{ .SiteInfo.BankCount }}</div>
             <div class="text-base font-semibold">Banks</div>
           </li>
           <li>
-            <div class="text-2xl font-extrabold">64.8K</div>
+            <div class="text-2xl font-extrabold">{{ .SiteInfo.TransactionCount }}</div>
             <div class="text-base font-semibold">Transactions</div>
           </li>
         </ul>
       </section>
-      <section id="on-the-go" class="py-16">
-        <div class="container max-w-4xl">
-          <p class="eyebrow font-bold text-xl">On the Move</p>
+      <section class="py-16 bg-ghost">
+        <div class="container max-w-3xl">
+          <p class="text-emerald-900 font-bold text-xl">On the Move</p>
           <h1 class="font-extrabold text-3xl mb-2">Fun Banking on the Go</h1>
           <p>
             We believe in learning on the go! Fun Banking is fully optimized for mobile devices,
@@ -106,7 +98,7 @@
           </p>
         </div>
       </section>
-      <section class="flex flex-col gap-8 max-w-4xl container">
+      <section class="flex flex-col gap-8 max-w-3xl container">
         <h1 class="text-[96px] text-emerald-900 text-center leading-none">&hearts;</h1>
         <p class="text-center">
           Fun Banking was born from a partnership with special education teachers, aiming to
@@ -116,9 +108,6 @@
         </p>
       </section>
     </main>
-    {{ template "app_footer" . }}
+    {{ template "layout/footer" . }}
   </body>
 </html>
-
-{{ define "click" }} Clicked {{ .Times }} times {{ end }} {{ define "user_count" }} {{
-.SiteInfo.UserCount }} {{ end }}
