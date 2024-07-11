@@ -10,7 +10,7 @@ type SessionHandler struct {
 }
 
 func (h SessionHandler) SignIn(c *gin.Context) {
-	c.HTML(http.StatusOK, "signin.html", nil)
+	c.HTML(http.StatusOK, "sessions/signin", nil)
 }
 
 func (h SessionHandler) CreateSession(c *gin.Context) {
@@ -26,5 +26,5 @@ func (h SessionHandler) CreateSession(c *gin.Context) {
 	formData := newFormData()
 	formData.Errors["email_or_username"] = "Unable to sign you in. Invalid credentials."
 
-	c.HTML(http.StatusUnauthorized, "signin_form", formData)
+	c.HTML(http.StatusUnauthorized, "sessions/signin_form", formData)
 }

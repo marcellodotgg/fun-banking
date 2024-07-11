@@ -25,8 +25,7 @@ func setupHomepageRoutes() {
 	handler := handler.NewHomePageHandler()
 
 	router.
-		GET("", handler.Homepage).
-		GET("signup", handler.SignUp)
+		GET("", handler.Homepage)
 }
 
 func setupSessionRoutes() {
@@ -40,7 +39,10 @@ func setupSessionRoutes() {
 func setupUserRoutes() {
 	handler := handler.NewUserHandler()
 
+	router.GET("signup", handler.SignUp)
+
 	router.
 		Group("users").
-		GET("count", handler.Count)
+		GET("count", handler.Count).
+		PUT("", handler.Create)
 }

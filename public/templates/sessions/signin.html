@@ -1,4 +1,4 @@
-{{ define "signin.html" }}
+{{ define "sessions/signin" }}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,10 +14,10 @@
         <div hx-boost="true" class="mb-4">
           Need an account? <a class="link" href="signup">Create one</a>.
         </div>
-        {{ template "signin_form" . }}
+        {{ template "sessions/signin_form" . }}
       </section>
     </main>
-    {{ template "layout/footer" . }} {{ template "layout/scripts" .}}
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
 </html>
 {{ end }}

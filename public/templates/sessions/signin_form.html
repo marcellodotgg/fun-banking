@@ -1,4 +1,4 @@
-{{ define "signin_form" }}
+{{ define "sessions/signin_form" }}
 <form hx-post="signin" hx-disabled-elt="button, input" class="flex flex-col gap-5">
   {{ if and . .Errors.email_or_username }}
   <div class="alert-banner bg-danger">{{ .Errors.email_or_username }}</div>

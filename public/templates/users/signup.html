@@ -1,4 +1,4 @@
-{{ define "signup.html" }}
+{{ define "users/signup" }}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,14 +10,14 @@
     {{ template "layout/navbar" . }}
     <main class="flex flex-col items-center container my-4">
       <section class="card bg-white border max-w-xl w-full">
-        <h1>Create a Fun Banking Account</h1>
-        <div hx-boost="true">
+        <h1 class="font-extrabold text-xl">Create a Fun Banking Account</h1>
+        <div hx-boost="true" class="mb-4">
           Create an account with us for free. Already have an account? <a href="signin">Sign in</a>.
         </div>
-        {{ template "signin_form" . }}
+        {{ template "users/signup_form" . }}
       </section>
     </main>
-    {{ template "layout/footer" . }}
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
 </html>
 {{ end }}

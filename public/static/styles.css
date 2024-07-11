@@ -67,6 +67,7 @@ input[type="email"] {
   border-width: 1px;
   padding: 8px 20px;
   border-radius: var(--pill-rounded);
+  width: 100%;
 }
 
 button[type="submit"],
