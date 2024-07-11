@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
@@ -39,6 +40,7 @@ func (h userHandler) Create(c *gin.Context) {
 	}
 
 	if formData.Data["password"] != formData.Data["password_confirmation"] {
+		formData.Errors["general"] = "Passwords provided do not match"
 		formData.Errors["passwords_dont_match"] = "Passwords provided do not match"
 		c.HTML(http.StatusUnprocessableEntity, "users/signup_form", formData)
 		return
@@ -49,8 +51,13 @@ func (h userHandler) Create(c *gin.Context) {
 		LastName:  formData.Data["last_name"],
 		Email:     formData.Data["email"],
 		Username:  formData.Data["username"],
+		Password:  formData.Data["password"],
 	}).Error; err != nil {
-		formData.Errors["unable_to_create"] = "Something went wrong creating your account"
+		if strings.Contains(err.Error(), "UNIQUE") {
+			formData.Errors["general"] = "An account with that username or e-mail already exists"
+		} else {
+			formData.Errors["general"] = "Something went wrong creating your account. If the problem persists, please contact us."
+		}
 		c.HTML(http.StatusUnprocessableEntity, "users/signup_form", formData)
 		return
 	}

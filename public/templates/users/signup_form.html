@@ -1,7 +1,7 @@
 {{ define "users/signup_form" }}
 <form hx-put="users" hx-disabled-elt="button, input" class="flex flex-col gap-5">
-  {{ if and . .Errors.email_or_username }}
-  <div class="alert-banner bg-danger">{{ .Errors.email_or_username }}</div>
+  {{ if and . .Errors.general }}
+  <div class="alert-banner bg-danger">{{ .Errors.general }}</div>
   {{ end }}
   <div class="flex flex-col gap-2">
     <div class="flex gap-4">
@@ -11,6 +11,7 @@
           id="first_name"
           name="first_name"
           type="text"
+          maxlength="20"
           value="{{ .Data.first_name }}"
           autocomplete="given-name"
           placeholder="First name"
@@ -24,6 +25,7 @@
           id="last_name"
           name="last_name"
           type="text"
+          maxlength="20"
           value="{{ .Data.last_name }}"
           autocomplete="family-name"
           required
