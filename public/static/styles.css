@@ -7,6 +7,7 @@
   --color-ghost: hsl(120, 20%, 88%);
   --color-bg: hsl(120, 20%, 93%);
   --color-link: hsl(120, 20%, 25%);
+  --color-outline: hsl(120, 20%, 75%);
   --pill-rounded: 20px;
   --pill-padding: 10px 20px;
   --card-padding: 20px;
@@ -52,7 +53,7 @@ button,
 input,
 textarea,
 select {
-  outline-color: var(--color-link);
+  outline-color: var(--color-outline);
 }
 
 label {
