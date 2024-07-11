@@ -4,6 +4,7 @@
   --color-warning: hsl(9, 69%, 88%);
   --color-success: hsl(133, 75%, 88%);
   --color-danger: hsl(0, 100%, 90%);
+  --color-danger-dark: hsl(0, 100%, 37%);
   --color-ghost: hsl(120, 20%, 88%);
   --color-bg: hsl(120, 20%, 93%);
   --color-link: hsl(120, 20%, 25%);
@@ -74,6 +75,12 @@ button[type="submit"],
 button[type="reset"] {
   border-radius: var(--pill-rounded);
   padding: 8px 16px;
+}
+
+form .error-message {
+  color: var(--color-danger-dark);
+  margin-top: 4px;
+  font-size: 0.9rem;
 }
 
 .htmx-indicator {
