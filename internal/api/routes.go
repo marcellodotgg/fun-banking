@@ -31,21 +31,20 @@ func setupHomepageRoutes() {
 }
 
 func setupSessionRoutes() {
-	handler := handler.NewSessionHandle()
+	handler := handler.NewSessionHandler()
 
 	router.
-		GET("signin", handler.SignIn).
-		POST("signin", handler.CreateSession).
+		GET("signin", middleware.NoAuth(), handler.SignIn).
+		POST("signin", middleware.NoAuth(), handler.CreateSession).
 		DELETE("signout", handler.DestroySession)
 }
 
 func setupUserRoutes() {
 	handler := handler.NewUserHandler()
 
-	router.GET("signup", handler.SignUp)
+	router.GET("signup", middleware.NoAuth(), handler.SignUp)
 
 	router.
 		Group("users").
-		GET("count", handler.Count).
 		PUT("", handler.Create)
 }

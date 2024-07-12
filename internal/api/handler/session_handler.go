@@ -14,7 +14,7 @@ type sessionHandler struct {
 	SignedIn bool
 }
 
-func NewSessionHandle() sessionHandler {
+func NewSessionHandler() sessionHandler {
 	return sessionHandler{
 		FormData: NewFormData(),
 		SignedIn: false,

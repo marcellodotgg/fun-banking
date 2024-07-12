@@ -1,13 +1,11 @@
 package middleware
 
 import (
-	"net/http"
-
 	"github.com/bytebury/fun-banking/internal/api/handler"
 	"github.com/gin-gonic/gin"
 )
 
-func Authenticated() gin.HandlerFunc {
+func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.GetString("id")
 
@@ -22,11 +20,7 @@ func Authenticated() gin.HandlerFunc {
 }
 
 func renderUnauthorized(c *gin.Context) {
-	formData := handler.NewFormData()
-	formData.Errors["general"] = "You need to be signed in to access that resource"
-
-	c.HTML(http.StatusUnauthorized, "sessions/signin", struct {
-		FormData handler.FormData
-		SignedIn bool
-	}{FormData: formData, SignedIn: false})
+	signInHandler := handler.NewSessionHandler()
+	signInHandler.FormData.Errors["general"] = "You need to be signed in to access that resource"
+	signInHandler.SignIn(c)
 }

@@ -23,10 +23,6 @@ func NewUserHandler() userHandler {
 	}
 }
 
-func (h userHandler) Count(c *gin.Context) {
-	c.HTML(http.StatusOK, "users_count", h.userService.Count())
-}
-
 func (h userHandler) SignUp(c *gin.Context) {
 	c.HTML(http.StatusOK, "users/signup", h)
 }
