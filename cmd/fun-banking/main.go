@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/bytebury/fun-banking/api"
+	"github.com/bytebury/fun-banking/internal/api"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/joho/godotenv"
 )

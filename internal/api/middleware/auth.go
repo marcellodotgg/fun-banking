@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/bytebury/fun-banking/api/handler"
+	"github.com/bytebury/fun-banking/internal/api/handler"
 	"github.com/bytebury/fun-banking/internal/infrastructure/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

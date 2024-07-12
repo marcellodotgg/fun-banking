@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/bytebury/fun-banking/api/handler"
-	"github.com/bytebury/fun-banking/api/middleware"
+	"github.com/bytebury/fun-banking/internal/api/handler"
+	"github.com/bytebury/fun-banking/internal/api/middleware"
 	"github.com/gin-gonic/gin"
 )
 
