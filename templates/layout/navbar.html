@@ -6,8 +6,12 @@
     </h1>
     <ul class="flex gap-2 last:-mr-3">
       <li><a class="ghost py-2 px-3 rounded-[20px]" href="/">Home</a></li>
-      <li><a class="ghost py-2 px-3 rounded-[20px]" href="/signin">Sign in</a></li>
-      <li><a class="ghost py-2 px-3 rounded-[20px]" href="/signup">Sign up</a></li>
+      {{ if .SignedIn }}
+      <li><a class="ghost py-2 px-3 rounded-[20px]" hx-delete="signout">Sign out</a></li>
+      {{ else }}
+      <li><a class="ghost py-2 px-3 rounded-[20px]" href="signin">Sign in</a></li>
+      <li><a class="ghost py-2 px-3 rounded-[20px]" href="signup">Sign up</a></li>
+      {{ end }}
     </ul>
   </div>
 </nav>

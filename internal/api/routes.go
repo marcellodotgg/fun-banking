@@ -14,6 +14,7 @@ func Start() {
 	// Load Static Files
 	router.Static("/static", "public/")
 	// Middleware
+	router.Use(middleware.Audit())
 	// Setup Routes
 	setupHomepageRoutes()
 	setupUserRoutes()
@@ -26,15 +27,16 @@ func setupHomepageRoutes() {
 	handler := handler.NewHomePageHandler()
 
 	router.
-		GET("", middleware.Authenticated(), handler.Homepage)
+		GET("", handler.Homepage)
 }
 
 func setupSessionRoutes() {
-	handler := &handler.SessionHandler{}
+	handler := handler.NewSessionHandle()
 
 	router.
 		GET("signin", handler.SignIn).
-		POST("signin", handler.CreateSession)
+		POST("signin", handler.CreateSession).
+		DELETE("signout", handler.DestroySession)
 }
 
 func setupUserRoutes() {

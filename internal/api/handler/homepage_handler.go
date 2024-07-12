@@ -17,6 +17,7 @@ type siteInfo struct {
 type homepageHandler struct {
 	SiteInfo    siteInfo
 	userService service.UserService
+	SignedIn    bool
 }
 
 func NewHomePageHandler() homepageHandler {
@@ -28,11 +29,13 @@ func NewHomePageHandler() homepageHandler {
 			TransactionCount: 0,
 		},
 		userService: service.NewUserService(),
+		SignedIn:    false,
 	}
 }
 
 func (h homepageHandler) Homepage(c *gin.Context) {
 	h.SiteInfo.UserCount = h.userService.Count()
+	h.SignedIn = c.GetString("id") != ""
 	c.HTML(http.StatusOK, "index.html", h)
 }
 

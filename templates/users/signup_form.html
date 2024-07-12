@@ -1,7 +1,7 @@
 {{ define "users/signup_form" }}
 <form hx-put="users" hx-disabled-elt="button, input" class="flex flex-col gap-5">
-  {{ if and . .Errors.general }}
-  <div class="alert-banner bg-danger">{{ .Errors.general }}</div>
+  {{ if and . .Form.Errors.general }}
+  <div class="alert-banner bg-danger">{{ .Form.Errors.general }}</div>
   {{ end }}
   <div class="flex flex-col gap-2">
     <div class="flex gap-4">
@@ -12,7 +12,7 @@
           name="first_name"
           type="text"
           maxlength="20"
-          value="{{ .Data.first_name }}"
+          value="{{ .Form.Data.first_name }}"
           autocomplete="given-name"
           placeholder="First name"
           required
@@ -26,7 +26,7 @@
           name="last_name"
           type="text"
           maxlength="20"
-          value="{{ .Data.last_name }}"
+          value="{{ .Form.Data.last_name }}"
           autocomplete="family-name"
           required
           placeholder="Last name"
@@ -39,7 +39,7 @@
         id="email"
         name="email"
         type="email"
-        value="{{ .Data.email }}"
+        value="{{ .Form.Data.email }}"
         autocomplete="email"
         placeholder="E-mail address"
         required
@@ -51,7 +51,7 @@
         id="username"
         name="username"
         type="text"
-        value="{{ .Data.username }}"
+        value="{{ .Form.Data.username }}"
         autocomplete="username"
         placeholder="Username"
         required
@@ -67,8 +67,8 @@
         placeholder="Password"
         required
       />
-      {{ if and . .Errors.passwords_dont_match }}
-      <div class="error-message">{{ .Errors.passwords_dont_match }}</div>
+      {{ if and . .Form.Errors.passwords_dont_match }}
+      <div class="error-message">{{ .Form.Errors.passwords_dont_match }}</div>
       {{ end }}
     </div>
     <div>
@@ -81,8 +81,8 @@
         placeholder="Confirm Password"
         required
       />
-      {{ if and . .Errors.passwords_dont_match }}
-      <div class="error-message">{{ .Errors.passwords_dont_match }}</div>
+      {{ if and . .Form.Errors.passwords_dont_match }}
+      <div class="error-message">{{ .Form.Errors.passwords_dont_match }}</div>
       {{ end }}
     </div>
   </div>
