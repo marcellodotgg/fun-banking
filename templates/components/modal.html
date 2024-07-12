@@ -1,0 +1,8 @@
+{{ define "modal" }}
+<div id="modal" class="modal">
+  <div class="modal-underlay"></div>
+  <div class="modal-content card mt-12 mx-4">
+    {{ if eq .ModalType "create_bank_modal" }} {{ template "create_bank_modal" . }} {{ end }}
+  </div>
+</div>
+{{ end }}

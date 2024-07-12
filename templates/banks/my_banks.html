@@ -1,0 +1,15 @@
+{{ define "my_banks" }} {{ if .Banks }}
+<ul class="flex flex-col gap-1 overflow-none">
+  {{ range .Banks }}
+  <li class="flex items-center gap-1">
+    <img
+      class="size-6 rounded-full border p-0.5"
+      src="https://avatars.githubusercontent.com/u/104793781?v=4"
+    />
+    <a href="#" class="link truncate">{{ .User.Username }}/{{ .Slug }}</a>
+  </li>
+  {{ end }}
+</ul>
+{{ else }}
+<div class="text-gray-600">It seems like you don't have any banks yet.</div>
+{{ end }} {{ end }}

@@ -15,13 +15,16 @@
             <div class="flex items-center justify-between">
               <h1 class="font-extrabold">Banks</h1>
               <button
+                hx-get="banks/modal-create"
+                hx-target="body"
+                hx-swap="beforeend"
                 class="px-3 py-1.5 text-sm bg-emerald-700 font-bold text-white hover:bg-emerald-800 rounded-[20px]"
               >
                 Create a Bank
               </button>
             </div>
-            <ul class="text-sm">
-              <li>Lazy Load this ISH</li>
+            <ul hx-get="banks" hx-trigger="load" class="text-sm">
+              Loading banks...
             </ul>
           </div>
         </aside>

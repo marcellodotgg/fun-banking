@@ -1,7 +1,7 @@
 package domain
 
 type User struct {
-	audit
+	Audit
 	Username  string `gorm:"unique; not null"`
 	Email     string `gorm:"unique; not null"`
 	FirstName string `gorm:"not null; size:20"`

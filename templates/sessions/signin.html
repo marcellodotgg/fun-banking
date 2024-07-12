@@ -20,19 +20,6 @@
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
-    <script>
-      document.addEventListener("htmx:afterRequest", (event) => {
-        const lastButtonClicked = event.target["htmx-internal-data"].lastButtonClicked;
-
-        if (lastButtonClicked && lastButtonClicked.id === "submit") {
-          const authToken = event.detail.xhr.getResponseHeader("FB-Auth-Token");
-
-          if (authToken) {
-            localStorage.setItem("authToken", authToken);
-          }
-        }
-      });
-    </script>
   </body>
 </html>
 {{ end }}

@@ -19,6 +19,7 @@ func Start() {
 	setupHomepageRoutes()
 	setupUserRoutes()
 	setupSessionRoutes()
+	setupBankRoutes()
 	// Run the application
 	router.Run()
 }
@@ -47,4 +48,14 @@ func setupUserRoutes() {
 	router.
 		Group("users").
 		PUT("", handler.Create)
+}
+
+func setupBankRoutes() {
+	handler := handler.NewBankHandler()
+
+	router.
+		Group("banks").
+		GET("", middleware.Auth(), handler.MyBanks).
+		GET("modal-create", middleware.Auth(), handler.CreateModal).
+		PUT("", middleware.Auth(), handler.CreateBank)
 }

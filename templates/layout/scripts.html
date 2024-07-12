@@ -7,4 +7,19 @@
     }
   });
 </script>
+
+<script>
+  /** Closes the current modal on the screen */
+  function closeModal(evt) {
+    const modal = document.getElementById("modal");
+
+    modal.classList.add("closing");
+
+    modal.addEventListener("animationend", function handleAnimationEnd() {
+      modal.classList.remove("closing");
+      modal.remove();
+      modal.removeEventListener("animationend", handleAnimationEnd);
+    });
+  }
+</script>
 {{ end }}
