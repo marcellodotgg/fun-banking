@@ -44,6 +44,7 @@ footer {
   background: hsl(120, 20%, 90%);
 }
 
+button.link,
 a.link {
   color: var(--color-link);
   text-decoration: underline;
@@ -135,4 +136,9 @@ button {
 
 .card.filled {
   background: var(--color-ghost);
+}
+
+.card.outlined {
+  background: white;
+  border-width: 1px;
 }

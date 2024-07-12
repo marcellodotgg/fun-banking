@@ -36,7 +36,16 @@ func NewHomePageHandler() homepageHandler {
 func (h homepageHandler) Homepage(c *gin.Context) {
 	h.SiteInfo.UserCount = h.userService.Count()
 	h.SignedIn = c.GetString("id") != ""
-	c.HTML(http.StatusOK, "index.html", h)
+
+	if h.SignedIn {
+		h.Dashboard(c)
+	} else {
+		c.HTML(http.StatusOK, "index.html", h)
+	}
+}
+
+func (h homepageHandler) Dashboard(c *gin.Context) {
+	c.HTML(http.StatusOK, "dashboard", h)
 }
 
 func (h homepageHandler) SignUp(c *gin.Context) {

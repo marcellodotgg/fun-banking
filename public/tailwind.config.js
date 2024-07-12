@@ -15,6 +15,13 @@ tailwind.config = {
     },
     container: {
       center: true,
+      screens: {
+        sm: "100%",
+        md: "100%",
+        lg: "100%",
+        xl: "1080px",
+        "2xl": "1080px",
+      },
       padding: {
         DEFAULT: "1rem",
         xl: "2rem",

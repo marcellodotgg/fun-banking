@@ -1,0 +1,54 @@
+{{ define "dashboard" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | Dashboard</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="mt-2 mb-4">
+      <div class="container flex flex-col md:flex-row gap-4">
+        <aside class="shrink-0 md:w-72 w-full">
+          <div class="flex flex-col gap-4 card outlined">
+            <div class="flex items-center justify-between">
+              <h1 class="font-extrabold">Banks</h1>
+              <button
+                class="px-3 py-1.5 text-sm bg-emerald-700 font-bold text-white hover:bg-emerald-800 rounded-[20px]"
+              >
+                Create a Bank
+              </button>
+            </div>
+            <ul class="text-sm">
+              <li>Lazy Load this ISH</li>
+            </ul>
+          </div>
+        </aside>
+        <section class="flex flex-col gap-4 grow">
+          <div class="alert-banner bg-warning">
+            Welcome to Fun Banking. We recently upgraded our website. Please be sure to report any
+            bugs or general feedback via the "Send Feedback" button below.
+          </div>
+          <div class="flex flex-col gap-2 card outlined">
+            <div class="flex items-center justify-between">
+              <h1 class="text-lg font-extrabold">Dashboard</h1>
+              <a class="text-sm link" href="mailto:bytebury@gmail.com">Send Feedback</a>
+            </div>
+            <p>
+              Welcome to the Dashboard, where you'll find updates about going on in Fun Banking.
+              This includes information updates from the Fun Banking team.
+            </p>
+            <p>You can <button class="link">create a bank</button> to get started.</p>
+          </div>
+          <div class="flex flex-col gap-2 card outlined">
+            <h1 class="text-lg font-extrabold">Latest News</h1>
+            We'll include some updates from the team here. Lazy loaded, of course.
+          </div>
+        </section>
+      </div>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }}

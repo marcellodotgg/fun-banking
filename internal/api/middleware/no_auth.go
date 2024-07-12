@@ -11,7 +11,7 @@ func NoAuth() gin.HandlerFunc {
 
 		if id != "" {
 			homePageHandler := handler.NewHomePageHandler()
-			homePageHandler.Homepage(c)
+			homePageHandler.Dashboard(c)
 			c.Abort()
 			return
 		}
