@@ -42,7 +42,18 @@
               Welcome to the Dashboard, where you'll find updates about going on in Fun Banking.
               This includes information updates from the Fun Banking team.
             </p>
-            <p>You can <button class="link">create a bank</button> to get started.</p>
+            <p>
+              You can
+              <button
+                hx-get="/banks/modal-create"
+                hx-target="body"
+                hx-swap="beforeend"
+                class="link"
+              >
+                create a bank
+              </button>
+              to get started.
+            </p>
           </div>
           <div class="flex flex-col gap-2 card outlined">
             <h1 class="text-lg font-extrabold">Latest News</h1>

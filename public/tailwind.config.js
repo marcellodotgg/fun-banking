@@ -19,8 +19,8 @@ tailwind.config = {
         sm: "100%",
         md: "100%",
         lg: "100%",
-        xl: "1080px",
-        "2xl": "1080px",
+        xl: "968px",
+        "2xl": "968px",
       },
       padding: {
         DEFAULT: "1rem",
