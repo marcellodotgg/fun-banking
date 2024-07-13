@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/service"
@@ -13,7 +14,6 @@ type customerHandler struct {
 	customerService service.CustomerService
 	ModalType       string
 	Form            FormData
-	BankID          string
 }
 
 func NewCustomerHandler() customerHandler {
@@ -21,14 +21,13 @@ func NewCustomerHandler() customerHandler {
 		customerService: service.NewCustomerService(),
 		ModalType:       "create_customer_modal",
 		Form:            NewFormData(),
-		BankID:          "",
 	}
 }
 
 func (h customerHandler) OpenCreateModal(c *gin.Context) {
 	h.ModalType = "create_customer_modal"
-	h.BankID = c.Query("bank_id")
 	h.Form = NewFormData()
+	h.Form.Data["bank_id"] = c.Query("bank_id")
 	c.HTML(http.StatusOK, "modal", h)
 }
 
@@ -45,7 +44,8 @@ func (h customerHandler) CreateCustomer(c *gin.Context) {
 	bankID, err := strconv.Atoi(h.Form.Data["bank_id"])
 
 	if err != nil {
-		// TODO
+		c.HTML(http.StatusBadRequest, "create_customer_form", h)
+		return
 	}
 
 	customer := domain.Customer{
@@ -56,9 +56,17 @@ func (h customerHandler) CreateCustomer(c *gin.Context) {
 	}
 
 	if err := h.customerService.Create(&customer); err != nil {
-		// handle errors
+		if strings.Contains(err.Error(), "UNIQUE") {
+			h.Form.Errors["general"] = "A customer with that PIN already exists in this bank"
+			h.Form.Errors["pin"] = "A customer with that PIN already exists in this bank"
+		} else {
+			h.Form.Errors["general"] = "Something went wrong creating your customer"
+		}
+
+		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
+		return
 	}
 
 	// need to do that better.
-	c.Header("HX-Redirect", "/")
+	c.HTML(http.StatusOK, "bank", h)
 }
