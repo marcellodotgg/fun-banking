@@ -1,8 +1,6 @@
 package service
 
 import (
-	"strings"
-
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"golang.org/x/crypto/bcrypt"
@@ -32,13 +30,7 @@ func (s userService) Create(user *domain.User) error {
 		return err
 	}
 
-	// TODO - validations
-
 	user.Password = passwordHash
-	user.Username = strings.TrimSpace(strings.ToLower(user.Username))
-	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
-	user.FirstName = strings.TrimSpace(strings.ToLower(user.FirstName))
-	user.LastName = strings.TrimSpace(strings.ToLower(user.LastName))
 
 	return persistence.DB.Create(&user).Error
 }

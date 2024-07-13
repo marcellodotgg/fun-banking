@@ -59,7 +59,9 @@ func setupBankRoutes() {
 		GET("", middleware.Auth(), handler.MyBanks).
 		GET("modal-create", middleware.Auth(), handler.CreateModal).
 		PUT("", middleware.Auth(), handler.CreateBank).
-		GET(":username/:slug", middleware.Auth(), handler.ViewBank)
+		GET(":username/:slug", middleware.Auth(), handler.ViewBank).
+		GET("settings", middleware.Auth(), handler.Settings).
+		PATCH("", middleware.Auth(), handler.UpdateBank)
 }
 
 func setupCustomerRoutes() {

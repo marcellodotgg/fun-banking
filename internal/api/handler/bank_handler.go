@@ -37,18 +37,9 @@ func (h bankHandler) MyBanks(c *gin.Context) {
 }
 
 func (h bankHandler) CreateBank(c *gin.Context) {
-	c.Request.ParseForm()
+	h.Form = GetForm(c)
 
-	h.Form = NewFormData()
-
-	for key, values := range c.Request.PostForm {
-		if len(values) > 0 {
-			h.Form.Data[key] = values[0]
-		}
-	}
-
-	userID, err := strconv.Atoi(c.GetString("id"))
-
+	userID, err := strconv.Atoi(c.GetString("id"))\
 	if err != nil {
 		h.Form.Errors["general"] = "Bad user. Are you signed in?"
 		c.HTML(http.StatusUnprocessableEntity, "create_bank_form", h)
@@ -75,6 +66,22 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s/%s", bank.User.Username, bank.Slug))
 }
 
+func (h bankHandler) UpdateBank(c *gin.Context) {
+	h.Form = GetForm(c)
+
+	bankId := h.Form.Data["bank_id"]
+	h.Bank.Name = h.Form.Data["name"]
+	h.Bank.Description = h.Form.Data["description"]
+
+	if err := h.bankService.Update(bankId, &h.Bank); err != nil {
+		h.Form.Errors["general"] = "A bank with that name already exists"
+		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
+		return
+	}
+
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s/%s", h.Bank.User.Username, h.Bank.Slug))
+}
+
 func (h bankHandler) CreateModal(c *gin.Context) {
 	h.Form = NewFormData()
 	h.ModalType = "create_bank_modal"
@@ -84,4 +91,21 @@ func (h bankHandler) CreateModal(c *gin.Context) {
 func (h bankHandler) ViewBank(c *gin.Context) {
 	h.bankService.FindByUsernameAndSlug(c.Param("username"), c.Param("slug"), &h.Bank)
 	c.HTML(http.StatusOK, "bank", h)
+}
+
+func (h bankHandler) Settings(c *gin.Context) {
+	h.Form = NewFormData()
+	h.ModalType = "update_bank_modal"
+	bankId := c.Query("id")
+
+	if err := h.bankService.FindByID(bankId, &h.Bank); err != nil {
+		c.HTML(http.StatusNotFound, "modal", h)
+		return
+	}
+
+	h.Form.Data["name"] = h.Bank.Name
+	h.Form.Data["description"] = h.Bank.Description
+	h.Form.Data["bank_id"] = bankId
+
+	c.HTML(http.StatusOK, "modal", h)
 }
