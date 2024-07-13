@@ -20,6 +20,7 @@ func Start() {
 	setupUserRoutes()
 	setupSessionRoutes()
 	setupBankRoutes()
+	setupCustomerRoutes()
 	// Run the application
 	router.Run()
 }
@@ -59,4 +60,13 @@ func setupBankRoutes() {
 		GET("modal-create", middleware.Auth(), handler.CreateModal).
 		PUT("", middleware.Auth(), handler.CreateBank).
 		GET(":username/:slug", middleware.Auth(), handler.ViewBank)
+}
+
+func setupCustomerRoutes() {
+	handler := handler.NewCustomerHandler()
+
+	router.
+		Group("customers").
+		GET("modal-create", middleware.Auth(), handler.OpenCreateModal).
+		PUT("", middleware.Auth(), handler.CreateCustomer)
 }

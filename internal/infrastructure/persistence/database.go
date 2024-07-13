@@ -24,6 +24,7 @@ func Connect() {
 func RunMigrations() {
 	DB.AutoMigrate(&domain.User{})
 	DB.AutoMigrate(&domain.Bank{})
+	DB.AutoMigrate(&domain.Customer{})
 
 	log.Println("🟢 successfully ran the migrations")
 }

@@ -7,34 +7,19 @@
     </tr>
   </thead>
   <tbody>
+    {{ if gt (len .Bank.Customers) 0 }} {{ range .Bank.Customers }}
     <tr class="border-b hover:bg-ghost/30 hover:cursor-pointer">
       <td class="text-left py-1.5 px-2">
-        <div class="font-semibold">Marcello Sabino</div>
-        <div class="text-xs text-gray-600">PIN-1234</div>
+        <div class="font-semibold">{{ .FirstName }} {{ .LastName}}</div>
+        <div class="text-xs text-gray-600">PIN-{{ .PIN }}</div>
       </td>
       <td class="text-right px-2">$0.00</td>
     </tr>
-    <tr class="border-b hover:bg-ghost/30 hover:cursor-pointer">
-      <td class="text-left py-1.5 px-2">
-        <div class="font-semibold">Marcello Sabino</div>
-        <div class="text-xs text-gray-600">PIN-1234</div>
-      </td>
-      <td class="text-right px-2">$0.00</td>
+    {{ end }} {{ else }}
+    <tr class="border-b" colspan="2">
+      <td class="text-left py-1.5 px-2 text-gray-600">You don't have any customers yet.</td>
     </tr>
-    <tr class="border-b hover:bg-ghost/30 hover:cursor-pointer">
-      <td class="text-left py-1.5 px-2">
-        <div class="font-semibold">Marcello Sabino</div>
-        <div class="text-xs text-gray-600">PIN-1234</div>
-      </td>
-      <td class="text-right px-2">$0.00</td>
-    </tr>
-    <tr class="border-b hover:bg-ghost/30 hover:cursor-pointer">
-      <td class="text-left py-1.5 px-2">
-        <div class="font-semibold">Marcello Sabino</div>
-        <div class="text-xs text-gray-600">PIN-1234</div>
-      </td>
-      <td class="text-right px-2">$0.00</td>
-    </tr>
+    {{ end }}
   </tbody>
   <caption class="sr-only">
     List of customers belonging to the bank
