@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -15,6 +16,8 @@ type bankHandler struct {
 	Banks       []domain.Bank
 	ModalType   string
 	Form        FormData
+	Bank        domain.Bank
+	SignedIn    bool
 }
 
 func NewBankHandler() bankHandler {
@@ -23,11 +26,13 @@ func NewBankHandler() bankHandler {
 		Banks:       []domain.Bank{},
 		ModalType:   "create_bank_modal",
 		Form:        NewFormData(),
+		Bank:        domain.Bank{},
+		SignedIn:    true,
 	}
 }
 
 func (h bankHandler) MyBanks(c *gin.Context) {
-	h.Banks = h.bankService.MyBanks(c.GetString("id"))
+	h.bankService.MyBanks(c.GetString("id"), &h.Banks)
 	c.HTML(http.StatusOK, "my_banks", h)
 }
 
@@ -67,11 +72,16 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 		return
 	}
 
-	c.Header("HX-Redirect", "/")
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s/%s", bank.User.Username, bank.Slug))
 }
 
 func (h bankHandler) CreateModal(c *gin.Context) {
 	h.Form = NewFormData()
 	h.ModalType = "create_bank_modal"
 	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h bankHandler) ViewBank(c *gin.Context) {
+	h.bankService.FindByUsernameAndSlug(c.Param("username"), c.Param("slug"), &h.Bank)
+	c.HTML(http.StatusOK, "bank", h)
 }
