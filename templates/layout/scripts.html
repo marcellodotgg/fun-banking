@@ -6,11 +6,15 @@
       evt.detail.isError = false;
     }
   });
+
+  document.body.addEventListener("closeModal", function (evt) {
+    closeModal();
+  });
 </script>
 
 <script>
   /** Closes the current modal on the screen */
-  function closeModal(evt) {
+  function closeModal() {
     const modal = document.getElementById("modal");
 
     modal.classList.add("closing");
@@ -22,4 +26,5 @@
     });
   }
 </script>
+
 {{ end }}

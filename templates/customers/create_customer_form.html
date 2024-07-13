@@ -1,10 +1,5 @@
 {{ define "create_customer_form" }}
-<form
-  hx-put="/customers"
-  hx-swap="outerHTML"
-  hx-disabled-elt="button, input, textarea"
-  class="flex flex-col gap-2"
->
+<form hx-put="/customers" hx-disabled-elt="button, input, textarea" class="flex flex-col gap-2">
   {{ if .Form.Errors.general }}
   <div class="alert-banner bg-warning mb-2">{{ .Form.Errors.general }}</div>
   {{ end }}

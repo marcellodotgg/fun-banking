@@ -1,0 +1,6 @@
+{{ define "customers_oob" }}
+<div id="customers-table" hx-swap-oob="true">{{ template "customers" . }}</div>
+<div id="number-of-customers" hx-swap-oob="true">
+  <span class="font-extrabold">{{ len .Bank.Customers }}</span> customers
+</div>
+{{ end }}

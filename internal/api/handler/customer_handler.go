@@ -11,16 +11,20 @@ import (
 )
 
 type customerHandler struct {
+	bankService     service.BankService
 	customerService service.CustomerService
 	ModalType       string
 	Form            FormData
+	Bank            domain.Bank
 }
 
 func NewCustomerHandler() customerHandler {
 	return customerHandler{
+		bankService:     service.NewBankService(),
 		customerService: service.NewCustomerService(),
 		ModalType:       "create_customer_modal",
 		Form:            NewFormData(),
+		Bank:            domain.Bank{},
 	}
 }
 
@@ -67,6 +71,11 @@ func (h customerHandler) CreateCustomer(c *gin.Context) {
 		return
 	}
 
-	// need to do that better.
-	c.HTML(http.StatusOK, "bank", h)
+	if err := h.bankService.FindByID(h.Form.Data["bank_id"], &h.Bank); err != nil {
+		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
+		return
+	}
+
+	c.Header("HX-Trigger", "closeModal")
+	c.HTML(http.StatusCreated, "customers_oob", h)
 }

@@ -35,7 +35,7 @@ func (s bankService) Create(bank *domain.Bank) error {
 }
 
 func (s bankService) FindByID(id string, bank *domain.Bank) error {
-	return persistence.DB.Preload("User").First(&bank, "id = ?", id).Error
+	return persistence.DB.Preload("User").Preload("Customers").First(&bank, "id = ?", id).Error
 }
 
 func (s bankService) FindByUsernameAndSlug(username, slug string, bank *domain.Bank) error {
