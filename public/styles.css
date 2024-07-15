@@ -6,7 +6,7 @@
   --color-danger: hsl(0, 100%, 90%);
   --color-danger-dark: hsl(0, 100%, 37%);
   --color-ghost: hsl(120, 20%, 88%);
-  --color-bg: hsl(120, 20%, 93%);
+  --color-bg: hsl(120, 20%, 96%);
   --color-link: hsl(120, 20%, 25%);
   --color-outline: hsl(120, 20%, 75%);
   --pill-rounded: 20px;
@@ -66,10 +66,18 @@ label {
 
 textarea,
 input[type="text"],
+input[type="number"],
 input[type="password"],
 input[type="email"] {
   border-width: 1px;
-  padding: 8px 20px;
+  padding: 8px 15px;
+  border-radius: var(--pill-rounded);
+  width: 100%;
+}
+
+form select {
+  border-width: 1px;
+  padding: 10px;
   border-radius: var(--pill-rounded);
   width: 100%;
 }

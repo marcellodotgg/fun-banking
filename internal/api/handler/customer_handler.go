@@ -16,6 +16,7 @@ type customerHandler struct {
 	ModalType       string
 	Form            FormData
 	Bank            domain.Bank
+	Customer        domain.Customer
 }
 
 func NewCustomerHandler() customerHandler {
@@ -32,6 +33,18 @@ func (h customerHandler) OpenCreateModal(c *gin.Context) {
 	h.ModalType = "create_customer_modal"
 	h.Form = NewFormData()
 	h.Form.Data["bank_id"] = c.Query("bank_id")
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h customerHandler) OpenCustomerModal(c *gin.Context) {
+	h.ModalType = "customer_modal"
+	h.Form = NewFormData()
+	h.Form.Data["customer_id"] = c.Query("customer_id")
+
+	if err := h.customerService.FindByID(h.Form.Data["customer_id"], &h.Customer); err != nil {
+		// TODO handle the error
+	}
+
 	c.HTML(http.StatusOK, "modal", h)
 }
 

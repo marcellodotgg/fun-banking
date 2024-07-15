@@ -70,5 +70,6 @@ func setupCustomerRoutes() {
 	router.
 		Group("customers").
 		GET("modal-create", middleware.Auth(), handler.OpenCreateModal).
+		GET("modal-customer", middleware.Auth(), handler.OpenCustomerModal).
 		PUT("", middleware.Auth(), handler.CreateCustomer)
 }
