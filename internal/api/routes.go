@@ -21,6 +21,7 @@ func Start() {
 	setupSessionRoutes()
 	setupBankRoutes()
 	setupCustomerRoutes()
+	setupAccountRoutes()
 	// Run the application
 	router.Run()
 }
@@ -73,4 +74,12 @@ func setupCustomerRoutes() {
 		GET("modal-customer", middleware.Auth(), handler.OpenCustomerModal).
 		GET(":id", middleware.Auth(), handler.GetCustomer).
 		PUT("", middleware.Auth(), handler.CreateCustomer)
+}
+
+func setupAccountRoutes() {
+	handler := handler.NewAccountHandler()
+
+	router.
+		Group("accounts").
+		GET(":id", middleware.Auth(), handler.Get)
 }

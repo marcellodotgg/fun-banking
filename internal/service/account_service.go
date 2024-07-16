@@ -6,6 +6,7 @@ import (
 )
 
 type AccountService interface {
+	FindByID(id string, account *domain.Account) error
 	Create(account *domain.Account) error
 }
 
@@ -13,6 +14,10 @@ type accountService struct{}
 
 func NewAccountService() AccountService {
 	return accountService{}
+}
+
+func (as accountService) FindByID(id string, account *domain.Account) error {
+	return persistence.DB.Preload("Customer").First(&account, "id = ?", id).Error
 }
 
 func (as accountService) Create(account *domain.Account) error {

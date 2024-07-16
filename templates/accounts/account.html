@@ -1,0 +1,15 @@
+{{ define "account" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | {{ .Account.Customer.FirstName}}'s {{ .Account.Name }}</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col gap-4 container mt-2 mb-4">Nice this works!</main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }}
