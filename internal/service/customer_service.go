@@ -20,5 +20,5 @@ func (s customerService) Create(customer *domain.Customer) error {
 	return persistence.DB.Create(&customer).Error
 }
 func (s customerService) FindByID(id string, customer *domain.Customer) error {
-	return persistence.DB.First(&customer, "id = ?", id).Error
+	return persistence.DB.Preload("Bank.User").First(&customer, "id = ?", id).Error
 }
