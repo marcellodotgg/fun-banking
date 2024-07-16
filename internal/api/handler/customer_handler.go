@@ -55,7 +55,6 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 
 	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
 		// TODO handle the error
-
 	}
 
 	c.HTML(http.StatusOK, "customer", h)

@@ -12,7 +12,8 @@ type Customer struct {
 	LastName  string `gorm:"not null"`
 	PIN       string `gorm:"uniqueIndex:idx_bank_pin; not null"`
 	Bank      Bank   `gorm:"foreignKey:BankID; constraint:OnDelete:CASCADE"`
-	BankID    uint   `gorm:"not null; uniqueIndex:idx_bank_pin; not null"`
+	BankID    uint   `gorm:"not null; uniqueIndex:idx_bank_pin;"`
+	Accounts  []Account
 }
 
 func (c *Customer) BeforeCreate(tx *gorm.DB) error {
