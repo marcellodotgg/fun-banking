@@ -60,7 +60,7 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 	}
 
 	for _, account := range h.Customer.Accounts {
-		h.NetWorth += account.CurrentBalance
+		h.NetWorth += account.Balance
 	}
 
 	c.HTML(http.StatusOK, "customer", h)

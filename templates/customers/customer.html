@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Fun Banking | {{ .Customer.FirstName }} {{ .Customer.LastName }}</title>
+    <title>Fun Banking | {{ .Customer.FullName }}</title>
     <meta name="description" content="Fun Banking - TODO" />
     {{ template "layout/head" . }}
   </head>
@@ -10,9 +10,7 @@
     {{ template "layout/navbar" . }}
     <main class="flex flex-col gap-4 container mt-2 mb-4">
       <section class="card outlined flex flex-col gap-2">
-        <h1 class="font-extrabold text-2xl leading-1">
-          {{ .Customer.FirstName }} {{ .Customer.LastName }}
-        </h1>
+        <h1 class="font-extrabold text-2xl leading-1">{{ .Customer.FullName }}</h1>
         <div class="flex items-center gap-2 text-sm flex-wrap">
           <div class="flex items-center gap-1 rounded-[20px] px-3 py-1 bg-ghost">
             <svg
