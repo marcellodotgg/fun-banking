@@ -9,8 +9,8 @@ cost down so that we can be in business; thus the "boring" architecture.
 1. Create your `.env`
 
 ```.env
-TEMPLATES_PATH=templates
 DATABASE_URL=fun_banking.db
+JWT_SECRET=something_secret
 ```
 
 # Local Environment
@@ -31,4 +31,12 @@ Now, you can just run the following command and your server will automatically l
 
 ```shell
 air
+```
+
+# Deployment
+
+Deployment is as easy as running the docker file via the `deploy.sh` script
+
+```shell
+./deploy.sh
 ```
