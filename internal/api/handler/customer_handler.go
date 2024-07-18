@@ -17,7 +17,6 @@ type customerHandler struct {
 	Form            FormData
 	Bank            domain.Bank
 	Customer        domain.Customer
-	NetWorth        float64
 	SignedIn        bool
 }
 
@@ -28,7 +27,6 @@ func NewCustomerHandler() customerHandler {
 		ModalType:       "create_customer_modal",
 		Form:            NewFormData(),
 		Bank:            domain.Bank{},
-		NetWorth:        0,
 		SignedIn:        true,
 	}
 }
@@ -40,27 +38,11 @@ func (h customerHandler) OpenCreateModal(c *gin.Context) {
 	c.HTML(http.StatusOK, "modal", h)
 }
 
-func (h customerHandler) OpenCustomerModal(c *gin.Context) {
-	h.ModalType = "customer_modal"
-	h.Form = NewFormData()
-	h.Form.Data["customer_id"] = c.Query("customer_id")
-
-	if err := h.customerService.FindByID(h.Form.Data["customer_id"], &h.Customer); err != nil {
-		// TODO handle the error
-	}
-
-	c.HTML(http.StatusOK, "modal", h)
-}
-
 func (h customerHandler) GetCustomer(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
 		// TODO handle the error
-	}
-
-	for _, account := range h.Customer.Accounts {
-		h.NetWorth += account.Balance
 	}
 
 	c.HTML(http.StatusOK, "customer", h)

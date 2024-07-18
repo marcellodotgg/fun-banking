@@ -34,3 +34,11 @@ func (c *Customer) BeforeUpdate(tx *gorm.DB) error {
 func (c Customer) FullName() string {
 	return cases.Title(language.AmericanEnglish).String(fmt.Sprintf("%s %s", c.FirstName, c.LastName))
 }
+
+func (c Customer) NetWorth() float64 {
+	netWorth := float64(0)
+	for _, account := range c.Accounts {
+		netWorth += account.Balance
+	}
+	return netWorth
+}

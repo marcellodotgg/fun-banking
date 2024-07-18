@@ -51,6 +51,7 @@ func (s bankService) FindByUsernameAndSlug(username, slug string, bank *domain.B
 	return persistence.DB.
 		Preload("User").
 		Preload("Customers").
+		Preload("Customers.Accounts").
 		Joins("JOIN users ON users.id = banks.user_id").
 		Where("banks.slug = ? AND users.username = ?", slug, username).
 		First(&bank).Error
