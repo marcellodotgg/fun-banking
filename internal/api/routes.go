@@ -1,6 +1,9 @@
 package api
 
 import (
+	"html/template"
+	"time"
+
 	"github.com/bytebury/fun-banking/internal/api/handler"
 	"github.com/bytebury/fun-banking/internal/api/middleware"
 	"github.com/gin-gonic/gin"
@@ -9,6 +12,13 @@ import (
 var router = gin.Default()
 
 func Start() {
+	router.SetFuncMap(template.FuncMap{
+		"sub":      func(a, b int) int { return a - b },
+		"add":      func(a, b int) int { return a + b },
+		"mul":      func(a, b int) int { return a * b },
+		"mulfloat": func(a, b float64) float64 { return a * b },
+		"datetime": func(dateTime time.Time) string { return dateTime.Format("July 02, 2006 at 3:04 PM") },
+	})
 	// Load Templates
 	router.LoadHTMLGlob("templates/**/*")
 	// Load Static Files
@@ -81,7 +91,8 @@ func setupAccountRoutes() {
 
 	router.
 		Group("accounts").
-		GET(":id", middleware.Auth(), handler.Get)
+		GET(":id", middleware.Auth(), handler.Get).
+		GET(":id/transactions", middleware.Auth(), handler.GetTransactions)
 }
 
 func setupTransactionRoutes() {

@@ -19,8 +19,8 @@ func NewAccountService() AccountService {
 
 func (as accountService) FindByID(id string, account *domain.Account) error {
 	return persistence.DB.
-		Preload("Customer.Accounts").
 		Preload("Customer.Bank").
+		Preload("Customer.Accounts").
 		First(&account, "id = ?", id).Error
 }
 

@@ -1,0 +1,63 @@
+{{ define "transactions" }}
+<table class="w-full table-auto overflow-hidden">
+  <thead class="border-b-2 border-black">
+    <tr>
+      <th class="p-2 text-left">Description</th>
+      <th class="p-2 text-right"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ if gt (len .PagingInfo.Items ) 0 }} {{ range .PagingInfo.Items }}
+    <tr class="border-b hover:bg-ghost/30 hover:cursor-default">
+      <td class="text-left py-1.5 px-2">
+        <div>{{ .Description }}</div>
+        <div class="text-xs text-gray-600">{{ datetime .CreatedAt }}</div>
+      </td>
+      <td class="text-right px-2">
+        <div class="font-extrabold">
+          {{ if gt .Amount 0.0 }}
+          <span class="text-emerald-700">${{ .Amount }}</span>
+          {{ else }}
+          <span class="text-red-700">${{ mulfloat .Amount -1 }}</span>
+          {{ end }}
+        </div>
+        <div class="text-sm text-gray-600">${{ .Balance }}</div>
+      </td>
+    </tr>
+    {{ end }} {{ else }}
+    <tr class="border-b">
+      <td colspan="2" class="text-left py-1.5 px-2 text-gray-600">
+        You don't have any transactions yet.
+      </td>
+    </tr>
+    {{ end }}
+  </tbody>
+  <caption class="sr-only">
+    List of transactions belonging to this account
+  </caption>
+</table>
+{{ if gt (len .PagingInfo.Items) 0 }}
+<div class="text-sm mt-4">
+  Displaying
+  <strong> {{ .PagingInfo.DisplayRange }} </strong>
+  of <strong>{{ .PagingInfo.TotalItems }}</strong> transactions
+</div>
+{{ end }}
+<div class="mt-4">
+  {{ if .PagingInfo.HasPreviousPage }}
+  <button
+    hx-get="/accounts/1/transactions?page-number={{sub .PagingInfo.PageNumber 1}}"
+    hx-target="#transactions-list"
+  >
+    Previous
+  </button>
+  {{ end }} {{ if .PagingInfo.HasNextPage }}
+  <button
+    hx-get="/accounts/{{.AccountID}}/transactions?page-number={{add .PagingInfo.PageNumber 1}}"
+    hx-target="#transactions-list"
+  >
+    Next
+  </button>
+  {{ end }}
+</div>
+{{ end }}

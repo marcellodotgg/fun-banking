@@ -73,6 +73,22 @@
           </li>
         </ul>
       </section>
+      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-bold">
+        <button class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5">
+          Withdraw or Deposit
+        </button>
+        <button class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5">Send Money</button>
+      </section>
+      <section class="card outlined">
+        <h1 class="text-lg font-extrabold">Transactions</h1>
+        <div
+          id="transactions-list"
+          hx-get="/accounts/{{ .Account.ID }}/transactions"
+          hx-trigger="load"
+        >
+          Loading...
+        </div>
+      </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
