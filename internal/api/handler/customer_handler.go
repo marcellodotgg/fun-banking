@@ -67,14 +67,7 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 }
 
 func (h customerHandler) CreateCustomer(c *gin.Context) {
-	c.Request.ParseForm()
-
-	h.Form = NewFormData()
-	for key, values := range c.Request.PostForm {
-		if len(values) > 0 {
-			h.Form.Data[key] = values[0]
-		}
-	}
+	h.Form = GetForm(c)
 
 	bankID, err := strconv.Atoi(h.Form.Data["bank_id"])
 

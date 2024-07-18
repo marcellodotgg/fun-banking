@@ -1,6 +1,10 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"strings"
+
+	"github.com/gin-gonic/gin"
+)
 
 type FormData struct {
 	Data   map[string]string
@@ -23,7 +27,7 @@ func GetForm(c *gin.Context) FormData {
 
 	for key, values := range c.Request.PostForm {
 		if len(values) > 0 {
-			form.Data[key] = values[0]
+			form.Data[key] = strings.TrimSpace(values[0])
 		}
 	}
 

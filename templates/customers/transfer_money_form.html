@@ -1,22 +1,31 @@
 {{ define "transfer_money_form" }}
-<form class="flex flex-col gap-2">
+<form hx-put="/transactions" hx-swap="outerHTML" class="flex flex-col gap-2">
+  {{ if eq (len .Accounts) 1}}
+  <input name="account_id" value="{{ (index .Accounts 0).ID }}" type="hidden" />
+  {{ else }} Select an account {{ end }}
   <div class="flex gap-4">
     <div class="flex flex-col gap-1 w-full">
-      <label>Transfer Type</label>
-      <select required>
+      <label for="transaction_type">Transfer Type</label>
+      <select id="transaction_type" name="type" required>
         <option disabled selected value="">Select one...</option>
         <option value="deposit">Deposit</option>
         <option value="withdraw">Withdraw</option>
       </select>
     </div>
     <div class="flex flex-col gap-1 w-full">
-      <label>Amount</label>
-      <input type="number" step=".01" required />
+      <label for="transaction_amount">Amount</label>
+      <input id="transaction_amount" name="amount" type="number" step=".01" required />
     </div>
   </div>
   <div class="flex flex-col gap-1">
-    <label>Short description</label>
-    <input type="text" required placeholder="Short description for this" />
+    <label for="transaction_description">Short description</label>
+    <input
+      id="transaction_description"
+      name="description"
+      type="text"
+      required
+      placeholder="Short description for this"
+    />
   </div>
   <div class="flex gap-2 mt-2">
     <button
@@ -27,7 +36,7 @@
       <div class="htmx-toggle">Complete Transfer</div>
       <div class="htmx-indicator text-gray-600">Creating...</div>
     </button>
-    <button class="ghost" type="reset" onclick="closeModal()">Cancel</button>
+    <button class="ghost" type="reset">Reset</button>
   </div>
 </form>
 {{ end }}

@@ -22,6 +22,7 @@ func Start() {
 	setupBankRoutes()
 	setupCustomerRoutes()
 	setupAccountRoutes()
+	setupTransactionRoutes()
 	// Run the application
 	router.Run()
 }
@@ -82,4 +83,12 @@ func setupAccountRoutes() {
 	router.
 		Group("accounts").
 		GET(":id", middleware.Auth(), handler.Get)
+}
+
+func setupTransactionRoutes() {
+	handler := handler.NewTransactionHandler()
+
+	router.
+		Group("transactions").
+		PUT("", middleware.Auth(), handler.Create)
 }
