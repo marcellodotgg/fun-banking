@@ -7,7 +7,7 @@ import (
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.GetString("id")
+		id := c.GetString("user_id")
 
 		if id == "" {
 			renderUnauthorized(c)

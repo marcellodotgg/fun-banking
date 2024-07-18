@@ -17,7 +17,10 @@ func NewAccountService() AccountService {
 }
 
 func (as accountService) FindByID(id string, account *domain.Account) error {
-	return persistence.DB.Preload("Customer").Preload("Customer.Accounts").First(&account, "id = ?", id).Error
+	return persistence.DB.
+		Preload("Customer.Accounts").
+		Preload("Customer.Bank").
+		First(&account, "id = ?", id).Error
 }
 
 func (as accountService) Create(account *domain.Account) error {

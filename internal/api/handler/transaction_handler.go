@@ -47,11 +47,14 @@ func (th transactionHandler) Create(c *gin.Context) {
 		return
 	}
 
+	userID, _ := th.convertToUintPointer(c.GetString("user_id"))
+
 	transaction := domain.Transaction{
 		AccountID:   account.ID,
 		Amount:      th.getTransferAmount(amount, th.Form.Data["type"]),
 		Description: th.Form.Data["description"],
 		Status:      domain.TransactionPending,
+		UserID:      userID,
 	}
 
 	if err := th.transactionService.Create(&transaction); err != nil {
@@ -67,4 +70,14 @@ func (th transactionHandler) getTransferAmount(amount float64, transferType stri
 		return amount
 	}
 	return amount * -1
+}
+
+func (th transactionHandler) convertToUintPointer(id string) (*uint, error) {
+	returnValue := new(uint)
+	idAsInt, err := strconv.Atoi(id)
+	if err != nil {
+		return returnValue, err
+	}
+	*returnValue = uint(idAsInt)
+	return returnValue, nil
 }

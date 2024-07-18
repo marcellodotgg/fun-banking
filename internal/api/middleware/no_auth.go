@@ -7,9 +7,9 @@ import (
 
 func NoAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.GetString("id")
+		userID := c.GetString("user_id")
 
-		if id != "" {
+		if userID != "" {
 			homePageHandler := handler.NewHomePageHandler()
 			homePageHandler.Dashboard(c)
 			c.Abort()

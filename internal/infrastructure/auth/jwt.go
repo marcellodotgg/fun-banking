@@ -7,16 +7,16 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-type AuditClaims struct {
-	ID string
+type UserClaims struct {
+	UserID string
 	jwt.StandardClaims
 }
 
 type JWTService struct{}
 
-func (j *JWTService) GenerateToken(id string) (string, error) {
-	claims := AuditClaims{
-		ID: id,
+func (j *JWTService) GenerateToken(userID string) (string, error) {
+	claims := UserClaims{
+		UserID: userID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(24 * 365 * 100 * time.Hour).Unix(),
 			IssuedAt:  time.Now().Unix(),

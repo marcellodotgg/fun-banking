@@ -32,14 +32,14 @@ func NewBankHandler() bankHandler {
 }
 
 func (h bankHandler) MyBanks(c *gin.Context) {
-	h.bankService.MyBanks(c.GetString("id"), &h.Banks)
+	h.bankService.MyBanks(c.GetString("user_id"), &h.Banks)
 	c.HTML(http.StatusOK, "my_banks", h)
 }
 
 func (h bankHandler) CreateBank(c *gin.Context) {
 	h.Form = GetForm(c)
 
-	userID, err := strconv.Atoi(c.GetString("id"))
+	userID, err := strconv.Atoi(c.GetString("user_id"))
 	if err != nil {
 		h.Form.Errors["general"] = "Bad user. Are you signed in?"
 		c.HTML(http.StatusUnprocessableEntity, "create_bank_form", h)

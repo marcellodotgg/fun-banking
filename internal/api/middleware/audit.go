@@ -17,7 +17,7 @@ func Audit() gin.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(tokenStr, &auth.AuditClaims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenStr, &auth.UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("JWT_SECRET")), nil
 		})
 
@@ -26,8 +26,8 @@ func Audit() gin.HandlerFunc {
 			return
 		}
 
-		if claims, ok := token.Claims.(*auth.AuditClaims); ok && token.Valid {
-			c.Set("id", claims.ID)
+		if claims, ok := token.Claims.(*auth.UserClaims); ok && token.Valid {
+			c.Set("user_id", claims.UserID)
 			c.Next()
 		} else {
 			c.Next()
