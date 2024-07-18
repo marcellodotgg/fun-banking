@@ -8,6 +8,7 @@ import (
 type AccountService interface {
 	FindByID(id string, account *domain.Account) error
 	Create(account *domain.Account) error
+	Update(account *domain.Account) error
 }
 
 type accountService struct{}
@@ -25,4 +26,8 @@ func (as accountService) FindByID(id string, account *domain.Account) error {
 
 func (as accountService) Create(account *domain.Account) error {
 	return persistence.DB.Create(&account).Error
+}
+
+func (as accountService) Update(account *domain.Account) error {
+	return persistence.DB.Updates(&account).Error
 }

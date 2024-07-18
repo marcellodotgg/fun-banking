@@ -133,14 +133,14 @@
               Transfers you do are immediately reflected to the customer's bank account.
             </p>
           </div>
-          {{ template "transfer_money_form" .Customer }}
+          <div id="transfer-money-form">{{ template "transfer_money_form" .Customer }}</div>
         </section>
         <section class="flex flex-col gap-2 card outlined">
           <div>
             <h1 class="text-lg font-extrabold">Banking</h1>
             <p class="text-sm text-gray-600">Account(s) available for this customer.</p>
           </div>
-          {{ template "accounts" . }}
+          <div id="customer-accounts">{{ template "accounts" .Customer }}</div>
         </section>
       </div>
     </main>

@@ -14,6 +14,7 @@ type transactionHandler struct {
 	Form               FormData
 	transactionService service.TransactionService
 	accountService     service.AccountService
+	customerService    service.CustomerService
 	Customer           domain.Customer
 }
 
@@ -23,6 +24,7 @@ func NewTransactionHandler() transactionHandler {
 		Form:               NewFormData(),
 		Customer:           domain.Customer{},
 		accountService:     service.NewAccountService(),
+		customerService:    service.NewCustomerService(),
 		transactionService: service.NewTransactionService(),
 	}
 }
@@ -62,7 +64,9 @@ func (th transactionHandler) Create(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "transfer_money_form", th.Customer)
+	th.customerService.FindByID(strconv.Itoa(int(th.Customer.ID)), &th.Customer)
+
+	c.HTML(http.StatusOK, "transfer_money_form_oob", th.Customer)
 }
 
 func (th transactionHandler) getTransferAmount(amount float64, transferType string) float64 {
