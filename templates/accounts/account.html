@@ -115,6 +115,9 @@
   hx-swap="outerHTML"
   class="flex flex-col gap-2"
 >
+  {{ if .Form.Errors.general }}
+  <div class="alert-banner bg-warning mt-4">{{ .Form.Errors.general }}</div>
+  {{ end }}
   <div class="my-2 grid grid-cols-2 gap-x-4 gap-y-2">
     <div>
       <label for="type">Transfer Type</label>
@@ -126,7 +129,17 @@
     </div>
     <div>
       <label for="amount">Amount</label>
-      <input id="amount" name="amount" type="number" step=".01" required />
+      <input
+        id="amount"
+        name="amount"
+        type="number"
+        step=".01"
+        value="{{ .Form.Data.amount }}"
+        required
+      />
+      {{ if .Form.Errors.amount }}
+      <div class="error-message">{{ .Form.Errors.amount }}</div>
+      {{ end }}
     </div>
     <div class="col-span-2">
       <label for="description">Description</label>
@@ -135,8 +148,12 @@
         name="description"
         type="text"
         placeholder="Short description..."
+        value="{{ .Form.Data.description }}"
         required
       />
+      {{ if .Form.Errors.description }}
+      <div class="error-message">{{ .Form.Errors.description }}</div>
+      {{ end }}
     </div>
   </div>
   <div class="flex gap-2 mt-2">

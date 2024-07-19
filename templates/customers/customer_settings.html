@@ -17,6 +17,8 @@
 >
   {{ if .Form.Errors.general }}
   <div class="alert-banner bg-warning mb-2">{{ .Form.Errors.general }}</div>
+  {{ end }} {{ if .Form.Data.success }}
+  <div class="alert-banner bg-success mb-2">{{ .Form.Data.success }}</div>
   {{ end }}
   <div class="flex flex-col gap-1">
     <label for="first_name">First name</label>

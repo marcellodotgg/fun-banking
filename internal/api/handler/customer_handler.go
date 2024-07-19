@@ -42,7 +42,8 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
-		// TODO handle the error
+		c.HTML(http.StatusNotFound, "not-found", h)
+		return
 	}
 
 	c.HTML(http.StatusOK, "customer", h)
@@ -53,9 +54,7 @@ func (h customerHandler) OpenSettings(c *gin.Context) {
 	h.ModalType = "customer_settings"
 	h.Form = NewFormData()
 
-	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
-		// TODO: handle the error
-	}
+	h.customerService.FindByID(id, &h.Customer)
 
 	h.Form.Data["first_name"] = h.Customer.FirstName
 	h.Form.Data["last_name"] = h.Customer.LastName
@@ -68,18 +67,25 @@ func (h customerHandler) Update(c *gin.Context) {
 	id := c.Param("id")
 	h.Form = GetForm(c)
 
-	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
-		// TODO: handle the error
-	}
+	h.customerService.FindByID(id, &h.Customer)
 
 	h.Customer.FirstName = h.Form.Data["first_name"]
 	h.Customer.LastName = h.Form.Data["last_name"]
 	h.Customer.PIN = h.Form.Data["pin"]
 
 	if err := h.customerService.Update(&h.Customer); err != nil {
-		// TODO: handle the error
+		if strings.Contains(err.Error(), "UNIQUE") {
+			h.Form.Errors["pin"] = "PIN is already in use by another customer"
+			c.HTML(http.StatusOK, "customer_settings_form", h)
+			return
+		}
+
+		h.Form.Errors["general"] = "Something went wrong updating your customer"
+		c.HTML(http.StatusOK, "customer_settings_form", h)
+		return
 	}
 
+	h.Form.Data["success"] = "Successfully updated the customer"
 	c.HTML(http.StatusOK, "customer_settings_oob", h)
 }
 
