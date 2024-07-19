@@ -41,7 +41,7 @@ func (s bankService) Update(id string, bank *domain.Bank) error {
 	if err := persistence.DB.Model(&oldBank).Updates(&bank).Error; err != nil {
 		return err
 	}
-	return persistence.DB.First(&bank).Error
+	return s.FindByID(id, bank)
 }
 
 func (s bankService) FindByID(id string, bank *domain.Bank) error {
