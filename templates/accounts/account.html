@@ -14,7 +14,7 @@
           <p class="font-bold text-emerald-700">
             {{ .Account.Customer.FullName }}
             <span class="text-gray-800">/</span>
-            {{ .Account.Name }}
+            <span id="account-name">{{ .Account.Name }}</span>
           </p>
           <h1 class="font-extrabold text-2xl leading-1">{{ currency .Account.Balance }}</h1>
         </div>
@@ -44,7 +44,7 @@
           <li>
             <button
               id="open-settings"
-              hx-get="/accounts/settings?id={{ .Account.ID }}"
+              hx-get="/accounts/{{ .Account.ID }}/settings"
               hx-target="body"
               hx-swap="beforeend"
               class="flex items-center gap-1 hover:text-link font-semibold"

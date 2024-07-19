@@ -14,6 +14,9 @@
     {{ if eq .ModalType "customer_settings" }} 
       {{ template "customer_settings" . }} 
     {{ end }} 
+    {{ if eq .ModalType "account_settings" }}
+      {{ template "account_settings" . }}
+    {{ end }}
   </div>
 </div>
 {{ end }}

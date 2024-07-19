@@ -96,7 +96,9 @@ func setupAccountRoutes() {
 	router.
 		Group("accounts").
 		GET(":id", middleware.Auth(), handler.Get).
-		GET(":id/transactions", middleware.Auth(), handler.GetTransactions)
+		GET(":id/transactions", middleware.Auth(), handler.GetTransactions).
+		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
+		PATCH(":id", middleware.Auth(), handler.Update)
 }
 
 func setupTransactionRoutes() {

@@ -12,6 +12,8 @@ import (
 
 type accountHandler struct {
 	SignedIn           bool
+	ModalType          string
+	Form               FormData
 	Account            domain.Account
 	accountService     service.AccountService
 	transactionService service.TransactionService
@@ -20,6 +22,8 @@ type accountHandler struct {
 func NewAccountHandler() accountHandler {
 	return accountHandler{
 		SignedIn:           true,
+		ModalType:          "",
+		Form:               NewFormData(),
 		Account:            domain.Account{},
 		accountService:     service.NewAccountService(),
 		transactionService: service.NewTransactionService(),
@@ -34,6 +38,36 @@ func (ah accountHandler) Get(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "account", ah)
+}
+
+func (ah accountHandler) OpenSettings(c *gin.Context) {
+	accountID := c.Param("id")
+	ah.Form = NewFormData()
+	ah.ModalType = "account_settings"
+
+	if err := ah.accountService.FindByID(accountID, &ah.Account); err != nil {
+		// TODO: handle error
+	}
+
+	ah.Form.Data["name"] = ah.Account.Name
+
+	c.HTML(http.StatusOK, "modal", ah)
+}
+
+func (ah accountHandler) Update(c *gin.Context) {
+	accountID := c.Param("id")
+	ah.Form = GetForm(c)
+
+	if err := ah.accountService.FindByID(accountID, &ah.Account); err != nil {
+		// TODO: handle error
+	}
+
+	ah.Account.Name = ah.Form.Data["name"]
+	if err := ah.accountService.Update(&ah.Account); err != nil {
+		// TODO: handle error
+	}
+
+	c.HTML(http.StatusOK, "account_settings_oob", ah)
 }
 
 func (ah accountHandler) GetTransactions(c *gin.Context) {
