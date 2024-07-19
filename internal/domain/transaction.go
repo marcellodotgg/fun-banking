@@ -1,5 +1,11 @@
 package domain
 
+import (
+	"errors"
+
+	"gorm.io/gorm"
+)
+
 const (
 	TransactionPending  = "PENDING"
 	TransactionApproved = "APPROVED"
@@ -16,4 +22,11 @@ type Transaction struct {
 	Account     Account `gorm:"foreignKey:AccountID; constraint:OnDelete:CASCADE"`
 	UserID      *uint   `gorm:"default:null"`
 	User        User    `gorm:"foreignKey:UserID; constraint:OnDelete:CASCADE"`
+}
+
+func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
+	if t.Amount == 0 {
+		return errors.New("amount cannot be 0")
+	}
+	return nil
 }

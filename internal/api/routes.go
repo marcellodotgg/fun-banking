@@ -98,6 +98,8 @@ func setupAccountRoutes() {
 		GET(":id", middleware.Auth(), handler.Get).
 		GET(":id/transactions", middleware.Auth(), handler.GetTransactions).
 		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
+		GET(":id/withdraw-or-deposit", middleware.Auth(), handler.OpenWithdrawOrDeposit).
+		PUT(":id/withdraw-or-deposit", middleware.Auth(), handler.WithdrawOrDeposit).
 		PATCH(":id", middleware.Auth(), handler.Update)
 }
 

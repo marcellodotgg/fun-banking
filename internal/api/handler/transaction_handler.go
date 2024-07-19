@@ -6,6 +6,7 @@ import (
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/service"
+	"github.com/bytebury/fun-banking/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -49,7 +50,7 @@ func (th transactionHandler) Create(c *gin.Context) {
 		return
 	}
 
-	userID, _ := th.convertToUintPointer(c.GetString("user_id"))
+	userID, _ := utils.ConvertToUintPointer(c.GetString("user_id"))
 
 	transaction := domain.Transaction{
 		AccountID:   account.ID,
@@ -70,18 +71,8 @@ func (th transactionHandler) Create(c *gin.Context) {
 }
 
 func (th transactionHandler) getTransferAmount(amount float64, transferType string) float64 {
-	if transferType == "deposit" {
-		return amount
+	if transferType == "withdraw" {
+		return amount * -1
 	}
-	return amount * -1
-}
-
-func (th transactionHandler) convertToUintPointer(id string) (*uint, error) {
-	returnValue := new(uint)
-	idAsInt, err := strconv.Atoi(id)
-	if err != nil {
-		return returnValue, err
-	}
-	*returnValue = uint(idAsInt)
-	return returnValue, nil
+	return amount
 }

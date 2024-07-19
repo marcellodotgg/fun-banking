@@ -7,6 +7,7 @@ import (
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/service"
+	"github.com/bytebury/fun-banking/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -52,6 +53,43 @@ func (ah accountHandler) OpenSettings(c *gin.Context) {
 	ah.Form.Data["name"] = ah.Account.Name
 
 	c.HTML(http.StatusOK, "modal", ah)
+}
+
+func (ah accountHandler) OpenWithdrawOrDeposit(c *gin.Context) {
+	accountID := c.Param("id")
+	ah.Form = NewFormData()
+	ah.ModalType = "withdraw_or_deposit_modal"
+
+	if err := ah.accountService.FindByID(accountID, &ah.Account); err != nil {
+		// TODO: handle error
+	}
+
+	c.HTML(http.StatusOK, "modal", ah)
+}
+
+func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {
+	ah.Form = GetForm(c)
+	accountID, _ := strconv.Atoi(c.Param("id"))
+	amount, _ := strconv.ParseFloat(ah.Form.Data["amount"], 64)
+	userID, _ := utils.ConvertToUintPointer(c.GetString("user_id"))
+
+	if ah.Form.Data["type"] == "withdraw" {
+		amount = amount * -1
+	}
+
+	transaction := domain.Transaction{
+		AccountID:   uint(accountID),
+		Amount:      amount,
+		Description: ah.Form.Data["description"],
+		UserID:      userID,
+	}
+
+	if err := ah.transactionService.Create(&transaction); err != nil {
+		// TODO: handle the error
+	}
+
+	c.Header("HX-Trigger", "closeModal")
+	c.HTML(http.StatusOK, "account", ah)
 }
 
 func (ah accountHandler) Update(c *gin.Context) {

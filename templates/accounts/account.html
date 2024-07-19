@@ -74,7 +74,12 @@
         </ul>
       </section>
       <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-bold">
-        <button class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5">
+        <button
+          hx-get="/accounts/{{.Account.ID}}/withdraw-or-deposit"
+          hx-target="body"
+          hx-swap="beforeend"
+          class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5"
+        >
           Withdraw or Deposit
         </button>
         <button class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5">Send Money</button>
@@ -97,4 +102,51 @@
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
 </html>
+{{ end }} {{ define "withdraw_or_deposit_modal" }}
+<div>
+  <h1 class="text-lg font-extrabold">Withdraw or Deposit</h1>
+  <p class="text-gray-600 text-sm">Create a withdraw or deposit to {{ .Account.Name }}.</p>
+</div>
+{{ template "withdraw_or_deposit_form" . }} {{ end }} {{ define "withdraw_or_deposit_form" }}
+<form
+  hx-put="/accounts/{{.Account.ID}}/withdraw-or-deposit"
+  hx-swap="outerHTML"
+  class="flex flex-col gap-2"
+>
+  <div class="my-2 grid grid-cols-2 gap-x-4 gap-y-2">
+    <div>
+      <label for="type">Transfer Type</label>
+      <select id="type" name="type" required>
+        <option disabled selected value="">Select one...</option>
+        <option value="deposit">Deposit</option>
+        <option value="withdraw">Withdraw</option>
+      </select>
+    </div>
+    <div>
+      <label for="amount">Amount</label>
+      <input id="amount" name="amount" type="number" step=".01" required />
+    </div>
+    <div class="col-span-2">
+      <label for="description">Description</label>
+      <input
+        id="description"
+        name="description"
+        type="text"
+        placeholder="Short description..."
+        required
+      />
+    </div>
+  </div>
+  <div class="flex gap-2 mt-2">
+    <button
+      id="submit"
+      class="bg-emerald-700 font-extrabold text-white hover:bg-emerald-800 disabled:bg-gray-200"
+      type="submit"
+    >
+      <div class="htmx-toggle">Submit</div>
+      <div class="htmx-indicator text-gray-600">Submitting...</div>
+    </button>
+    <button class="ghost" type="reset" onclick="closeModal()">Cancel</button>
+  </div>
+</form>
 {{ end }}

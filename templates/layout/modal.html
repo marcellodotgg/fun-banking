@@ -17,6 +17,9 @@
     {{ if eq .ModalType "account_settings" }}
       {{ template "account_settings" . }}
     {{ end }}
+    {{ if eq .ModalType "withdraw_or_deposit_modal" }}
+    {{ template "withdraw_or_deposit_modal" . }}
+  {{ end }} 
   </div>
 </div>
 {{ end }}
