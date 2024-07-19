@@ -86,7 +86,9 @@
       </section>
       <section class="flex flex-col gap-4 card outlined">
         <h1 class="text-lg font-extrabold">This Month</h1>
-        {{ template "chart_deposits_vs_withdrawals" . }}
+        <div hx-get="/accounts/{{ .Account.ID }}/cash-flow" hx-trigger="load">
+          Crunching the latest data...
+        </div>
       </section>
       <section class="card outlined">
         <h1 class="text-lg font-extrabold">Transactions</h1>

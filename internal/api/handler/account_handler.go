@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -65,6 +66,16 @@ func (ah accountHandler) OpenWithdrawOrDeposit(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "modal", ah)
+}
+
+func (ah accountHandler) CashFlow(c *gin.Context) {
+	var cashflow service.Cashflow
+
+	if err := ah.transactionService.CashflowByAccount(c.Param("id"), &cashflow); err != nil {
+		fmt.Println(err)
+	}
+
+	c.HTML(http.StatusOK, "chart_deposits_vs_withdrawals", cashflow)
 }
 
 func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {

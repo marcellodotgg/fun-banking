@@ -8,13 +8,16 @@
   referrerpolicy="no-referrer"
 ></script>
 <script>
-  window.addEventListener("load", function () {
+  document.body.addEventListener("htmx:afterSettle", function () {
+    const deposits = {{ .Deposits }};
+    const withdrawals = Math.abs({{ .Withdrawals }});
+
     const data = {
       labels: ["Deposits", "Withdrawals"],
       datasets: [
         {
           label: "",
-          data: [500, 200],
+          data: [deposits, withdrawals],
           backgroundColor: ["hsla(133, 75%, 25%, 0.5)", "hsla(0, 100%, 50%, 0.5)"],
         },
       ],
