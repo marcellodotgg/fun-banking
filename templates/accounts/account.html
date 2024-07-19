@@ -79,6 +79,10 @@
         </button>
         <button class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5">Send Money</button>
       </section>
+      <section class="flex flex-col gap-4 card outlined">
+        <h1 class="text-lg font-extrabold">This Month</h1>
+        {{ template "chart_deposits_vs_withdrawals" . }}
+      </section>
       <section class="card outlined">
         <h1 class="text-lg font-extrabold">Transactions</h1>
         <div

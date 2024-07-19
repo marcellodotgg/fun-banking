@@ -38,7 +38,7 @@ func (ah accountHandler) Get(c *gin.Context) {
 
 func (ah accountHandler) GetTransactions(c *gin.Context) {
 	accountID := c.Param("id")
-	pageNumber, _ := strconv.Atoi(c.Query("page-number"))
+	pageNumber, _ := strconv.Atoi(c.Query("page"))
 
 	if pageNumber < 1 {
 		pageNumber = 1

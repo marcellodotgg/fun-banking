@@ -46,14 +46,14 @@
 <div class="mt-4">
   {{ if .PagingInfo.HasPreviousPage }}
   <button
-    hx-get="/accounts/1/transactions?page-number={{sub .PagingInfo.PageNumber 1}}"
+    hx-get="/accounts/1/transactions?page={{sub .PagingInfo.PageNumber 1}}"
     hx-target="#transactions-list"
   >
     Previous
   </button>
   {{ end }} {{ if .PagingInfo.HasNextPage }}
   <button
-    hx-get="/accounts/{{.AccountID}}/transactions?page-number={{add .PagingInfo.PageNumber 1}}"
+    hx-get="/accounts/{{.AccountID}}/transactions?page={{add .PagingInfo.PageNumber 1}}"
     hx-target="#transactions-list"
   >
     Next
