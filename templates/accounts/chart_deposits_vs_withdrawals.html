@@ -9,6 +9,21 @@
 ></script>
 <script>
   document.body.addEventListener("htmx:afterSettle", function () {
+    waitForChartJSThenLoad();
+  });
+
+  function waitForChartJSThenLoad() {
+    const interval = setInterval(() => {
+      try {
+        if (Chart) {
+        clearInterval(interval);
+          loadChart();
+        }
+      } catch {}
+    }, 100);
+  }
+
+  function loadChart() {
     const deposits = {{ .Deposits }};
     const withdrawals = Math.abs({{ .Withdrawals }});
 
@@ -24,6 +39,6 @@
     };
     const config = { type: "bar", data, options: { plugins: { legend: { display: false } } } };
     new Chart(document.getElementById("deposits-versus-withdrawals").getContext("2d"), config);
-  });
+  }
 </script>
 {{ end }}
