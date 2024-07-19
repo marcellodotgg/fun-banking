@@ -1,0 +1,81 @@
+{{ define "customer_settings" }}
+<div class="flex flex-col gap-4">
+  <div>
+    <h1 class="text-xl font-extrabold">Update {{ .Customer.FullName }}</h1>
+    <p class="text-gray-600 text-sm">
+      You can update certain things about your customer. Like their name and PIN.
+    </p>
+  </div>
+  <div id="customer-settings-form">{{ template "customer_settings_form" . }}</div>
+</div>
+{{ end }} {{ define "customer_settings_form" }}
+<form
+  hx-patch="/customers/{{.Customer.ID}}"
+  hx-swap="outerHTML"
+  hx-disabled-elt="button, input, textarea"
+  class="flex flex-col gap-2"
+>
+  {{ if .Form.Errors.general }}
+  <div class="alert-banner bg-warning mb-2">{{ .Form.Errors.general }}</div>
+  {{ end }}
+  <div class="flex flex-col gap-1">
+    <label for="first_name">First name</label>
+    <input
+      id="first_name"
+      name="first_name"
+      type="text"
+      autocomplete="off"
+      placeholder="First name"
+      required
+      value="{{ .Form.Data.first_name }}"
+      autofocus
+    />
+  </div>
+  <div class="flex flex-col gap-1">
+    <label for="first_name">Last name</label>
+    <input
+      id="last_name"
+      name="last_name"
+      type="text"
+      autocomplete="off"
+      placeholder="Last name"
+      required
+      value="{{ .Form.Data.last_name }}"
+      autofocus
+    />
+  </div>
+  <div class="flex flex-col gap-1">
+    <label for="first_name">PIN</label>
+    <input
+      id="pin"
+      name="pin"
+      type="text"
+      autocomplete="off"
+      placeholder="PIN"
+      value="{{ .Form.Data.pin}}"
+      required
+      autofocus
+    />
+    {{ if .Form.Errors.pin }}
+    <div class="error-message">{{ .Form.Errors.pin }}</div>
+    {{ end }}
+  </div>
+  <div class="flex gap-2 mt-2">
+    <button
+      id="submit"
+      class="bg-emerald-700 font-extrabold text-white hover:bg-emerald-800 disabled:bg-gray-200"
+      type="submit"
+    >
+      <div class="htmx-toggle">Update</div>
+      <div class="htmx-indicator text-gray-600">Updating...</div>
+    </button>
+    <button class="ghost" type="reset" onclick="closeModal()">Cancel</button>
+  </div>
+</form>
+{{ end }} {{ define "customer_settings_oob" }}
+<span id="customer-name" hx-swap-oob="true">{{ .Customer.FullName }}</span>
+<span id="customer-pin" hx-swap-oob="true">{{ .Customer.PIN }}</span>
+<div id="customer-settings-form" hx-swap-oob="true" hx-swap="outerHTML">
+  {{ template "customer_settings_form" . }}
+</div>
+{{ end }}

@@ -9,11 +9,12 @@ import (
 type CustomerService interface {
 	Create(customer *domain.Customer) error
 	FindByID(id string, customer *domain.Customer) error
+	Update(customer *domain.Customer) error
 }
 
 type customerService struct{}
 
-func NewCustomerService() customerService {
+func NewCustomerService() CustomerService {
 	return customerService{}
 }
 
@@ -28,4 +29,8 @@ func (s customerService) Create(customer *domain.Customer) error {
 }
 func (s customerService) FindByID(id string, customer *domain.Customer) error {
 	return persistence.DB.Preload("Bank.User").Preload("Accounts").First(&customer, "id = ?", id).Error
+}
+
+func (s customerService) Update(customer *domain.Customer) error {
+	return persistence.DB.Updates(&customer).Error
 }

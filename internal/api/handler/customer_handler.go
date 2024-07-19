@@ -48,6 +48,41 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 	c.HTML(http.StatusOK, "customer", h)
 }
 
+func (h customerHandler) OpenSettings(c *gin.Context) {
+	id := c.Param("id")
+	h.ModalType = "customer_settings"
+	h.Form = NewFormData()
+
+	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
+		// TODO: handle the error
+	}
+
+	h.Form.Data["first_name"] = h.Customer.FirstName
+	h.Form.Data["last_name"] = h.Customer.LastName
+	h.Form.Data["pin"] = h.Customer.PIN
+
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h customerHandler) Update(c *gin.Context) {
+	id := c.Param("id")
+	h.Form = GetForm(c)
+
+	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
+		// TODO: handle the error
+	}
+
+	h.Customer.FirstName = h.Form.Data["first_name"]
+	h.Customer.LastName = h.Form.Data["last_name"]
+	h.Customer.PIN = h.Form.Data["pin"]
+
+	if err := h.customerService.Update(&h.Customer); err != nil {
+		// TODO: handle the error
+	}
+
+	c.HTML(http.StatusOK, "customer_settings_oob", h)
+}
+
 func (h customerHandler) CreateCustomer(c *gin.Context) {
 	h.Form = GetForm(c)
 

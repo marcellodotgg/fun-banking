@@ -11,6 +11,9 @@
     {{ if eq .ModalType "update_bank_modal" }} 
       {{ template "update_bank_modal" . }} 
     {{ end }}
+    {{ if eq .ModalType "customer_settings" }} 
+      {{ template "customer_settings" . }} 
+    {{ end }} 
   </div>
 </div>
 {{ end }}

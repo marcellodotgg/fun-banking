@@ -85,6 +85,8 @@ func setupCustomerRoutes() {
 		Group("customers").
 		GET("modal-create", middleware.Auth(), handler.OpenCreateModal).
 		GET(":id", middleware.Auth(), handler.GetCustomer).
+		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
+		PATCH(":id", middleware.Auth(), handler.Update).
 		PUT("", middleware.Auth(), handler.CreateCustomer)
 }
 
