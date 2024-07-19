@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
+	"gorm.io/gorm"
 )
 
 type BankService interface {
@@ -44,13 +45,20 @@ func (s bankService) Update(id string, bank *domain.Bank) error {
 }
 
 func (s bankService) FindByID(id string, bank *domain.Bank) error {
-	return persistence.DB.Preload("User").Preload("Customers").First(&bank, "id = ?", id).Error
+	return persistence.DB.
+		Preload("User").
+		Preload("Customers", func(db *gorm.DB) *gorm.DB {
+			return db.Order("first_name ASC").Order("last_name ASC")
+		}).
+		First(&bank, "id = ?", id).Error
 }
 
 func (s bankService) FindByUsernameAndSlug(username, slug string, bank *domain.Bank) error {
 	return persistence.DB.
 		Preload("User").
-		Preload("Customers").
+		Preload("Customers", func(db *gorm.DB) *gorm.DB {
+			return db.Order("first_name ASC").Order("last_name ASC")
+		}).
 		Preload("Customers.Accounts").
 		Joins("JOIN users ON users.id = banks.user_id").
 		Where("banks.slug = ? AND users.username = ?", slug, username).

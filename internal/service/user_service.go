@@ -7,7 +7,6 @@ import (
 )
 
 type UserService interface {
-	Count() int64
 	Create(user *domain.User) error
 }
 
@@ -15,12 +14,6 @@ type userService struct{}
 
 func NewUserService() UserService {
 	return userService{}
-}
-
-func (s userService) Count() int64 {
-	var count int64
-	persistence.DB.Model(&domain.User{}).Count(&count)
-	return count
 }
 
 func (s userService) Create(user *domain.User) error {

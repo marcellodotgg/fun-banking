@@ -36,7 +36,7 @@ func (ah accountHandler) Get(c *gin.Context) {
 	accountID := c.Param("id")
 
 	if err := ah.accountService.FindByID(accountID, &ah.Account); err != nil {
-		// handle error
+		// TODO: handle error
 	}
 
 	c.HTML(http.StatusOK, "account", ah)
@@ -135,11 +135,11 @@ func (ah accountHandler) GetTransactions(c *gin.Context) {
 	}
 
 	if err := ah.transactionService.FindAllByAccount(accountID, &pagingInfo.Items, pagingInfo); err != nil {
-		// handle error
+		// TODO: handle error
 	}
 
 	if err := ah.transactionService.CountAllByAccount(accountID, &pagingInfo.TotalItems); err != nil {
-		// handle error
+		// TODO: handle error
 	}
 
 	c.HTML(http.StatusOK, "transactions", struct {

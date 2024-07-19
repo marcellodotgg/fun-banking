@@ -3,7 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/bytebury/fun-banking/internal/service"
+	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,9 +16,8 @@ type siteInfo struct {
 }
 
 type homepageHandler struct {
-	SiteInfo    siteInfo
-	userService service.UserService
-	SignedIn    bool
+	SiteInfo siteInfo
+	SignedIn bool
 }
 
 func NewHomePageHandler() homepageHandler {
@@ -28,13 +28,16 @@ func NewHomePageHandler() homepageHandler {
 			BankCount:        0,
 			TransactionCount: 0,
 		},
-		userService: service.NewUserService(),
-		SignedIn:    false,
+		SignedIn: false,
 	}
 }
 
 func (h homepageHandler) Homepage(c *gin.Context) {
-	h.SiteInfo.UserCount = h.userService.Count()
+	persistence.DB.Model(&domain.User{}).Count(&h.SiteInfo.UserCount)
+	persistence.DB.Model(&domain.Customer{}).Count(&h.SiteInfo.CustomerCount)
+	persistence.DB.Model(&domain.Bank{}).Count(&h.SiteInfo.BankCount)
+	persistence.DB.Model(&domain.Transaction{}).Count(&h.SiteInfo.TransactionCount)
+
 	h.SignedIn = c.GetString("user_id") != ""
 
 	if h.SignedIn {
