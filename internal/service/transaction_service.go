@@ -73,7 +73,7 @@ func (ts transactionService) CashflowByAccount(accountID string, cashflow *Cashf
 	var deposits float64
 	if err := persistence.DB.
 		Model(&domain.Transaction{}).
-		Where("strftime('%m', created_at) = ? AND amount >= ?", month, 0).
+		Where("strftime('%m', created_at) = ? AND amount >= ? AND account_id = ?", month, 0, accountID).
 		Select("sum(amount)").
 		Row().
 		Scan(&deposits); err != nil {
@@ -83,7 +83,7 @@ func (ts transactionService) CashflowByAccount(accountID string, cashflow *Cashf
 	var withdrawals float64
 	if err := persistence.DB.
 		Model(&domain.Transaction{}).
-		Where("strftime('%m', created_at) = ? AND amount <= ?", month, 0).
+		Where("strftime('%m', created_at) = ? AND amount <= ? AND account_id = ?", month, 0, accountID).
 		Select("sum(amount)").
 		Row().
 		Scan(&withdrawals); err != nil {
