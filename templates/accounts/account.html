@@ -16,7 +16,7 @@
             <span class="text-gray-800">/</span>
             {{ .Account.Name }}
           </p>
-          <h1 class="font-extrabold text-2xl leading-1">${{ .Account.Balance }}</h1>
+          <h1 class="font-extrabold text-2xl leading-1">{{ currency .Account.Balance }}</h1>
         </div>
         <ul class="flex flex-wrap gap-2 items-center text-sm">
           <li>

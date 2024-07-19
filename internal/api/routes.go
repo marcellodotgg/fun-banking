@@ -6,6 +6,7 @@ import (
 
 	"github.com/bytebury/fun-banking/internal/api/handler"
 	"github.com/bytebury/fun-banking/internal/api/middleware"
+	"github.com/bytebury/fun-banking/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,7 @@ var router = gin.Default()
 
 func Start() {
 	router.SetFuncMap(template.FuncMap{
+		"currency": func(amount float64) string { return utils.FormatCurrency(amount) },
 		"sub":      func(a, b int) int { return a - b },
 		"add":      func(a, b int) int { return a + b },
 		"mul":      func(a, b int) int { return a * b },

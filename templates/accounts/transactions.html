@@ -16,12 +16,12 @@
       <td class="text-right px-2">
         <div class="font-extrabold">
           {{ if gt .Amount 0.0 }}
-          <span class="text-emerald-700">${{ .Amount }}</span>
+          <span class="text-emerald-700">{{ currency .Amount }}</span>
           {{ else }}
-          <span class="text-red-700">${{ mulfloat .Amount -1 }}</span>
+          <span class="text-red-700">{{ currency (mulfloat .Amount -1) }}</span>
           {{ end }}
         </div>
-        <div class="text-sm text-gray-600">${{ .Balance }}</div>
+        <div class="text-sm text-gray-600">{{ currency .Balance }}</div>
       </td>
     </tr>
     {{ end }} {{ else }}
