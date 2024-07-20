@@ -72,11 +72,12 @@ func setupBankRoutes() {
 	router.
 		Group("banks").
 		GET("", middleware.Auth(), handler.MyBanks).
-		GET("modal-create", middleware.Auth(), handler.CreateModal).
 		PUT("", middleware.Auth(), handler.CreateBank).
+		// TODO: PATCH should take in an ID
+		PATCH("", middleware.Auth(), handler.UpdateBank).
+		GET("modal-create", middleware.Auth(), handler.CreateModal).
 		GET(":username/:slug", middleware.Auth(), handler.ViewBank).
-		GET("settings", middleware.Auth(), handler.Settings).
-		PATCH("", middleware.Auth(), handler.UpdateBank)
+		GET("settings", middleware.Auth(), handler.Settings)
 }
 
 func setupCustomerRoutes() {
@@ -84,11 +85,12 @@ func setupCustomerRoutes() {
 
 	router.
 		Group("customers").
+		PUT("", middleware.Auth(), handler.CreateCustomer).
+		// TODO: move this to the banks route!
 		GET("modal-create", middleware.Auth(), handler.OpenCreateModal).
 		GET(":id", middleware.Auth(), handler.GetCustomer).
-		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
 		PATCH(":id", middleware.Auth(), handler.Update).
-		PUT("", middleware.Auth(), handler.CreateCustomer)
+		GET(":id/settings", middleware.Auth(), handler.OpenSettings)
 }
 
 func setupAccountRoutes() {
@@ -97,12 +99,12 @@ func setupAccountRoutes() {
 	router.
 		Group("accounts").
 		GET(":id", middleware.Auth(), handler.Get).
+		PATCH(":id", middleware.Auth(), handler.Update).
 		GET(":id/transactions", middleware.Auth(), handler.GetTransactions).
 		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
-		GET(":id/withdraw-or-deposit", middleware.Auth(), handler.OpenWithdrawOrDeposit).
 		GET(":id/cash-flow", middleware.Auth(), handler.CashFlow).
-		PUT(":id/withdraw-or-deposit", middleware.Auth(), handler.WithdrawOrDeposit).
-		PATCH(":id", middleware.Auth(), handler.Update)
+		GET(":id/withdraw-or-deposit", middleware.Auth(), handler.OpenWithdrawOrDeposit).
+		PUT(":id/withdraw-or-deposit", middleware.Auth(), handler.WithdrawOrDeposit)
 }
 
 func setupTransactionRoutes() {
