@@ -21,6 +21,7 @@
       name="name"
       type="search"
       autocomplete="off"
+      onblur="hideSuggestions()"
       class="focus:ring-1 ring-outline"
     />
     <div id="search-results"></div>
@@ -45,16 +46,16 @@
   </div>
 </form>
 {{ end }} {{ define "search_bank_customers" }}
-<div class="mt-2">
+<div id="search-suggestions" class="mt-2">
   <strong class="text-sm">Suggestions:</strong>
-  <ul id="search-suggestions" class="flex flex-col w-full border rounded-xl mt-2 shadow">
+  <ul class="flex flex-col w-full border rounded-xl mt-2 shadow">
     {{ if gt (len .) 0 }} {{ range . }}
     <li
       class="w-full border-b first:rounded-t-xl last:border-0 last:rounded-b-xl hover:bg-ghost/75"
     >
       <button
         type="button"
-        onclick="selectRecipient({{ .ID }}, {{ .FullName }})"
+        onmousedown="selectRecipient({{ .ID }}, {{ .FullName }})"
         class="text-left w-full py-2 px-3"
       >
         {{ .FullName }}
