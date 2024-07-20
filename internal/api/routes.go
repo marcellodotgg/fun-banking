@@ -104,7 +104,8 @@ func setupAccountRoutes() {
 		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
 		GET(":id/cash-flow", middleware.Auth(), handler.CashFlow).
 		GET(":id/withdraw-or-deposit", middleware.Auth(), handler.OpenWithdrawOrDeposit).
-		PUT(":id/withdraw-or-deposit", middleware.Auth(), handler.WithdrawOrDeposit)
+		PUT(":id/withdraw-or-deposit", middleware.Auth(), handler.WithdrawOrDeposit).
+		GET(":id/send-money", middleware.Auth(), handler.OpenSendMoneyModal)
 }
 
 func setupTransactionRoutes() {

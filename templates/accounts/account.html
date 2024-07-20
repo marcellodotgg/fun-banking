@@ -78,11 +78,18 @@
           hx-get="/accounts/{{.Account.ID}}/withdraw-or-deposit"
           hx-target="body"
           hx-swap="beforeend"
-          class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5"
+          class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-4"
         >
           Withdraw or Deposit
         </button>
-        <button class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-5">Send Money</button>
+        <button
+          hx-get="/accounts/{{.Account.ID}}/send-money"
+          hx-target="body"
+          hx-swap="beforeend"
+          class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-4"
+        >
+          Send Money
+        </button>
       </section>
       <section class="flex flex-col gap-4 card outlined">
         <h1 class="text-lg font-extrabold">This Month</h1>

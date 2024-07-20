@@ -19,7 +19,10 @@
     {{ end }}
     {{ if eq .ModalType "withdraw_or_deposit_modal" }}
     {{ template "withdraw_or_deposit_modal" . }}
-  {{ end }} 
+    {{ end }} 
+    {{ if eq .ModalType "send_money_modal" }}
+    {{ template "send_money_modal" . }}
+    {{ end }} 
   </div>
 </div>
 {{ end }}

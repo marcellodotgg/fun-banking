@@ -10,6 +10,7 @@ type CustomerService interface {
 	Create(customer *domain.Customer) error
 	FindByID(id string, customer *domain.Customer) error
 	Update(customer *domain.Customer) error
+	FindAllByBankID(bankID string, customers *[]domain.Customer) error
 }
 
 type customerService struct{}
@@ -33,4 +34,8 @@ func (s customerService) FindByID(id string, customer *domain.Customer) error {
 
 func (s customerService) Update(customer *domain.Customer) error {
 	return persistence.DB.Updates(&customer).Error
+}
+
+func (s customerService) FindAllByBankID(bankID string, customers *[]domain.Customer) error {
+	return persistence.DB.Order("first_name desc").Order("last_name desc").Find(&customers, "bank_id = ?", bankID).Error
 }

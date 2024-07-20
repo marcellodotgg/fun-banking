@@ -155,3 +155,15 @@ func (ah accountHandler) GetTransactions(c *gin.Context) {
 		AccountID  string
 	}{pagingInfo, accountID})
 }
+
+func (h accountHandler) OpenSendMoneyModal(c *gin.Context) {
+	accountID := c.Param("id")
+	h.ModalType = "send_money_modal"
+
+	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "modal", h)
+}
