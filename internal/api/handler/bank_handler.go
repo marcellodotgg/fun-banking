@@ -154,3 +154,13 @@ func (h bankHandler) OpenSettingsModal(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "modal", h)
 }
+
+func (h bankHandler) CustomerSearch(c *gin.Context) {
+	bankID := c.Param("id")
+	searchStr := c.Query("name")
+
+	var customers []domain.Customer
+	h.customerService.FindAllByBankIDAndName(bankID, searchStr, &customers)
+
+	c.HTML(http.StatusOK, "search_bank_customers", customers)
+}

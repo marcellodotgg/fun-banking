@@ -4,6 +4,7 @@ tailwind.config = {
       colors: {
         ghost: "hsl(120, 20%, 88%)",
         "ghost-dark": "hsl(120, 20%, 83%)",
+        outline: "hsl(120, 20%, 75%)",
         info: "hsl(120, 20%, 88%)",
         warning: "hsl(9, 69%, 88%)",
         danger: "hsl(0, 100%, 90%)",

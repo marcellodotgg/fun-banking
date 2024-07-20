@@ -59,6 +59,10 @@ select {
   outline-color: var(--color-outline);
 }
 
+input[type="search"] {
+  outline-color: #ffffff00;
+}
+
 label {
   font-size: 0.9rem;
   font-weight: 600;
@@ -68,6 +72,7 @@ textarea,
 input[type="text"],
 input[type="number"],
 input[type="password"],
+input[type="search"],
 input[type="email"] {
   border-width: 1px;
   padding: 8px 15px;

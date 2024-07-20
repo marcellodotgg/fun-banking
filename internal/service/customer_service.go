@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"gorm.io/gorm"
@@ -11,6 +13,7 @@ type CustomerService interface {
 	FindByID(id string, customer *domain.Customer) error
 	Update(customer *domain.Customer) error
 	FindAllByBankID(bankID string, customers *[]domain.Customer) error
+	FindAllByBankIDAndName(bankID, name string, customers *[]domain.Customer) error
 }
 
 type customerService struct{}
@@ -38,4 +41,23 @@ func (s customerService) Update(customer *domain.Customer) error {
 
 func (s customerService) FindAllByBankID(bankID string, customers *[]domain.Customer) error {
 	return persistence.DB.Order("first_name desc").Order("last_name desc").Find(&customers, "bank_id = ?", bankID).Error
+}
+
+func (s customerService) FindAllByBankIDAndName(bankID, name string, customers *[]domain.Customer) error {
+	var firstName, lastName string
+	var names = strings.Split(strings.ToLower(name), " ")
+
+	if len(names) == 1 {
+		firstName = names[0]
+	}
+
+	if len(names) >= 2 {
+		firstName = names[0]
+		lastName = names[1]
+	}
+
+	return persistence.DB.
+		Order("first_name desc").
+		Order("last_name desc").
+		Find(&customers, "bank_id = ? AND ((first_name LIKE ? AND last_name LIKE ?) OR (last_name LIKE ? AND first_name LIKE ?))", bankID, "%"+firstName+"%", "%"+lastName+"%", "%"+firstName+"%", "%"+lastName+"%").Error
 }

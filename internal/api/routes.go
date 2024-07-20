@@ -77,6 +77,7 @@ func setupBankRoutes() {
 		GET(":id", middleware.Auth(), handler.ViewBank).
 		PATCH(":id", middleware.Auth(), handler.UpdateBank).
 		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal).
+		GET(":id/customers", middleware.Auth(), handler.CustomerSearch).
 		POST(":id/create-customer", middleware.Auth(), handler.OpenCreateCustomerModal).
 		PUT(":id/create-customer", middleware.Auth(), handler.CreateCustomer)
 }
