@@ -29,6 +29,7 @@ func Start() {
 	router.Use(middleware.Audit())
 	// Setup Routes
 	setupHomepageRoutes()
+	setupActionRoutes()
 	setupUserRoutes()
 	setupSessionRoutes()
 	setupBankRoutes()
@@ -110,4 +111,11 @@ func setupTransactionRoutes() {
 	router.
 		Group("transactions").
 		PUT("", middleware.Auth(), handler.Create)
+}
+
+func setupActionRoutes() {
+	handler := handler.NewActionHandler()
+
+	router.Group("actions").
+		GET("open-app-drawer", middleware.Audit(), handler.OpenAppDrawer)
 }

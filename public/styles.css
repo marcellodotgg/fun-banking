@@ -153,6 +153,55 @@ button {
   border-width: 1px;
 }
 
+.app-drawer {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  /* Animate when opening */
+  animation-name: fadeIn;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+.app-drawer > .underlay {
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+.app-drawer > .content {
+  position: absolute;
+  left: 0;
+  width: 400px;
+  max-width: 80%;
+  height: 100dvh;
+  background: white;
+  animation-name: slideIn;
+  animation-duration: 250ms;
+  animation-timing-function: ease;
+  padding: 16px;
+}
+
+.app-drawer.closing {
+  animation-name: fadeOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
+.app-drawer.closing > .content {
+  animation-name: slideOut;
+  animation-duration: 150ms;
+  animation-timing-function: ease;
+}
+
 .modal {
   /* Underlay covers entire screen. */
   position: fixed;
@@ -227,6 +276,24 @@ button {
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -100%;
   }
 }
 

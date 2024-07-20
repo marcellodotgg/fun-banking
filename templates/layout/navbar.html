@@ -5,13 +5,16 @@
       <a class="ghost -ml-3 py-2 px-3 rounded-[20px]" href="/"> Fun Banking </a>
     </h1>
     <ul class="flex gap-2 last:-mr-3">
-      <li><a class="ghost py-2 px-3 rounded-[20px]" href="/">Home</a></li>
-      {{ if .SignedIn }}
-      <li><a class="ghost py-2 px-3 rounded-[20px]" hx-delete="signout">Sign out</a></li>
-      {{ else }}
-      <li><a class="ghost py-2 px-3 rounded-[20px]" href="signin">Sign in</a></li>
-      <li><a class="ghost py-2 px-3 rounded-[20px]" href="signup">Sign up</a></li>
-      {{ end }}
+      <li>
+        <button
+          class="ghost py-2 px-3 rounded-[20px]"
+          hx-get="/actions/open-app-drawer"
+          hx-swap="beforeend"
+          hx-target="body"
+        >
+          Open Drawer
+        </button>
+      </li>
     </ul>
   </div>
 </nav>

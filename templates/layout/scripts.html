@@ -12,6 +12,10 @@
   document.body.addEventListener("closeModal", function (evt) {
     closeModal();
   });
+
+  document.body.addEventListener("closeAppDrawer", function (evt) {
+    closeAppDrawer();
+  });
 </script>
 
 <script>
@@ -27,6 +31,18 @@
       modal.removeEventListener("animationend", handleAnimationEnd);
     });
   }
-</script>
 
+  /** Closes the app drawer */
+  function closeAppDrawer() {
+    const appDrawer = document.getElementById("app-drawer");
+
+    appDrawer.classList.add("closing");
+
+    appDrawer.addEventListener("animationend", function handleAnimationEnd() {
+      appDrawer.classList.remove("closing");
+      appDrawer.remove();
+      appDrawer.removeEventListener("animationend", handleAnimationEnd);
+    });
+  }
+</script>
 {{ end }}
