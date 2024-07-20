@@ -44,7 +44,7 @@
           <li>
             <button
               id="open-settings"
-              hx-get="/accounts/{{ .Account.ID }}/settings"
+              hx-post="/accounts/{{ .Account.ID }}/settings"
               hx-target="body"
               hx-swap="beforeend"
               class="flex items-center gap-1 hover:text-link font-semibold"
@@ -75,7 +75,7 @@
       </section>
       <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-bold">
         <button
-          hx-get="/accounts/{{.Account.ID}}/withdraw-or-deposit"
+          hx-post="/accounts/{{.Account.ID}}/withdraw-or-deposit"
           hx-target="body"
           hx-swap="beforeend"
           class="pill bg-ghost hover:bg-ghost-dark w-full py-3 md:py-4"

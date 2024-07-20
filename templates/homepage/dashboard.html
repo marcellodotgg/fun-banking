@@ -15,7 +15,7 @@
             <div class="flex items-center justify-between">
               <h1 class="font-extrabold">Banks</h1>
               <button
-                hx-get="/banks/modal-create"
+                hx-post="/banks/create"
                 hx-target="body"
                 hx-swap="beforeend"
                 class="px-3 py-1.5 text-sm bg-emerald-700 font-bold text-white hover:bg-emerald-800 rounded-[20px]"
@@ -44,12 +44,7 @@
             </p>
             <p>
               You can
-              <button
-                hx-get="/banks/modal-create"
-                hx-target="body"
-                hx-swap="beforeend"
-                class="link"
-              >
+              <button hx-post="/banks/create" hx-target="body" hx-swap="beforeend" class="link">
                 create a bank
               </button>
               to get started.

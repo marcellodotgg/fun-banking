@@ -12,22 +12,24 @@ import (
 )
 
 type bankHandler struct {
-	bankService service.BankService
-	Banks       []domain.Bank
-	ModalType   string
-	Form        FormData
-	Bank        domain.Bank
-	SignedIn    bool
+	bankService     service.BankService
+	customerService service.CustomerService
+	Banks           []domain.Bank
+	ModalType       string
+	Form            FormData
+	Bank            domain.Bank
+	SignedIn        bool
 }
 
 func NewBankHandler() bankHandler {
 	return bankHandler{
-		bankService: service.NewBankService(),
-		Banks:       []domain.Bank{},
-		ModalType:   "create_bank_modal",
-		Form:        NewFormData(),
-		Bank:        domain.Bank{},
-		SignedIn:    true,
+		bankService:     service.NewBankService(),
+		customerService: service.NewCustomerService(),
+		Banks:           []domain.Bank{},
+		ModalType:       "create_bank_modal",
+		Form:            NewFormData(),
+		Bank:            domain.Bank{},
+		SignedIn:        true,
 	}
 }
 
@@ -63,49 +65,92 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 		return
 	}
 
-	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s/%s", bank.User.Username, bank.Slug))
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%d", bank.ID))
 }
 
 func (h bankHandler) UpdateBank(c *gin.Context) {
 	h.Form = GetForm(c)
 
-	bankId := h.Form.Data["bank_id"]
+	bankID := c.Param("id")
 	h.Bank.Name = h.Form.Data["name"]
 	h.Bank.Description = h.Form.Data["description"]
 
-	if err := h.bankService.Update(bankId, &h.Bank); err != nil {
+	if err := h.bankService.Update(bankID, &h.Bank); err != nil {
 		h.Form.Errors["general"] = "A bank with that name already exists"
 		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return
 	}
 
-	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s/%s", h.Bank.User.Username, h.Bank.Slug))
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s", bankID))
 }
 
-func (h bankHandler) CreateModal(c *gin.Context) {
+func (h bankHandler) OpenCreateModal(c *gin.Context) {
 	h.Form = NewFormData()
 	h.ModalType = "create_bank_modal"
 	c.HTML(http.StatusOK, "modal", h)
 }
 
+func (h bankHandler) OpenCreateCustomerModal(c *gin.Context) {
+	h.ModalType = "create_customer_modal"
+	h.Form = NewFormData()
+	h.bankService.FindByID(c.Param("id"), &h.Bank)
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h bankHandler) CreateCustomer(c *gin.Context) {
+	h.Form = GetForm(c)
+	bankID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "create_customer_form", h)
+		return
+	}
+
+	customer := domain.Customer{
+		BankID:    uint(bankID),
+		FirstName: h.Form.Data["first_name"],
+		LastName:  h.Form.Data["last_name"],
+		PIN:       h.Form.Data["pin"],
+	}
+
+	if err := h.bankService.FindByID(c.Param("id"), &h.Bank); err != nil {
+		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
+		return
+	}
+
+	if err := h.customerService.Create(&customer); err != nil {
+		if strings.Contains(err.Error(), "UNIQUE") {
+			h.Form.Errors["general"] = "A customer with that PIN already exists in this bank"
+			h.Form.Errors["pin"] = "A customer with that PIN already exists in this bank"
+		} else {
+			h.Form.Errors["general"] = "Something went wrong creating your customer"
+		}
+
+		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
+		return
+	}
+
+	c.Header("HX-Trigger", "closeModal")
+	c.HTML(http.StatusCreated, "customers_oob", h)
+}
+
 func (h bankHandler) ViewBank(c *gin.Context) {
-	h.bankService.FindByUsernameAndSlug(c.Param("username"), c.Param("slug"), &h.Bank)
+	h.bankService.FindByID(c.Param("id"), &h.Bank)
 	c.HTML(http.StatusOK, "bank", h)
 }
 
-func (h bankHandler) Settings(c *gin.Context) {
+func (h bankHandler) OpenSettingsModal(c *gin.Context) {
 	h.Form = NewFormData()
 	h.ModalType = "update_bank_modal"
-	bankId := c.Query("id")
+	bankID := c.Param("id")
 
-	if err := h.bankService.FindByID(bankId, &h.Bank); err != nil {
+	if err := h.bankService.FindByID(bankID, &h.Bank); err != nil {
 		c.HTML(http.StatusNotFound, "modal", h)
 		return
 	}
 
 	h.Form.Data["name"] = h.Bank.Name
 	h.Form.Data["description"] = h.Bank.Description
-	h.Form.Data["bank_id"] = bankId
 
 	c.HTML(http.StatusOK, "modal", h)
 }

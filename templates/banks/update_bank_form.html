@@ -1,6 +1,6 @@
 {{ define "update_bank_form" }}
 <form
-  hx-patch="/banks"
+  hx-patch="/banks/{{.Bank.ID}}"
   hx-swap="outerHTML"
   hx-disabled-elt="button, input, textarea"
   class="flex flex-col gap-2"
@@ -34,7 +34,6 @@
 {{ .Form.Data.description }}</textarea
     >
   </div>
-  <input type="hidden" name="bank_id" value="{{ .Bank.ID }}" />
   <div class="flex gap-2 mt-2">
     <button
       id="submit"

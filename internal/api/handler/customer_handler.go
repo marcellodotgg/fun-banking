@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -49,7 +48,7 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 	c.HTML(http.StatusOK, "customer", h)
 }
 
-func (h customerHandler) OpenSettings(c *gin.Context) {
+func (h customerHandler) OpenSettingsModal(c *gin.Context) {
 	id := c.Param("id")
 	h.ModalType = "customer_settings"
 	h.Form = NewFormData()
@@ -87,42 +86,4 @@ func (h customerHandler) Update(c *gin.Context) {
 
 	h.Form.Data["success"] = "Successfully updated the customer"
 	c.HTML(http.StatusOK, "customer_settings_oob", h)
-}
-
-func (h customerHandler) CreateCustomer(c *gin.Context) {
-	h.Form = GetForm(c)
-
-	bankID, err := strconv.Atoi(h.Form.Data["bank_id"])
-
-	if err != nil {
-		c.HTML(http.StatusBadRequest, "create_customer_form", h)
-		return
-	}
-
-	customer := domain.Customer{
-		BankID:    uint(bankID),
-		FirstName: h.Form.Data["first_name"],
-		LastName:  h.Form.Data["last_name"],
-		PIN:       h.Form.Data["pin"],
-	}
-
-	if err := h.customerService.Create(&customer); err != nil {
-		if strings.Contains(err.Error(), "UNIQUE") {
-			h.Form.Errors["general"] = "A customer with that PIN already exists in this bank"
-			h.Form.Errors["pin"] = "A customer with that PIN already exists in this bank"
-		} else {
-			h.Form.Errors["general"] = "Something went wrong creating your customer"
-		}
-
-		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
-		return
-	}
-
-	if err := h.bankService.FindByID(h.Form.Data["bank_id"], &h.Bank); err != nil {
-		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
-		return
-	}
-
-	c.Header("HX-Trigger", "closeModal")
-	c.HTML(http.StatusCreated, "customers_oob", h)
 }

@@ -55,7 +55,7 @@
             <li>
               <button
                 id="open-settings"
-                hx-get="/banks/settings?id={{ .Bank.ID }}"
+                hx-post="/banks/{{.Bank.ID}}/settings"
                 hx-target="body"
                 hx-swap="beforeend"
                 class="flex items-center gap-1 hover:text-link font-semibold"
@@ -89,7 +89,7 @@
         <div class="flex items-center justify-between">
           <h1 class="font-extrabold">Customers</h1>
           <button
-            hx-get="/customers/modal-create?bank_id={{ .Bank.ID }}"
+            hx-post="/banks/{{.Bank.ID}}/create-customer"
             hx-target="body"
             hx-swap="beforeend"
             class="px-3 py-1.5 text-sm bg-emerald-700 font-bold text-white hover:bg-emerald-800 rounded-[20px]"

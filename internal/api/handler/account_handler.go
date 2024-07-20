@@ -44,7 +44,7 @@ func (ah accountHandler) Get(c *gin.Context) {
 	c.HTML(http.StatusOK, "account", ah)
 }
 
-func (ah accountHandler) OpenSettings(c *gin.Context) {
+func (ah accountHandler) OpenSettingsModal(c *gin.Context) {
 	accountID := c.Param("id")
 	ah.Form = NewFormData()
 	ah.ModalType = "account_settings"
@@ -54,23 +54,13 @@ func (ah accountHandler) OpenSettings(c *gin.Context) {
 	c.HTML(http.StatusOK, "modal", ah)
 }
 
-func (ah accountHandler) OpenWithdrawOrDeposit(c *gin.Context) {
+func (ah accountHandler) OpenWithdrawOrDepositModal(c *gin.Context) {
 	accountID := c.Param("id")
 	ah.Form = NewFormData()
 	ah.ModalType = "withdraw_or_deposit_modal"
 	ah.accountService.FindByID(accountID, &ah.Account)
 
 	c.HTML(http.StatusOK, "modal", ah)
-}
-
-func (ah accountHandler) CashFlow(c *gin.Context) {
-	var cashflow service.Cashflow
-
-	if err := ah.transactionService.CashflowByAccount(c.Param("id"), &cashflow); err != nil {
-		fmt.Println(err)
-	}
-
-	c.HTML(http.StatusOK, "chart_deposits_vs_withdrawals", cashflow)
 }
 
 func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {
@@ -102,8 +92,22 @@ func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {
 		return
 	}
 
+	// refresh the transactions
+	ah.accountService.FindByID(c.Param("id"), &ah.Account)
+
 	c.Header("HX-Trigger", "closeModal")
+	// TODO I think I need to do an oob here
 	c.HTML(http.StatusOK, "account", ah)
+}
+
+func (ah accountHandler) CashFlow(c *gin.Context) {
+	var cashflow service.Cashflow
+
+	if err := ah.transactionService.CashflowByAccount(c.Param("id"), &cashflow); err != nil {
+		fmt.Println(err)
+	}
+
+	c.HTML(http.StatusOK, "chart_deposits_vs_withdrawals", cashflow)
 }
 
 func (ah accountHandler) Update(c *gin.Context) {

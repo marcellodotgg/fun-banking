@@ -56,7 +56,7 @@
             <li>
               <a
                 class="flex items-center gap-1 hover:text-link"
-                href="/banks/{{.Customer.Bank.User.Username}}/{{.Customer.Bank.Slug}}"
+                href="/banks/{{.Customer.Bank.ID }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@
             <li>
               <button
                 id="open-settings"
-                hx-get="/customers/{{.Customer.ID}}/settings"
+                hx-post="/customers/{{.Customer.ID}}/settings"
                 hx-target="body"
                 hx-swap="beforeend"
                 class="flex items-center gap-1 hover:text-link font-semibold"

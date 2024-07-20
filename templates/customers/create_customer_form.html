@@ -1,5 +1,10 @@
 {{ define "create_customer_form" }}
-<form hx-put="/customers" hx-disabled-elt="button, input, textarea" class="flex flex-col gap-2">
+<form
+  hx-put="/banks/{{.Bank.ID}}/create-customer"
+  hx-swap="outerHTML"
+  hx-disabled-elt="button, input, textarea"
+  class="flex flex-col gap-2"
+>
   {{ if .Form.Errors.general }}
   <div class="alert-banner bg-warning mb-2">{{ .Form.Errors.general }}</div>
   {{ end }} {{ if .Form.Data.success }}
@@ -46,7 +51,6 @@
     <div class="error-message">{{ .Form.Errors.pin }}</div>
     {{ end }}
   </div>
-  <input type="hidden" name="bank_id" value="{{ .Form.Data.bank_id }}" />
   <div class="flex gap-2 mt-2">
     <button
       id="submit"

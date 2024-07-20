@@ -73,11 +73,12 @@ func setupBankRoutes() {
 		Group("banks").
 		GET("", middleware.Auth(), handler.MyBanks).
 		PUT("", middleware.Auth(), handler.CreateBank).
-		// TODO: PATCH should take in an ID
-		PATCH("", middleware.Auth(), handler.UpdateBank).
-		GET("modal-create", middleware.Auth(), handler.CreateModal).
-		GET(":username/:slug", middleware.Auth(), handler.ViewBank).
-		GET("settings", middleware.Auth(), handler.Settings)
+		POST("create", middleware.Auth(), handler.OpenCreateModal).
+		GET(":id", middleware.Auth(), handler.ViewBank).
+		PATCH(":id", middleware.Auth(), handler.UpdateBank).
+		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal).
+		POST(":id/create-customer", middleware.Auth(), handler.OpenCreateCustomerModal).
+		PUT(":id/create-customer", middleware.Auth(), handler.CreateCustomer)
 }
 
 func setupCustomerRoutes() {
@@ -85,12 +86,9 @@ func setupCustomerRoutes() {
 
 	router.
 		Group("customers").
-		PUT("", middleware.Auth(), handler.CreateCustomer).
-		// TODO: move this to the banks route!
-		GET("modal-create", middleware.Auth(), handler.OpenCreateModal).
 		GET(":id", middleware.Auth(), handler.GetCustomer).
 		PATCH(":id", middleware.Auth(), handler.Update).
-		GET(":id/settings", middleware.Auth(), handler.OpenSettings)
+		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal)
 }
 
 func setupAccountRoutes() {
@@ -101,9 +99,9 @@ func setupAccountRoutes() {
 		GET(":id", middleware.Auth(), handler.Get).
 		PATCH(":id", middleware.Auth(), handler.Update).
 		GET(":id/transactions", middleware.Auth(), handler.GetTransactions).
-		GET(":id/settings", middleware.Auth(), handler.OpenSettings).
+		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal).
 		GET(":id/cash-flow", middleware.Auth(), handler.CashFlow).
-		GET(":id/withdraw-or-deposit", middleware.Auth(), handler.OpenWithdrawOrDeposit).
+		POST(":id/withdraw-or-deposit", middleware.Auth(), handler.OpenWithdrawOrDepositModal).
 		PUT(":id/withdraw-or-deposit", middleware.Auth(), handler.WithdrawOrDeposit).
 		GET(":id/send-money", middleware.Auth(), handler.OpenSendMoneyModal)
 }
@@ -113,6 +111,7 @@ func setupTransactionRoutes() {
 
 	router.
 		Group("transactions").
+		// TODO creation should actually be on the account
 		PUT("", middleware.Auth(), handler.Create)
 }
 
