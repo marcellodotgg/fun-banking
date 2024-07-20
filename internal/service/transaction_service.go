@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -18,6 +20,7 @@ type Cashflow struct {
 
 type TransactionService interface {
 	Create(transaction *domain.Transaction) error
+	SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error
 	FindAllByAccount(accountID string, transactions *[]domain.Transaction, pagingInfo pagination.PagingInfo[domain.Transaction]) error
 	CountAllByAccount(accountID string, count *int64) error
 	CashflowByAccount(accountID string, cashflow *Cashflow) error
@@ -42,7 +45,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 
 		transaction.Balance = account.Balance
 
-		if account.Customer.Bank.UserID == *transaction.UserID {
+		if &account.Customer.Bank.UserID == transaction.UserID {
 			transaction.Status = domain.TransactionApproved
 			account.Balance += transaction.Amount
 
@@ -52,6 +55,51 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 		}
 
 		return persistence.DB.Create(&transaction).Error
+	})
+}
+
+func (s transactionService) SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error {
+	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		if fromAccount.Balance < transaction.Amount {
+			return errors.New("you do not have enough money")
+		}
+
+		amount := transaction.Amount
+		description := transaction.Description
+
+		transaction.Amount = amount * -1
+		transaction.Balance = fromAccount.Balance
+		transaction.AccountID = fromAccount.ID
+		transaction.Description = fmt.Sprintf("Money sent to %s. Note: %s", recipient.FullName(), description)
+		transaction.Status = domain.TransactionApproved
+
+		fromAccount.Balance -= amount
+
+		if err := s.accountService.Update(&fromAccount); err != nil {
+			return err
+		}
+
+		if err := persistence.DB.Create(&transaction).Error; err != nil {
+			return err
+		}
+
+		toAccount := recipient.Accounts[0]
+
+		secondTransaction := domain.Transaction{}
+
+		secondTransaction.Amount = amount
+		secondTransaction.Balance = toAccount.Balance
+		secondTransaction.AccountID = toAccount.ID
+		secondTransaction.Description = fmt.Sprintf("Money sent from %s. Note: %s", fromAccount.Customer.FullName(), description)
+		secondTransaction.Status = domain.TransactionApproved
+
+		toAccount.Balance += amount
+
+		if err := s.accountService.Update(&toAccount); err != nil {
+			return err
+		}
+
+		return persistence.DB.Create(&secondTransaction).Error
 	})
 }
 

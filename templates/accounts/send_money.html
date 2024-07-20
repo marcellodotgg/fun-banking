@@ -10,7 +10,7 @@
   <div id="send-money-form">{{ template "send_money_form" . }}</div>
 </div>
 {{ end }} {{ define "send_money_form" }}
-<form class="flex flex-col gap-2">
+<form hx-put="/accounts/{{ .Account.ID }}/send-money" class="flex flex-col gap-2">
   <div>
     <label for="name">Recipient</label>
     <input

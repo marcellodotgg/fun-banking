@@ -20,6 +20,7 @@ type accountHandler struct {
 	Account            domain.Account
 	accountService     service.AccountService
 	transactionService service.TransactionService
+	customerService    service.CustomerService
 }
 
 func NewAccountHandler() accountHandler {
@@ -30,6 +31,7 @@ func NewAccountHandler() accountHandler {
 		Account:            domain.Account{},
 		accountService:     service.NewAccountService(),
 		transactionService: service.NewTransactionService(),
+		customerService:    service.NewCustomerService(),
 	}
 }
 
@@ -170,4 +172,34 @@ func (h accountHandler) OpenSendMoneyModal(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h accountHandler) SendMoney(c *gin.Context) {
+	accountID := c.Param("id")
+	h.Form = GetForm(c)
+	recipientID := h.Form.Data["recipient"]
+
+	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	var recipient domain.Customer
+	if err := h.customerService.FindByID(recipientID, &recipient); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	amount, _ := strconv.ParseFloat(h.Form.Data["amount"], 64)
+
+	transaction := domain.Transaction{
+		Amount:      amount,
+		Description: h.Form.Data["description"],
+	}
+
+	if err := h.transactionService.SendMoney(h.Account, recipient, &transaction); err != nil {
+		// TODO: handl the error
+	}
+
+	c.Header("HX-Redirect", "/accounts/"+accountID)
 }
