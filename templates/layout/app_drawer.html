@@ -3,8 +3,12 @@
   <div class="underlay" onclick="closeAppDrawer()"></div>
   <aside class="flex flex-col gap-4 content">
     <h1 class="font-bold">Navigation</h1>
-    <section>
-      Profile Section
+    <section class="flex items-center gap-2">
+      <img class="border-2 rounded-full size-16 p-1" src="{{ .CurrentUser.ImageURL }}" alt="profile image" />
+      <div class="flex flex-col">
+        <h1 class="text-lg font-extrabold">{{ .CurrentUser.FullName }}</h1>
+        <span class="text-sm text-gray-600 -mt-1">@{{ .CurrentUser.Username }}</span>
+      </div>
     </section>
     <ul>
       {{ if .SignedIn }}

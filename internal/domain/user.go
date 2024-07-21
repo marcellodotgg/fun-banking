@@ -1,8 +1,11 @@
 package domain
 
 import (
+	"fmt"
 	"strings"
 
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"gorm.io/gorm"
 )
 
@@ -20,6 +23,10 @@ type User struct {
 	Role      string `gorm:"not null; default:FREE"`
 	Password  string `json:"-" gorm:"not null"`
 	ImageURL  string `gorm:"not null; default:https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg"`
+}
+
+func (u User) FullName() string {
+	return cases.Title(language.AmericanEnglish).String(fmt.Sprintf("%s %s", u.FirstName, u.LastName))
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {
