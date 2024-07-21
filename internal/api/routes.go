@@ -66,9 +66,9 @@ func setupUserRoutes() {
 	router.GET("settings", middleware.Auth(), handler.Settings)
 
 	router.
-		Group("users", middleware.Auth()).
+		Group("users").
 		PUT("", handler.Create).
-		PATCH("", handler.Update)
+		PATCH("", middleware.Auth(), handler.Update)
 }
 
 func setupBankRoutes() {
