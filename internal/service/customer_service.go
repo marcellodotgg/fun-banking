@@ -12,8 +12,7 @@ type CustomerService interface {
 	Create(customer *domain.Customer) error
 	FindByID(id string, customer *domain.Customer) error
 	Update(customer *domain.Customer) error
-	FindAllByBankID(bankID string, customers *[]domain.Customer) error
-	FindAllByBankIDAndName(bankID, name string, customers *[]domain.Customer) error
+	FindAllByBankIDAndName(bankID, name string, limit int, customers *[]domain.Customer) error
 }
 
 type customerService struct{}
@@ -39,11 +38,7 @@ func (s customerService) Update(customer *domain.Customer) error {
 	return persistence.DB.Updates(&customer).Error
 }
 
-func (s customerService) FindAllByBankID(bankID string, customers *[]domain.Customer) error {
-	return persistence.DB.Order("first_name desc").Order("last_name desc").Find(&customers, "bank_id = ?", bankID).Error
-}
-
-func (s customerService) FindAllByBankIDAndName(bankID, name string, customers *[]domain.Customer) error {
+func (s customerService) FindAllByBankIDAndName(bankID, name string, limit int, customers *[]domain.Customer) error {
 	var firstName, lastName string
 	var names = strings.Split(strings.ToLower(name), " ")
 
@@ -57,8 +52,7 @@ func (s customerService) FindAllByBankIDAndName(bankID, name string, customers *
 	}
 
 	return persistence.DB.
-		Order("first_name desc").
-		Order("last_name desc").
-		Limit(5).
+		Order("last_name ASC, first_name ASC").
+		Limit(limit).
 		Find(&customers, "bank_id = ? AND ((first_name LIKE ? AND last_name LIKE ?) OR (last_name LIKE ? AND first_name LIKE ?))", bankID, "%"+firstName+"%", "%"+lastName+"%", "%"+firstName+"%", "%"+lastName+"%").Error
 }

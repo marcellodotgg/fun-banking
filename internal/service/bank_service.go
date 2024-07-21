@@ -47,7 +47,7 @@ func (s bankService) FindByID(id string, bank *domain.Bank) error {
 	return persistence.DB.
 		Preload("User").
 		Preload("Customers", func(db *gorm.DB) *gorm.DB {
-			return db.Order("first_name ASC").Order("last_name ASC")
+			return db.Order("last_name ASC, first_name ASC")
 		}).
 		Preload("Customers.Accounts").
 		First(&bank, "id = ?", id).Error

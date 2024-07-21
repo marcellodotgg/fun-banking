@@ -1,5 +1,15 @@
-{{ define "customers" }}
-<table class="w-full table-auto overflow-hidden">
+{{ define "customers" }} {{ if gt (len .Bank.Customers) 6 }}
+<input
+  hx-get="/banks/{{ .Bank.ID }}/customers-filter"
+  hx-trigger="input changed delay:500ms, search"
+  hx-target="#results"
+  hx-swap="outerHTML"
+  type="search"
+  name="search"
+  placeholder="Search..."
+/>
+{{ end }} {{template "customers_table" .Bank.Customers }} {{ end }} {{ define "customers_table" }}
+<table id="results" class="w-full table-auto overflow-hidden">
   <thead class="border-b-2 border-black">
     <tr>
       <th class="p-2 text-left">Customer</th>
@@ -7,7 +17,7 @@
     </tr>
   </thead>
   <tbody>
-    {{ if gt (len .Bank.Customers) 0 }} {{ range .Bank.Customers }}
+    {{ if gt (len .) 0 }} {{ range . }}
     <tr onclick="goToCustomer('{{.ID}}')" class="border-b hover:bg-ghost/30 hover:cursor-pointer">
       <td class="text-left py-1.5 px-2">
         <div class="font-semibold">{{ .FullName }}</div>
@@ -27,6 +37,7 @@
     List of customers belonging to the bank
   </caption>
 </table>
+
 <script>
   function goToCustomer(id) {
     window.location.href = `/customers/${id}`;

@@ -160,7 +160,17 @@ func (h bankHandler) CustomerSearch(c *gin.Context) {
 	searchStr := c.Query("name")
 
 	var customers []domain.Customer
-	h.customerService.FindAllByBankIDAndName(bankID, searchStr, &customers)
+	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 5, &customers)
 
 	c.HTML(http.StatusOK, "search_bank_customers", customers)
+}
+
+func (h bankHandler) FilterCustomers(c *gin.Context) {
+	bankID := c.Param("id")
+	searchStr := c.Query("search")
+
+	var customers []domain.Customer
+	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 100, &customers)
+
+	c.HTML(http.StatusOK, "customers_table", customers)
 }
