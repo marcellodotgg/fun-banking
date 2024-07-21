@@ -21,6 +21,6 @@ func Auth() gin.HandlerFunc {
 
 func renderUnauthorized(c *gin.Context) {
 	signInHandler := handler.NewSessionHandler()
-	signInHandler.FormData.Errors["general"] = "You need to be signed in to access that resource"
+	signInHandler.Form.Errors["general"] = "You need to be signed in to access that resource"
 	signInHandler.SignIn(c)
 }

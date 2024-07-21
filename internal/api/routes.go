@@ -47,7 +47,8 @@ func setupHomepageRoutes() {
 	handler := handler.NewHomePageHandler()
 
 	router.
-		GET("", handler.Homepage)
+		GET("", handler.Homepage).
+		GET(":username/:slug", middleware.NoAuth(), handler.BankSignIn)
 }
 
 func setupSessionRoutes() {
@@ -56,7 +57,9 @@ func setupSessionRoutes() {
 	router.
 		GET("signin", middleware.NoAuth(), handler.SignIn).
 		POST("signin", middleware.NoAuth(), handler.CreateSession).
-		DELETE("signout", handler.DestroySession)
+		DELETE("signout", handler.DestroySession).
+		POST("sessions/customer", middleware.NoAuth(), handler.CreateCustomerSession).
+		DELETE("sessions/customer", handler.DestroyCustomerSession)
 }
 
 func setupUserRoutes() {

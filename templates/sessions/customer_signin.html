@@ -1,0 +1,45 @@
+{{ define "customer_signin" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | Sign in to {{ .Bank.Name }}</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col items-center container mt-2 mb-4">
+      <section class="flex flex-col gap-2 card bg-white border max-w-xl w-full">
+        <div>
+          <h1 class="font-extrabold text-xl">Sign in to {{ .Bank.Name }}</h1>
+          <div class="text-sm text-gray-600">{{ .Bank.Description }}</div>
+        </div>
+        {{ template "customer_signin_form" . }}
+      </section>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }} {{ define "customer_signin_form" }}
+<form
+  hx-post="/sessions/customer"
+  hx-swap="outerHTML"
+  hx-disabled-elt="input, button"
+  class="flex flex-col gap-4"
+>
+  {{ if .Form.Errors.general }}
+  <div class="alert-banner bg-danger">{{ .Form.Errors.general }}</div>
+  {{ end }}
+  <div>
+    <label for="pin">Enter Your PIN</label>
+    <input id="pin" name="pin" type="password" autocomplete="off" />
+  </div>
+  <input name="bank_id" type="hidden" value="{{ .Form.Data.bank_id }}" />
+  <div>
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">
+      <div class="htmx-toggle">Sign in</div>
+      <div class="htmx-indicator">Signin in...</div>
+    </button>
+  </div>
+</form>
+{{ end }}

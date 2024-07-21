@@ -13,6 +13,7 @@ type CustomerService interface {
 	FindByID(id string, customer *domain.Customer) error
 	Update(customer *domain.Customer) error
 	FindAllByBankIDAndName(bankID, name string, limit int, customers *[]domain.Customer) error
+	FindByBankIDAndPIN(bankID, pin string, customer *domain.Customer) error
 }
 
 type customerService struct{}
@@ -56,4 +57,11 @@ func (s customerService) FindAllByBankIDAndName(bankID, name string, limit int, 
 		Order("last_name ASC, first_name ASC").
 		Limit(limit).
 		Find(&customers, "bank_id = ? AND ((first_name LIKE ? AND last_name LIKE ?) OR (last_name LIKE ? AND first_name LIKE ?))", bankID, "%"+firstName+"%", "%"+lastName+"%", "%"+firstName+"%", "%"+lastName+"%").Error
+}
+
+func (s customerService) FindByBankIDAndPIN(bankID, pin string, customer *domain.Customer) error {
+	return persistence.DB.
+		Joins("JOIN banks ON banks.id = customers.bank_id").
+		Where("banks.id = ? AND customers.pin = ?", bankID, pin).
+		First(&customer).Error
 }

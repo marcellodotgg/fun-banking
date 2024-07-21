@@ -11,6 +11,7 @@ type BankService interface {
 	Create(bank *domain.Bank) error
 	Update(id string, bank *domain.Bank) error
 	FindByID(id string, bank *domain.Bank) error
+	FindByUsernameAndSlug(username, slug string, bank *domain.Bank) error
 }
 
 type bankService struct{}
@@ -51,4 +52,12 @@ func (s bankService) FindByID(id string, bank *domain.Bank) error {
 		}).
 		Preload("Customers.Accounts").
 		First(&bank, "id = ?", id).Error
+}
+
+func (s bankService) FindByUsernameAndSlug(username, slug string, bank *domain.Bank) error {
+	return persistence.DB.
+		Preload("User").
+		Joins("JOIN users ON users.id = banks.user_id").
+		Where("users.username = ? AND banks.slug = ?", username, slug).
+		First(&bank).Error
 }
