@@ -8,12 +8,15 @@ import (
 	"github.com/bytebury/fun-banking/internal/api/middleware"
 	"github.com/bytebury/fun-banking/internal/utils"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var router = gin.Default()
 
 func Start() {
 	router.SetFuncMap(template.FuncMap{
+		"titleize": func(text string) string { return cases.Title(language.AmericanEnglish).String(text) },
 		"currency": func(amount float64) string { return utils.FormatCurrency(amount) },
 		"sub":      func(a, b int) int { return a - b },
 		"add":      func(a, b int) int { return a + b },
@@ -64,7 +67,8 @@ func setupUserRoutes() {
 
 	router.
 		Group("users", middleware.Auth()).
-		PUT("", handler.Create)
+		PUT("", handler.Create).
+		PATCH("", handler.Update)
 }
 
 func setupBankRoutes() {

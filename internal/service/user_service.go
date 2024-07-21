@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strconv"
+
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"golang.org/x/crypto/bcrypt"
@@ -8,6 +10,8 @@ import (
 
 type UserService interface {
 	Create(user *domain.User) error
+	Update(id string, user *domain.User) error
+	FindByID(id string, user *domain.User) error
 }
 
 type userService struct{}
@@ -26,6 +30,22 @@ func (s userService) Create(user *domain.User) error {
 	user.Password = passwordHash
 
 	return persistence.DB.Create(&user).Error
+}
+
+func (s userService) FindByID(id string, user *domain.User) error {
+	return persistence.DB.First(&user, "id = ?", id).Error
+}
+
+func (s userService) Update(id string, user *domain.User) error {
+	userID, err := strconv.Atoi(id)
+
+	if err != nil {
+		return err
+	}
+
+	user.ID = uint(userID)
+
+	return persistence.DB.Updates(&user).Error
 }
 
 func (s userService) hashPassword(password string) (string, error) {

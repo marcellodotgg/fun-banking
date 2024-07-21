@@ -80,6 +80,19 @@ input[type="email"] {
   width: 100%;
 }
 
+button[type="submit"] {
+  font-weight: 900;
+  color: white;
+}
+
+button[type="submit"]:disabled {
+  background: #ddd;
+}
+
+button[type="reset"]:hover {
+  background: var(--color-ghost);
+}
+
 form select {
   border-width: 1px;
   padding: 10px;

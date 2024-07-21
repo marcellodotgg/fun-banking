@@ -8,10 +8,87 @@
   </head>
   <body>
     {{ template "layout/navbar" . }}
-    <main class="mt-2 mb-4">
-      <div class="container flex flex-col md:flex-row gap-4">Settings page</div>
+    <main class="flex flex-col gap-4 mt-2 mb-4 container">
+      <section class="card outlined flex flex-col gap-4">
+        <div>
+          <h1 class="text-lg font-extrabold">Profile Settings</h1>
+          <p class="text-gray-600 text-sm">
+            You can change certain aspects of your profile here, including preferences.
+          </p>
+        </div>
+        <div>{{ template "user_settings_form" . }}</div>
+      </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
 </html>
+{{ end }} {{ define "user_settings_form" }}
+<form
+  hx-patch="/users"
+  hx-swap="outerHTML"
+  hx-disabled-elt="button, input"
+  class="flex flex-col gap-2"
+>
+  {{ if .Form.Errors.general }}
+  <div class="alert-banner bg-danger mb-2">{{ .Form.Errors.general }}</div>
+  {{ end }} {{ if .Form.Data.success }}
+  <div class="alert-banner bg-success mb-2">{{ .Form.Data.success }}</div>
+  {{ end }}
+  <div class="flex gap-4">
+    <div class="w-full">
+      <label for="first_name">First name</label>
+      <input
+        id="first_name"
+        name="first_name"
+        autocomplete="given-name"
+        type="text"
+        maxlength="15"
+        value="{{ titleize .Form.Data.first_name }}"
+        required
+      />
+    </div>
+    <div class="w-full">
+      <label for="last_name">Last name</label>
+      <input
+        id="last_name"
+        name="last_name"
+        autocomplete="family-name"
+        type="text"
+        value="{{ titleize .Form.Data.last_name }}"
+        maxlength="15"
+        required
+      />
+    </div>
+  </div>
+  <div class="w-full">
+    <label for="username">Username</label>
+    <input
+      id="username"
+      name="username"
+      autocomplete="username"
+      type="text"
+      maxlength="12"
+      required
+      value="{{ .Form.Data.username }}"
+    />
+  </div>
+  <div class="w-full">
+    <label for="image_url">Profile image URL</label>
+    <input
+      id="image_url"
+      name="image_url"
+      autocomplete="off"
+      type="text"
+      required
+      value="{{ .Form.Data.image_url }}"
+    />
+  </div>
+  <div class="flex gap-2 items-center mt-2">
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">
+      <div class="htmx-toggle">Update</div>
+      <div class="htmx-indicator text-gray-600">Updating...</div>
+    </button>
+    <button type="reset">Cancel</button>
+  </div>
+</form>
 {{ end }}
