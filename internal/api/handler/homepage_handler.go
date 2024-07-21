@@ -19,11 +19,13 @@ type siteInfo struct {
 }
 
 type homepageHandler struct {
-	SiteInfo    siteInfo
-	SignedIn    bool
-	Bank        domain.Bank
-	bankService service.BankService
-	Form        FormData
+	SiteInfo        siteInfo
+	SignedIn        bool
+	Bank            domain.Bank
+	Customer        domain.Customer
+	bankService     service.BankService
+	customerService service.CustomerService
+	Form            FormData
 }
 
 func NewHomePageHandler() homepageHandler {
@@ -34,10 +36,12 @@ func NewHomePageHandler() homepageHandler {
 			BankCount:        0,
 			TransactionCount: 0,
 		},
-		SignedIn:    false,
-		Bank:        domain.Bank{},
-		bankService: service.NewBankService(),
-		Form:        NewFormData(),
+		SignedIn:        false,
+		Bank:            domain.Bank{},
+		Customer:        domain.Customer{},
+		bankService:     service.NewBankService(),
+		customerService: service.NewCustomerService(),
+		Form:            NewFormData(),
 	}
 }
 
@@ -49,6 +53,11 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 
 	h.SignedIn = c.GetString("user_id") != ""
 
+	if c.GetString("customer_id") != "" {
+		h.CustomerDashboard(c)
+		return
+	}
+
 	if h.SignedIn {
 		h.Dashboard(c)
 	} else {
@@ -58,6 +67,17 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 
 func (h homepageHandler) Dashboard(c *gin.Context) {
 	c.HTML(http.StatusOK, "dashboard", h)
+}
+
+func (h homepageHandler) CustomerDashboard(c *gin.Context) {
+	customerID := c.GetString("customer_id")
+
+	if err := h.customerService.FindByID(customerID, &h.Customer); err != nil {
+		c.HTML(http.StatusNotFound, "index.html", h)
+		return
+	}
+
+	c.HTML(http.StatusOK, "customer", h)
 }
 
 func (h homepageHandler) SignUp(c *gin.Context) {

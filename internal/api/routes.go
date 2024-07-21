@@ -29,7 +29,7 @@ func Start() {
 	// Load Static Files
 	router.Static("/static", "public/")
 	// Middleware
-	router.Use(middleware.Audit())
+	router.Use(middleware.Audit(), middleware.CustomerAudit())
 	// Setup Routes
 	setupHomepageRoutes()
 	setupActionRoutes()
@@ -130,5 +130,5 @@ func setupActionRoutes() {
 	handler := handler.NewActionHandler()
 
 	router.Group("actions").
-		GET("open-app-drawer", middleware.Audit(), handler.OpenAppDrawer)
+		GET("open-app-drawer", handler.OpenAppDrawer)
 }
