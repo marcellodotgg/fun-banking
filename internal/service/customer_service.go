@@ -52,6 +52,7 @@ func (s customerService) FindAllByBankIDAndName(bankID, name string, limit int, 
 	}
 
 	return persistence.DB.
+		Preload("Accounts").
 		Order("last_name ASC, first_name ASC").
 		Limit(limit).
 		Find(&customers, "bank_id = ? AND ((first_name LIKE ? AND last_name LIKE ?) OR (last_name LIKE ? AND first_name LIKE ?))", bankID, "%"+firstName+"%", "%"+lastName+"%", "%"+firstName+"%", "%"+lastName+"%").Error
