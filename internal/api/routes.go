@@ -60,9 +60,10 @@ func setupUserRoutes() {
 	handler := handler.NewUserHandler()
 
 	router.GET("signup", middleware.NoAuth(), handler.SignUp)
+	router.GET("settings", middleware.Auth(), handler.Settings)
 
 	router.
-		Group("users").
+		Group("users", middleware.Auth()).
 		PUT("", handler.Create)
 }
 

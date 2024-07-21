@@ -1,0 +1,17 @@
+{{ define "user_settings" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | User Settings</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="mt-2 mb-4">
+      <div class="container flex flex-col md:flex-row gap-4">Settings page</div>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }}

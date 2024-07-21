@@ -64,3 +64,7 @@ func (h userHandler) Create(c *gin.Context) {
 
 	c.Header("HX-Redirect", "/signin")
 }
+
+func (h userHandler) Settings(c *gin.Context) {
+	c.HTML(http.StatusOK, "user_settings", h)
+}

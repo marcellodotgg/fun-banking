@@ -6,6 +6,11 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	UserRoleFree  = "FREE"
+	UserRoleAdmin = "ADMIN"
+)
+
 type User struct {
 	Audit
 	Username  string `gorm:"unique; not null"`
