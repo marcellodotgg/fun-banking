@@ -2,10 +2,7 @@
 <ul class="flex flex-col gap-1 overflow-none">
   {{ range .Banks }}
   <li class="flex items-center gap-1">
-    <img
-      class="size-6 rounded-full border p-0.5"
-      src="https://avatars.githubusercontent.com/u/104793781?v=4"
-    />
+    <img class="size-6 rounded-full border p-0.5" src="{{ .User.ImageURL }}" />
     <a href="/banks/{{ .ID }}" class="link truncate"> {{ .User.Username }}/{{ .Slug }} </a>
   </li>
   {{ end }}
