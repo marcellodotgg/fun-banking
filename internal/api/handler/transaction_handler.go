@@ -16,6 +16,7 @@ type transactionHandler struct {
 	transactionService service.TransactionService
 	accountService     service.AccountService
 	customerService    service.CustomerService
+	userService        service.UserService
 	Customer           domain.Customer
 }
 
@@ -26,6 +27,7 @@ func NewTransactionHandler() transactionHandler {
 		Customer:           domain.Customer{},
 		accountService:     service.NewAccountService(),
 		customerService:    service.NewCustomerService(),
+		userService:        service.NewUserService(),
 		transactionService: service.NewTransactionService(),
 	}
 }
@@ -68,6 +70,33 @@ func (th transactionHandler) Create(c *gin.Context) {
 	th.customerService.FindByID(strconv.Itoa(int(th.Customer.ID)), &th.Customer)
 
 	c.HTML(http.StatusOK, "transfer_money_form_oob", th.Customer)
+}
+
+func (h transactionHandler) Approve(c *gin.Context) {
+	transactionID := c.Param("id")
+
+	if err := h.transactionService.Update(transactionID, c.GetString("user_id"), domain.TransactionApproved); err != nil {
+		c.HTML(http.StatusBadRequest, "", h)
+		return
+	}
+
+	var transactions []domain.Transaction
+	h.userService.FindPendingTransactions(c.GetString("user_id"), &transactions)
+	c.HTML(http.StatusAccepted, "notifications_list_oob", transactions)
+
+}
+
+func (h transactionHandler) Decline(c *gin.Context) {
+	transactionID := c.Param("id")
+
+	if err := h.transactionService.Update(transactionID, c.GetString("user_id"), domain.TransactionDeclined); err != nil {
+		c.HTML(http.StatusBadRequest, "", h)
+		return
+	}
+
+	var transactions []domain.Transaction
+	h.userService.FindPendingTransactions(c.GetString("user_id"), &transactions)
+	c.HTML(http.StatusAccepted, "notifications_list_oob", transactions)
 }
 
 func (th transactionHandler) getTransferAmount(amount float64, transferType string) float64 {

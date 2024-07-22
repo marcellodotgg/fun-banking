@@ -10,10 +10,16 @@
       <div class="text-sm text-gray-600"><strong>Note: </strong>{{ .Description }}</div>
     </div>
     <div class="flex flex-col sm:flex-row gap-2 items-center shrink-0 flex justify-end text-sm">
-      <button class="pill border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50">
+      <button
+        hx-patch="/transactions/{{ .ID }}/approve"
+        class="pill border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50"
+      >
         Approve
       </button>
-      <button class="pill border border-red-700 text-red-700 font-bold hover:bg-red-50">
+      <button
+        hx-patch="/transactions/{{.ID}}/decline"
+        class="pill border border-red-700 text-red-700 font-bold hover:bg-red-50"
+      >
         Decline
       </button>
     </div>
@@ -22,4 +28,7 @@
 </ul>
 {{ else }}
 <div>Yeah, dawg. You got nothing.</div>
-{{ end }} {{ end }}
+{{ end }} {{ end }} {{ define "notifications_list_oob" }}
+<div hx-swap-oob="true" id="notifications">{{ template "notifications_list" . }}</div>
+<div hx-swap-oob="true" id="inbox-badge">{{ template "inbox_badge" gt (len .) 0 }}</div>
+{{ end }}

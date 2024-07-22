@@ -17,7 +17,7 @@
             to approve or deny them.
           </p>
         </div>
-        <div id="notifications" hx-get="/notifications/pending" hx-trigger="load"></div>
+        <div id="notifications" hx-get="/notifications/pending" hx-trigger="load, every 30s"></div>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}

@@ -20,6 +20,7 @@ type Cashflow struct {
 
 type TransactionService interface {
 	Create(transaction *domain.Transaction) error
+	Update(id, userID, status string) error
 	SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error
 	FindAllByAccount(accountID string, transactions *[]domain.Transaction, pagingInfo pagination.PagingInfo[domain.Transaction]) error
 	CountAllByAccount(accountID string, count *int64) error
@@ -100,6 +101,34 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 		}
 
 		return persistence.DB.Create(&secondTransaction).Error
+	})
+}
+
+func (s transactionService) Update(id, userID, status string) error {
+	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		var transaction domain.Transaction
+		if err := persistence.DB.First(&transaction, "id = ?", id).Error; err != nil {
+			return err
+		}
+
+		var account domain.Account
+		if err := persistence.DB.First(&account, "id = ?", transaction.AccountID).Error; err != nil {
+			return err
+		}
+
+		userIDUintPtr, _ := utils.ConvertToUintPointer(userID)
+
+		transaction.UserID = userIDUintPtr
+		transaction.Status = status
+		transaction.Balance = account.Balance
+
+		if err := persistence.DB.Updates(&transaction).Error; err != nil {
+			return err
+		}
+
+		account.Balance += transaction.Amount
+
+		return persistence.DB.Select("Balance").Updates(&account).Error
 	})
 }
 

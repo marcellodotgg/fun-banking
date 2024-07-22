@@ -134,7 +134,9 @@ func setupTransactionRoutes() {
 	router.
 		Group("transactions").
 		// TODO creation should actually be on the account
-		PUT("", middleware.AnyAuth(), handler.Create)
+		PUT("", middleware.AnyAuth(), handler.Create).
+		PATCH(":id/approve", middleware.UserAuth(), handler.Approve).
+		PATCH(":id/decline", middleware.UserAuth(), handler.Decline)
 }
 
 func setupActionRoutes() {
