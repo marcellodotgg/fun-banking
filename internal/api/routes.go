@@ -153,5 +153,8 @@ func setupControlPanelRoutes() {
 
 	router.
 		Group("control-panel", middleware.UserAuth(), middleware.AdminOnly()).
-		GET("", handler.AppInsights)
+		GET("", handler.AppInsights).
+		GET("users", handler.Users).
+		GET("announcements", handler.Announcements).
+		GET("polls", handler.Polls)
 }

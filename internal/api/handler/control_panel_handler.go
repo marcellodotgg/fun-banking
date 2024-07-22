@@ -28,3 +28,15 @@ func (h controlPanelHandler) AppInsights(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "control_panel_app_insights", h)
 }
+
+func (h controlPanelHandler) Users(c *gin.Context) {
+	c.HTML(http.StatusOK, "control_panel_users", h)
+}
+
+func (h controlPanelHandler) Announcements(c *gin.Context) {
+	c.HTML(http.StatusOK, "control_panel_announcements", h)
+}
+
+func (h controlPanelHandler) Polls(c *gin.Context) {
+	c.HTML(http.StatusOK, "control_panel_polls", h)
+}

@@ -1,0 +1,19 @@
+{{ define "control_panel_users" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | Manage Users</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col gap-4 mt-2 mb-4 container">
+      <section class="card outlined flex flex-col gap-4">
+        <h1 class="font-extrabold">Users</h1>
+      </section>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }}
