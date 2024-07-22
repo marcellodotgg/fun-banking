@@ -1,7 +1,7 @@
 {{ define "sessions/signin_form" }}
 <form hx-post="signin" hx-disabled-elt="button, input" class="flex flex-col gap-5">
-  {{ if and . .FormData.Errors.email_or_username }}
-  <div class="alert-banner bg-danger">{{ .FormData.Errors.email_or_username }}</div>
+  {{ if and . .Form.Errors.email_or_username }}
+  <div class="alert-banner bg-danger">{{ .Form.Errors.email_or_username }}</div>
   {{ end }}
   <div class="flex flex-col gap-2">
     <div class="flex flex-col gap-1">

@@ -14,8 +14,8 @@
           <h1 class="font-extrabold text-xl">Sign in to Fun Banking</h1>
           <div hx-boost="true">Need an account? <a class="link" href="signup">Create one</a>.</div>
         </div>
-        {{ if and . .FormData.Errors.general }}
-        <div class="alert-banner bg-warning">{{ .FormData.Errors.general }}</div>
+        {{ if and . .Form.Errors.general }}
+        <div class="alert-banner bg-warning">{{ .Form.Errors.general }}</div>
         {{ end }} {{ template "sessions/signin_form" . }}
       </section>
     </main>

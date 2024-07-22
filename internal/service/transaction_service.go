@@ -45,7 +45,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 
 		transaction.Balance = account.Balance
 
-		if &account.Customer.Bank.UserID == transaction.UserID {
+		if account.Customer.Bank.UserID == *transaction.UserID {
 			transaction.Status = domain.TransactionApproved
 			account.Balance += transaction.Amount
 
