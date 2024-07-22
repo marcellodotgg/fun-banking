@@ -111,6 +111,7 @@ func (h userHandler) Update(c *gin.Context) {
 }
 
 func (h userHandler) Notifications(c *gin.Context) {
+	h.SignedIn = true
 	c.HTML(http.StatusOK, "notifications", h)
 }
 
