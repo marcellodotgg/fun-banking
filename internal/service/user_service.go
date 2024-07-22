@@ -12,6 +12,7 @@ type UserService interface {
 	Create(user *domain.User) error
 	Update(id string, user *domain.User) error
 	FindByID(id string, user *domain.User) error
+	FindPendingTransactions(id string, transactions *[]domain.Transaction) error
 }
 
 type userService struct{}
@@ -46,6 +47,20 @@ func (s userService) Update(id string, user *domain.User) error {
 	user.ID = uint(userID)
 
 	return persistence.DB.Updates(&user).Error
+}
+
+func (s userService) FindPendingTransactions(id string, transactions *[]domain.Transaction) error {
+	return persistence.DB.
+		Joins("JOIN users on users.id = banks.user_id").
+		Joins("JOIN banks on banks.id = customers.bank_id").
+		Joins("JOIN customers on customers.id = accounts.customer_id").
+		Joins("JOIN accounts on accounts.id = transactions.account_id").
+		Where("users.id = ?", id).
+		Where("transactions.status = 'PENDING'").
+		Preload("Account").
+		Preload("Account.Customer").
+		Select("transactions.*").
+		Find(&transactions).Error
 }
 
 func (s userService) hashPassword(password string) (string, error) {

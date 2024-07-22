@@ -39,6 +39,7 @@ func Start() {
 	setupCustomerRoutes()
 	setupAccountRoutes()
 	setupTransactionRoutes()
+	setupNotificationRoutes()
 	// Run the application
 	router.Run()
 }
@@ -72,6 +73,16 @@ func setupUserRoutes() {
 		Group("users").
 		PUT("", handler.Create).
 		PATCH("", middleware.UserAuth(), handler.Update)
+}
+
+func setupNotificationRoutes() {
+	handler := handler.NewUserHandler()
+
+	router.
+		Group("notifications").
+		GET("", middleware.UserAuth(), handler.Notifications).
+		GET("pending", middleware.UserAuth(), handler.PendingTransactions).
+		POST("has-pending", middleware.UserAuth(), handler.HasPendingTransactions)
 }
 
 func setupBankRoutes() {

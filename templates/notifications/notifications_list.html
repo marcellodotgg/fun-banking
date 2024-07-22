@@ -1,0 +1,25 @@
+{{ define "notifications_list" }} {{ if gt (len .) 0 }}
+<ul class="flex flex-col gap-2">
+  {{ range . }}
+  <li class="flex items-center gap-3 border-t pt-3">
+    <div class="flex flex-col w-full">
+      <div class="text-sm text-gray-600">
+        {{ .Account.Customer.FullName }} &mdash; {{ .Account.Name }}
+      </div>
+      <div class="text-xl font-extrabold">{{ currency .Amount }}</div>
+      <div class="text-sm text-gray-600"><strong>Note: </strong>{{ .Description }}</div>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-2 items-center shrink-0 flex justify-end text-sm">
+      <button class="pill border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50">
+        Approve
+      </button>
+      <button class="pill border border-red-700 text-red-700 font-bold hover:bg-red-50">
+        Decline
+      </button>
+    </div>
+  </li>
+  {{ end }}
+</ul>
+{{ else }}
+<div>Yeah, dawg. You got nothing.</div>
+{{ end }} {{ end }}

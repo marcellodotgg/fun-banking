@@ -109,3 +109,28 @@ func (h userHandler) Update(c *gin.Context) {
 	// TODO: Might need to be OOB
 	c.HTML(http.StatusAccepted, "user_settings_form", h)
 }
+
+func (h userHandler) Notifications(c *gin.Context) {
+	c.HTML(http.StatusOK, "notifications", h)
+}
+
+func (h userHandler) PendingTransactions(c *gin.Context) {
+	userID := c.GetString("user_id")
+
+	var transactions []domain.Transaction
+	h.userService.FindPendingTransactions(userID, &transactions)
+
+	c.HTML(http.StatusOK, "notifications_list", transactions)
+}
+
+func (h userHandler) HasPendingTransactions(c *gin.Context) {
+	userID := c.GetString("user_id")
+
+	var transactions []domain.Transaction
+	if err := h.userService.FindPendingTransactions(userID, &transactions); err != nil {
+		c.HTML(http.StatusOK, "inbox_badge", false)
+		return
+	}
+
+	c.HTML(http.StatusOK, "inbox_badge", len(transactions))
+}
