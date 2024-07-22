@@ -130,6 +130,7 @@ form .error-message {
 
 /** Transitions */
 a,
+details summary,
 button {
   transition-property: color, background;
   transition-duration: 300ms;
@@ -331,4 +332,61 @@ button {
   100% {
     transform: scale(0.9);
   }
+}
+
+#app-drawer ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#app-drawer ul li a {
+  display: block;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+#app-drawer ul li a:hover {
+  background: hsl(120, 20%, 95%);
+}
+
+#app-drawer ul li a.active {
+  background: var(--color-ghost);
+}
+
+#app-drawer ul li a.active:hover {
+  background: hsl(120, 20%, 83%);
+}
+
+#app-drawer ul li details summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+#app-drawer ul li details > summary:after {
+  content: "▼";
+}
+
+#app-drawer ul li details[open] > summary:after {
+  content: "▲";
+}
+
+#app-drawer ul li details[open] summary {
+  background: hsl(120, 20%, 95%);
+}
+
+#app-drawer ul li details summary:hover {
+  background: hsl(120, 20%, 95%);
+}
+
+#app-drawer ul li details ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 0 24px;
 }

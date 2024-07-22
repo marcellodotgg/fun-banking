@@ -29,6 +29,14 @@ func (u User) FullName() string {
 	return cases.Title(language.AmericanEnglish).String(fmt.Sprintf("%s %s", u.FirstName, u.LastName))
 }
 
+func (u User) IsAdmin() bool {
+	return u.Role == UserRoleAdmin
+}
+
+func (u User) IsFree() bool {
+	return u.Role == UserRoleFree
+}
+
 func (u *User) BeforeCreate(tx *gorm.DB) error {
 	u.Username = strings.TrimSpace(strings.ToLower(u.Username))
 	u.Email = strings.TrimSpace(strings.ToLower(u.Email))

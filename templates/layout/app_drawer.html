@@ -14,7 +14,20 @@
     {{ end }}
     <ul>
       {{ if .SignedIn }}
-      <li><a href="/">Dashboard</a></li>
+      <li><a href="/" class="active">Dashboard</a></li>
+      {{ if .CurrentUser.IsAdmin }}
+        <li>
+          <details>
+            <summary>Control Panel</summary>
+            <ul>
+              <li><a href="/control-panel">Application Insights</a></li>
+              <li><a href="/control-panel/users">Manage Users</a></li>
+              <li><a href="/control-panel/announcements">Announcements</a></li>
+              <li><a href="/control-panel/polls">Polls</a></li>
+            </ul>
+          </details>
+        </li>
+      {{ end }}
       <li><a href="/settings">Settings</a></li>
       <li><a hx-delete="/signout">Sign out</a></li>
       {{ else if .CustomerSignedIn }}
@@ -30,4 +43,27 @@
     </ul>
   </aside>
 </div>
+<script>
+  setActiveLink();
+
+  function setActiveLink() {
+    const links = document.querySelectorAll('#app-drawer ul li a');
+    const currentUrl = window.location;
+
+    links.forEach(link => {
+      link.classList.remove('active');
+
+      if (link.getAttribute('href') === currentUrl.pathname) {
+        link.classList.add('active');
+
+        // This will open any details if a child is active
+        const parent = link.parentElement.parentElement.parentElement;
+        if (parent && parent.localName === 'details') {
+          parent.setAttribute('open', 'open');
+          console.dir(parent);
+        }
+      }
+    });
+  }
+</script>
 {{ end }}

@@ -40,6 +40,7 @@ func Start() {
 	setupAccountRoutes()
 	setupTransactionRoutes()
 	setupNotificationRoutes()
+	setupControlPanelRoutes()
 	// Run the application
 	router.Run()
 }
@@ -144,4 +145,12 @@ func setupActionRoutes() {
 
 	router.Group("actions").
 		GET("open-app-drawer", handler.OpenAppDrawer)
+}
+
+func setupControlPanelRoutes() {
+	handler := handler.NewControlPanelHandler()
+
+	router.
+		Group("control-panel", middleware.UserAuth(), middleware.AdminOnly()).
+		GET("", handler.AppInsights)
 }
