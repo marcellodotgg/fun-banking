@@ -17,6 +17,7 @@ var router = gin.Default()
 func Start() {
 	router.SetFuncMap(template.FuncMap{
 		"titleize": func(text string) string { return cases.Title(language.AmericanEnglish).String(text) },
+		"number":   func(amount int64) string { return utils.FormatNumber(amount) },
 		"currency": func(amount float64) string { return utils.FormatCurrency(amount) },
 		"sub":      func(a, b int) int { return a - b },
 		"add":      func(a, b int) int { return a + b },

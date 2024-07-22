@@ -9,7 +9,35 @@
   <body>
     {{ template "layout/navbar" . }}
     <main class="flex flex-col gap-4 mt-2 mb-4 container">
-      <section class="card outlined flex flex-col gap-4">HELLO WORLD</section>
+      <section class="card outlined flex flex-col gap-4">
+        <h1 class="font-extrabold">Application Insights</h1>
+        <table>
+          <thead class="border-b-2 border-black">
+            <tr>
+              <th class="text-left p-2">Entity Type</th>
+              <th class="text-right p-2">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="hover:bg-ghost/40 border-b">
+              <td class="p-2">Users</td>
+              <td class="text-right p-2">{{ number .SiteInfo.UserCount }}</td>
+            </tr>
+            <tr class="hover:bg-ghost/40 border-b">
+              <td class="p-2">Banks</td>
+              <td class="text-right p-2">{{ number .SiteInfo.BankCount }}</td>
+            </tr>
+            <tr class="hover:bg-ghost/40 border-b">
+              <td class="p-2">Customers</td>
+              <td class="text-right p-2">{{ number .SiteInfo.CustomerCount }}</td>
+            </tr>
+            <tr class="hover:bg-ghost/40 border-b">
+              <td class="p-2">Transactions</td>
+              <td class="text-right p-2">{{ number .SiteInfo.TransactionCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>

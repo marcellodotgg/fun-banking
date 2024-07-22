@@ -11,6 +11,10 @@ func FormatCurrency(amount float64) string {
 	return formatUSD(amount)
 }
 
+func FormatNumber(amount int64) string {
+	return humanize.Comma(amount)
+}
+
 func formatUSD(amount float64) string {
 	formattedAmount := humanize.CommafWithDigits(amount, 2)
 
