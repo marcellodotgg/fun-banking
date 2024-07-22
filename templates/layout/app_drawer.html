@@ -3,6 +3,7 @@
   <div class="underlay" onclick="closeAppDrawer()"></div>
   <aside class="flex flex-col gap-4 content">
     <h1 class="font-bold">Navigation</h1>
+    {{ if .SignedIn }}
     <section class="flex items-center gap-2">
       <img class="border-2 rounded-full size-16 p-1" src="{{ .CurrentUser.ImageURL }}" alt="profile image" />
       <div class="flex flex-col">
@@ -10,11 +11,15 @@
         <span class="text-sm text-gray-600 -mt-1">@{{ .CurrentUser.Username }}</span>
       </div>
     </section>
+    {{ end }}
     <ul>
       {{ if .SignedIn }}
       <li><a href="/">Dashboard</a></li>
       <li><a href="/settings">Settings</a></li>
       <li><a hx-delete="/signout">Sign out</a></li>
+      {{ else if .CustomerSignedIn }}
+      <li><a href="/">Dashboard</a></li>
+      <li><a hx-delete="/sessions/customer">Sign out</a></li>
       {{ else }}
       <li>
         <li><a href="/">Homepage</a></li>

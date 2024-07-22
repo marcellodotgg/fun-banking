@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Auth() gin.HandlerFunc {
+func UserAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.GetString("user_id")
 

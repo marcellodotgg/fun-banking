@@ -57,21 +57,21 @@ func setupSessionRoutes() {
 	router.
 		GET("signin", middleware.NoAuth(), handler.SignIn).
 		POST("signin", middleware.NoAuth(), handler.CreateSession).
-		DELETE("signout", handler.DestroySession).
+		DELETE("signout", middleware.UserAuth(), handler.DestroySession).
 		POST("sessions/customer", middleware.NoAuth(), handler.CreateCustomerSession).
-		DELETE("sessions/customer", handler.DestroyCustomerSession)
+		DELETE("sessions/customer", middleware.CustomerAuth(), handler.DestroyCustomerSession)
 }
 
 func setupUserRoutes() {
 	handler := handler.NewUserHandler()
 
 	router.GET("signup", middleware.NoAuth(), handler.SignUp)
-	router.GET("settings", middleware.Auth(), handler.Settings)
+	router.GET("settings", middleware.UserAuth(), handler.Settings)
 
 	router.
 		Group("users").
 		PUT("", handler.Create).
-		PATCH("", middleware.Auth(), handler.Update)
+		PATCH("", middleware.UserAuth(), handler.Update)
 }
 
 func setupBankRoutes() {
@@ -79,16 +79,16 @@ func setupBankRoutes() {
 
 	router.
 		Group("banks").
-		GET("", middleware.Auth(), handler.MyBanks).
-		PUT("", middleware.Auth(), handler.CreateBank).
-		POST("create", middleware.Auth(), handler.OpenCreateModal).
-		GET(":id", middleware.Auth(), handler.ViewBank).
-		PATCH(":id", middleware.Auth(), handler.UpdateBank).
-		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal).
+		GET("", middleware.UserAuth(), handler.MyBanks).
+		PUT("", middleware.UserAuth(), handler.CreateBank).
+		POST("create", middleware.UserAuth(), handler.OpenCreateModal).
+		GET(":id", middleware.UserAuth(), handler.ViewBank).
+		PATCH(":id", middleware.UserAuth(), handler.UpdateBank).
+		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
 		GET(":id/customers", middleware.AnyAuth(), handler.CustomerSearch).
-		GET(":id/customers-filter", middleware.Auth(), handler.FilterCustomers).
-		POST(":id/create-customer", middleware.Auth(), handler.OpenCreateCustomerModal).
-		PUT(":id/create-customer", middleware.Auth(), handler.CreateCustomer)
+		GET(":id/customers-filter", middleware.UserAuth(), handler.FilterCustomers).
+		POST(":id/create-customer", middleware.UserAuth(), handler.OpenCreateCustomerModal).
+		PUT(":id/create-customer", middleware.UserAuth(), handler.CreateCustomer)
 }
 
 func setupCustomerRoutes() {
@@ -97,8 +97,8 @@ func setupCustomerRoutes() {
 	router.
 		Group("customers").
 		GET(":id", middleware.AnyAuth(), handler.GetCustomer).
-		PATCH(":id", middleware.Auth(), handler.Update).
-		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal)
+		PATCH(":id", middleware.UserAuth(), handler.Update).
+		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal)
 }
 
 func setupAccountRoutes() {
@@ -107,9 +107,9 @@ func setupAccountRoutes() {
 	router.
 		Group("accounts").
 		GET(":id", middleware.AnyAuth(), handler.Get).
-		PATCH(":id", middleware.Auth(), handler.Update).
+		PATCH(":id", middleware.UserAuth(), handler.Update).
 		GET(":id/transactions", middleware.AnyAuth(), handler.GetTransactions).
-		POST(":id/settings", middleware.Auth(), handler.OpenSettingsModal).
+		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
 		GET(":id/cash-flow", middleware.AnyAuth(), handler.CashFlow).
 		POST(":id/withdraw-or-deposit", middleware.AnyAuth(), handler.OpenWithdrawOrDepositModal).
 		PUT(":id/withdraw-or-deposit", middleware.AnyAuth(), handler.WithdrawOrDeposit).
