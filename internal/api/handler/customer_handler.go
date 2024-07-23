@@ -63,16 +63,15 @@ func (h customerHandler) OpenSettingsModal(c *gin.Context) {
 }
 
 func (h customerHandler) Update(c *gin.Context) {
-	id := c.Param("id")
 	h.Form = GetForm(c)
 
-	h.customerService.FindByID(id, &h.Customer)
+	h.Customer = domain.Customer{
+		FirstName: h.Form.Data["first_name"],
+		LastName:  h.Form.Data["last_name"],
+		PIN:       h.Form.Data["pin"],
+	}
 
-	h.Customer.FirstName = h.Form.Data["first_name"]
-	h.Customer.LastName = h.Form.Data["last_name"]
-	h.Customer.PIN = h.Form.Data["pin"]
-
-	if err := h.customerService.Update(&h.Customer); err != nil {
+	if err := h.customerService.Update(c.Param("id"), &h.Customer); err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") {
 			h.Form.Errors["pin"] = "PIN is already in use by another customer"
 			c.HTML(http.StatusOK, "customer_settings_form", h)

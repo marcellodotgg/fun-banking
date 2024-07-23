@@ -11,7 +11,7 @@ import (
 type CustomerService interface {
 	Create(customer *domain.Customer) error
 	FindByID(id string, customer *domain.Customer) error
-	Update(customer *domain.Customer) error
+	Update(id string, customer *domain.Customer) error
 	FindAllByBankIDAndName(bankID, name string, limit int, customers *[]domain.Customer) error
 	FindByBankIDAndPIN(bankID, pin string, customer *domain.Customer) error
 }
@@ -35,8 +35,11 @@ func (s customerService) FindByID(id string, customer *domain.Customer) error {
 	return persistence.DB.Preload("Bank.User").Preload("Accounts").First(&customer, "id = ?", id).Error
 }
 
-func (s customerService) Update(customer *domain.Customer) error {
-	return persistence.DB.Updates(&customer).Error
+func (s customerService) Update(id string, customer *domain.Customer) error {
+	if err := persistence.DB.Where("id = ?", id).Updates(&customer).Error; err != nil {
+		return err
+	}
+	return s.FindByID(id, customer)
 }
 
 func (s customerService) FindAllByBankIDAndName(bankID, name string, limit int, customers *[]domain.Customer) error {

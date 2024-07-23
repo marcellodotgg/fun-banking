@@ -28,17 +28,11 @@ func (s bankService) Create(bank *domain.Bank) error {
 	if err := persistence.DB.Create(&bank).Error; err != nil {
 		return err
 	}
-
 	return persistence.DB.Preload("User").First(&bank).Error
 }
 
 func (s bankService) Update(id string, bank *domain.Bank) error {
-	var oldBank domain.Bank
-	if err := persistence.DB.First(&oldBank, "id = ?", id).Error; err != nil {
-		return err
-	}
-
-	if err := persistence.DB.Model(&oldBank).Updates(&bank).Error; err != nil {
+	if err := persistence.DB.Where("id = ?", id).Updates(&bank).Error; err != nil {
 		return err
 	}
 	return s.FindByID(id, bank)

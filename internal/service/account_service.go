@@ -8,7 +8,7 @@ import (
 type AccountService interface {
 	FindByID(id string, account *domain.Account) error
 	Create(account *domain.Account) error
-	Update(account *domain.Account) error
+	Update(id string, account *domain.Account) error
 }
 
 type accountService struct{}
@@ -17,17 +17,20 @@ func NewAccountService() AccountService {
 	return accountService{}
 }
 
-func (as accountService) FindByID(id string, account *domain.Account) error {
+func (s accountService) FindByID(id string, account *domain.Account) error {
 	return persistence.DB.
 		Preload("Customer.Bank").
 		Preload("Customer.Accounts").
 		First(&account, "id = ?", id).Error
 }
 
-func (as accountService) Create(account *domain.Account) error {
+func (s accountService) Create(account *domain.Account) error {
 	return persistence.DB.Create(&account).Error
 }
 
-func (as accountService) Update(account *domain.Account) error {
-	return persistence.DB.Updates(&account).Error
+func (s accountService) Update(id string, account *domain.Account) error {
+	if err := persistence.DB.Where("id = ?", id).Updates(&account).Error; err != nil {
+		return err
+	}
+	return s.FindByID(id, account)
 }

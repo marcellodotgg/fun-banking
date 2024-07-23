@@ -113,16 +113,10 @@ func (ah accountHandler) CashFlow(c *gin.Context) {
 }
 
 func (ah accountHandler) Update(c *gin.Context) {
-	accountID := c.Param("id")
 	ah.Form = GetForm(c)
 
-	if err := ah.accountService.FindByID(accountID, &ah.Account); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", ah)
-		return
-	}
-
 	ah.Account.Name = ah.Form.Data["name"]
-	if err := ah.accountService.Update(&ah.Account); err != nil {
+	if err := ah.accountService.Update(c.Param("id"), &ah.Account); err != nil {
 		ah.Form.Errors["general"] = "Something happened trying to update your account"
 		c.HTML(http.StatusUnprocessableEntity, "account_settings_form", ah)
 		return

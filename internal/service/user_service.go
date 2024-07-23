@@ -1,7 +1,6 @@
 package service
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -72,10 +71,7 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 }
 
 func (s userService) Update(id string, user *domain.User) error {
-	userID, _ := strconv.Atoi(id)
-	user.ID = userID
-
-	return persistence.DB.Updates(&user).Error
+	return persistence.DB.Where("id = ?", id).Updates(&user).Error
 }
 
 func (s userService) FindPendingTransactions(id string, transactions *[]domain.Transaction) error {

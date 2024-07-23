@@ -39,8 +39,10 @@ func NewTransactionService() TransactionService {
 
 func (ts transactionService) Create(transaction *domain.Transaction) error {
 	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		accountID := strconv.Itoa(transaction.AccountID)
+
 		var account domain.Account
-		if err := ts.accountService.FindByID(strconv.Itoa(transaction.AccountID), &account); err != nil {
+		if err := ts.accountService.FindByID(accountID, &account); err != nil {
 			return err
 		}
 
@@ -50,7 +52,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 			transaction.Status = domain.TransactionApproved
 			account.Balance += transaction.Amount
 
-			if err := ts.accountService.Update(&account); err != nil {
+			if err := ts.accountService.Update(accountID, &account); err != nil {
 				return err
 			}
 		}
@@ -76,7 +78,7 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 
 		fromAccount.Balance -= amount
 
-		if err := s.accountService.Update(&fromAccount); err != nil {
+		if err := s.accountService.Update(strconv.Itoa(fromAccount.ID), &fromAccount); err != nil {
 			return err
 		}
 
@@ -96,7 +98,7 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 
 		toAccount.Balance += amount
 
-		if err := s.accountService.Update(&toAccount); err != nil {
+		if err := s.accountService.Update(strconv.Itoa(toAccount.ID), &toAccount); err != nil {
 			return err
 		}
 
