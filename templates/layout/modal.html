@@ -23,6 +23,9 @@
     {{ if eq .ModalType "send_money_modal" }}
     {{ template "send_money_modal" . }}
     {{ end }} 
+    {{ if eq .ModalType "control_panel_user_modal" }}
+    {{ template "control_panel_user_modal" . }}
+    {{ end }}
   </div>
 </div>
 {{ end }}

@@ -1,0 +1,48 @@
+{{ define "control_panel_user_modal" }}
+<div class="flex flex-col gap-4">
+  <div>
+    <h1 class="text-xl font-extrabold">Manage {{ .User.FullName }}</h1>
+    <p class="text-gray-600 text-sm">You can manage this user however you need to. Admins will not be able to update user information like names, however.</p>
+  </div>
+  <div id="update-user-form">{{ template "control_panel_user_form" . }}</div>
+  <div id="bank-list">
+      <strong>Banks</strong>
+      {{ if gt (len .User.Banks) 0 }}
+      <table>
+        <tbody>
+          {{ range .User.Banks }}
+            <tr>
+              <td><a class="link" href="/banks/{{ .ID }}">{{ .Name }}</a></td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+      {{ else }}
+      <div class="text-sm text-gray-600">This user has no banks</div>
+      {{ end }}
+  </div>
+</div>
+{{ end }} {{ define "control_panel_user_form" }}
+<form class="flex flex-col gap-2">
+  <div>
+    <label for="role">User Role</label>
+    <select id="role" name="role">
+      <option value="FREE" {{ if .User.IsFree }} selected {{ end }}>Free</option>
+      <option value="PREMIUM" {{ if eq .User.Role "PREMIUM" }} selected {{ end }}>Premium</option>
+      <option value="ADMIN" {{ if .User.IsAdmin }} selected {{ end }}>Admin</option>
+    </select>
+  </div>
+  <div>
+    <label for="verified">Verified</label>
+    <input id="verified" name="verified" type="checkbox" {{ if .User.IsAdmin }} checked {{ end }} />
+  </div>
+  <div>
+    <label for="image_url">Image URL</label>
+    <input id="image_url" name="image_url" type="text" value="{{ .User.ImageURL }}" />
+    <span class="text-xs text-gray-600">https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg</span>
+  </div>
+  <div>
+    <button class="bg-emerald-700 hover:bg-emerald-800" type="submit">Update User</button>
+  </div>
+</form>
+{{ end }}

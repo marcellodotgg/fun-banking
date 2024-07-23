@@ -2,8 +2,10 @@ package service
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -12,6 +14,7 @@ type UserService interface {
 	Create(user *domain.User) error
 	Update(id string, user *domain.User) error
 	FindByID(id string, user *domain.User) error
+	Search(search string, pagingInfo *pagination.PagingInfo[domain.User]) error
 	FindPendingTransactions(id string, transactions *[]domain.Transaction) error
 }
 
@@ -34,7 +37,38 @@ func (s userService) Create(user *domain.User) error {
 }
 
 func (s userService) FindByID(id string, user *domain.User) error {
-	return persistence.DB.First(&user, "id = ?", id).Error
+	return persistence.DB.Preload("Banks").First(&user, "id = ?", id).Error
+}
+
+func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[domain.User]) error {
+	var users []domain.User
+	var usersCount int64
+
+	search = strings.ToLower(search)
+
+	// Count the users first
+	persistence.DB.
+		Model(domain.User{}).
+		Where("username LIKE ?", "%"+search+"%").
+		Or("email LIKE ?", "%"+search+"%").
+		Or("first_name LIKE ?", "%"+search+"%").
+		Or("last_name LIKE ?", "%"+search+"%").
+		Count(&usersCount)
+
+	// Find the users
+	persistence.DB.
+		Where("username LIKE ?", "%"+search+"%").
+		Or("email LIKE ?", "%"+search+"%").
+		Or("first_name LIKE ?", "%"+search+"%").
+		Or("last_name LIKE ?", "%"+search+"%").
+		Offset((pagingInfo.PageNumber - 1) * pagingInfo.ItemsPerPage).
+		Limit(pagingInfo.ItemsPerPage).
+		Find(&users)
+
+	pagingInfo.Items = users
+	pagingInfo.TotalItems = usersCount
+
+	return nil
 }
 
 func (s userService) Update(id string, user *domain.User) error {

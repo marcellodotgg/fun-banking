@@ -9,11 +9,93 @@
   <body>
     {{ template "layout/navbar" . }}
     <main class="flex flex-col gap-4 mt-2 mb-4 container">
-      <section class="card outlined flex flex-col gap-4">
-        <h1 class="font-extrabold">Users</h1>
+      <section class="card outlined flex flex-col gap-2">
+        <div>
+          <h1 class="font-extrabold">Users</h1>
+        </div>
+        <form class="flex flex-col gap-2">
+          <div>
+            <label for="search">Search for a User</label>
+            <input
+              id="search"
+              hx-get="/control-panel/users/search"
+              hx-trigger="input changed delay:500ms, search"
+              hx-target="#user-list"
+              name="search"
+              autocomplete="off"
+              type="search"
+              placeholder="Search for a user..."
+            />
+          </div>
+          <div class="flex items-center gap-1">
+            <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">Search</button>
+            <a href="/control-panel/users" class="pill ghost">Reset</a>
+          </div>
+        </form>
+        <div id="user-list">{{ template "control_panel_users_list" .UserResults }}</div>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
 </html>
+{{ end }} {{ define "control_panel_users_list" }}
+<table class="w-full table-auto overflow-hidden">
+  <thead class="border-b-2 border-black">
+    <tr>
+      <th class="p-2 text-left">User Information</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ if gt (len .Items ) 0 }} {{ range .Items }}
+    <tr
+      hx-get="/control-panel/users/{{ .ID }}"
+      hx-trigger="click"
+      hx-target="body"
+      hx-swap="beforeend"
+      class="border-b hover:bg-ghost/30 hover:cursor-pointer"
+    >
+      <td class="flex gap-3 items-center text-left p-2">
+        <div>
+          <img
+            class="size-14 rounded-full border p-0.5"
+            src="{{ .ImageURL }}"
+            alt="profile image"
+          />
+        </div>
+        <div>
+          <div class="flex items-center gap-1 leading-none">
+            <span class="font-semibold">{{ .FullName }}</span>
+            <span class="text-xs text-gray-600">(@{{ .Username }})</span>
+          </div>
+          <div class="leading-none">
+            <a href="mailto:{{ .Email }}" class="link text-xs">{{ .Email }}</a>
+          </div>
+          <div class="text-xs text-gray-600">Joined on {{ datetime .CreatedAt }}</div>
+        </div>
+      </td>
+    </tr>
+    {{ end }} {{ else }}
+    <tr class="border-b">
+      <td colspan="2" class="text-left p-2 text-gray-600">There are no users registered.</td>
+    </tr>
+    {{ end }}
+  </tbody>
+  <caption class="sr-only">
+    List of users belonging to Fun Banking.
+  </caption>
+</table>
+{{ if gt (len .Items) 0 }}
+<div class="text-sm mt-4">
+  Displaying
+  <strong> {{ .DisplayRange }} </strong>
+  of <strong>{{ .TotalItems }}</strong> users
+</div>
+{{ end }}
+<div class="mt-4">
+  {{ if .HasPreviousPage }}
+  <a href="/control-panel/users?page={{ sub .PageNumber 1 }}">Previous</a>
+  {{ end }} {{ if .HasNextPage }}
+  <a href="/control-panel/users?page={{add .PageNumber 1}}">Next</a>
+  {{ end }}
+</div>
 {{ end }}
