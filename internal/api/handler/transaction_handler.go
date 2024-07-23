@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/service"
@@ -13,6 +14,7 @@ import (
 type transactionHandler struct {
 	SignedIn           bool
 	Form               FormData
+	ModalType          string
 	transactionService service.TransactionService
 	accountService     service.AccountService
 	customerService    service.CustomerService
@@ -24,6 +26,7 @@ func NewTransactionHandler() transactionHandler {
 	return transactionHandler{
 		SignedIn:           true,
 		Form:               NewFormData(),
+		ModalType:          "",
 		Customer:           domain.Customer{},
 		accountService:     service.NewAccountService(),
 		customerService:    service.NewCustomerService(),
@@ -97,6 +100,35 @@ func (h transactionHandler) Decline(c *gin.Context) {
 	var transactions []domain.Transaction
 	h.userService.FindPendingTransactions(c.GetString("user_id"), &transactions)
 	c.HTML(http.StatusAccepted, "notifications_list_oob", transactions)
+}
+
+func (h transactionHandler) OpenBulkTransferModal(c *gin.Context) {
+	h.ModalType = "bulk_transfer_modal"
+	h.Form = GetForm(c)
+	h.Form.Data["customer_ids"] = strings.Join(c.QueryArray("ids"), ",")
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h transactionHandler) BulkTransfer(c *gin.Context) {
+	h.Form = GetForm(c)
+	customerIDs := strings.Split(h.Form.Data["customer_ids"], ",")
+
+	amount, _ := strconv.ParseFloat(h.Form.Data["amount"], 64)
+	userID, _ := utils.ConvertToIntPointer(c.GetString("user_id"))
+
+	transaction := domain.Transaction{
+		Amount:      h.getTransferAmount(amount, h.Form.Data["type"]),
+		Description: h.Form.Data["description"],
+		UserID:      userID,
+	}
+
+	if err := h.transactionService.BulkTransfer(customerIDs, &transaction); err != nil {
+		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
+		return
+	}
+
+	c.Header("HX-Trigger", "closeModal")
+	// TODO: OOB swap for this, too.
 }
 
 func (th transactionHandler) getTransferAmount(amount float64, transferType string) float64 {

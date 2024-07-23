@@ -9,6 +9,7 @@ type AccountService interface {
 	FindByID(id string, account *domain.Account) error
 	Create(account *domain.Account) error
 	Update(id string, account *domain.Account) error
+	UpdateBalance(id string, account *domain.Account) error
 }
 
 type accountService struct{}
@@ -30,6 +31,13 @@ func (s accountService) Create(account *domain.Account) error {
 
 func (s accountService) Update(id string, account *domain.Account) error {
 	if err := persistence.DB.Where("id = ?", id).Updates(&account).Error; err != nil {
+		return err
+	}
+	return s.FindByID(id, account)
+}
+
+func (s accountService) UpdateBalance(id string, account *domain.Account) error {
+	if err := persistence.DB.Where("id = ?", id).Select("balance").Updates(&account).Error; err != nil {
 		return err
 	}
 	return s.FindByID(id, account)

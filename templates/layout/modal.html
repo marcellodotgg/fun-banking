@@ -26,6 +26,9 @@
     {{ if eq .ModalType "control_panel_user_modal" }}
     {{ template "control_panel_user_modal" . }}
     {{ end }}
+    {{ if eq .ModalType "bulk_transfer_modal" }}
+    {{ template "bulk_transfer_modal" . }}
+    {{ end }}
   </div>
 </div>
 {{ end }}

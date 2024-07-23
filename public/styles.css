@@ -6,6 +6,7 @@
   --color-danger: hsl(0, 100%, 90%);
   --color-danger-dark: hsl(0, 100%, 37%);
   --color-ghost: hsl(120, 20%, 88%);
+  --color-ghost-darker: hsl(120, 20%, 83%);
   --color-bg: hsl(120, 20%, 96%);
   --color-link: hsl(120, 20%, 25%);
   --color-outline: hsl(120, 20%, 75%);
@@ -432,4 +433,12 @@ article.announcement ol li,
 article.announcement ul li {
   margin-left: 6px;
   list-style-type: disc;
+}
+
+table tr.selected {
+  background: var(--color-ghost);
+}
+
+table tr.selected:hover {
+  background: var(--color-ghost-darker);
 }

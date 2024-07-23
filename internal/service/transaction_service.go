@@ -25,15 +25,18 @@ type TransactionService interface {
 	FindAllByAccount(accountID string, transactions *[]domain.Transaction, pagingInfo pagination.PagingInfo[domain.Transaction]) error
 	CountAllByAccount(accountID string, count *int64) error
 	CashflowByAccount(accountID string, cashflow *Cashflow) error
+	BulkTransfer(customerIDs []string, transaction *domain.Transaction) error
 }
 
 type transactionService struct {
-	accountService AccountService
+	accountService  AccountService
+	customerService CustomerService
 }
 
 func NewTransactionService() TransactionService {
 	return transactionService{
-		accountService: NewAccountService(),
+		accountService:  NewAccountService(),
+		customerService: NewCustomerService(),
 	}
 }
 
@@ -52,7 +55,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 			transaction.Status = domain.TransactionApproved
 			account.Balance += transaction.Amount
 
-			if err := ts.accountService.Update(accountID, &account); err != nil {
+			if err := ts.accountService.UpdateBalance(accountID, &account); err != nil {
 				return err
 			}
 		}
@@ -78,7 +81,7 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 
 		fromAccount.Balance -= amount
 
-		if err := s.accountService.Update(strconv.Itoa(fromAccount.ID), &fromAccount); err != nil {
+		if err := s.accountService.UpdateBalance(strconv.Itoa(fromAccount.ID), &fromAccount); err != nil {
 			return err
 		}
 
@@ -98,7 +101,7 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 
 		toAccount.Balance += amount
 
-		if err := s.accountService.Update(strconv.Itoa(toAccount.ID), &toAccount); err != nil {
+		if err := s.accountService.UpdateBalance(strconv.Itoa(toAccount.ID), &toAccount); err != nil {
 			return err
 		}
 
@@ -173,4 +176,26 @@ func (ts transactionService) CashflowByAccount(accountID string, cashflow *Cashf
 	cashflow.Withdrawals = withdrawals
 
 	return nil
+}
+
+func (s transactionService) BulkTransfer(customerIDs []string, transaction *domain.Transaction) error {
+	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		for _, customerID := range customerIDs {
+			var customer domain.Customer
+			if err := s.customerService.FindByID(customerID, &customer); err != nil {
+				return err
+			}
+
+			newTransaction := domain.Transaction{
+				AccountID:   customer.Accounts[0].ID,
+				Amount:      transaction.Amount,
+				Description: transaction.Description,
+				UserID:      transaction.UserID,
+			}
+			if err := s.Create(&newTransaction); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }

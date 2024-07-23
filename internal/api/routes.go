@@ -137,10 +137,11 @@ func setupTransactionRoutes() {
 
 	router.
 		Group("transactions").
-		// TODO creation should actually be on the account
 		PUT("", middleware.AnyAuth(), handler.Create).
 		PATCH(":id/approve", middleware.UserAuth(), handler.Approve).
-		PATCH(":id/decline", middleware.UserAuth(), handler.Decline)
+		PATCH(":id/decline", middleware.UserAuth(), handler.Decline).
+		GET("open-bulk-transfer", middleware.UserAuth(), handler.OpenBulkTransferModal).
+		PUT("bulk", middleware.UserAuth(), handler.BulkTransfer)
 }
 
 func setupActionRoutes() {
