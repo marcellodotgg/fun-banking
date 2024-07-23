@@ -14,7 +14,15 @@
           <h1 class="font-extrabold text-2xl">{{ .Announcement.Title }}</h1>
           <div class="text-gray-600 text-sm">On {{ datetime .Announcement.CreatedAt }}</div>
         </div>
-        <article class="announcement">{{ html .Announcement.HTML }}</article>
+        <article class="announcement">
+          {{ html .Announcement.HTML }} {{ if .CurrentUser.IsAdmin }}
+          <div class="mt-4">
+            <a href="/control-panel/announcements/{{.Announcement.ID}}" class="link">
+              Edit Announcement
+            </a>
+          </div>
+          {{ end }}
+        </article>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}

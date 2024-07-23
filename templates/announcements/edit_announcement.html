@@ -1,8 +1,8 @@
-{{ define "announcements_dashboard" }}
+{{ define "edit_announcement" }}
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Fun Banking | Announcements</title>
+    <title>Fun Banking | Edit Announcement</title>
     <meta name="description" content="Fun Banking - TODO" />
     {{ template "layout/head" . }}
   </head>
@@ -17,7 +17,7 @@
             informing users of updates or general knowledge sharing.
           </div>
         </div>
-        <div id="announcement-form">{{ template "announcement_form" .Form }}</div>
+        <div id="announcement-form">{{ template "edit_announcement_form" .Form }}</div>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}

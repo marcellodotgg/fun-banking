@@ -9,7 +9,7 @@ type AnnouncementService interface {
 	FindByID(id string, announcement *domain.Announcement) error
 	Recent(announcements *[]domain.Announcement) error
 	Create(announcement *domain.Announcement) error
-	Update(announcement *domain.Announcement) error
+	Update(id string, announcement *domain.Announcement) error
 	Delete(id string) error
 }
 
@@ -31,8 +31,8 @@ func (s announcementService) Create(announcement *domain.Announcement) error {
 	return persistence.DB.Create(&announcement).Error
 }
 
-func (s announcementService) Update(announcement *domain.Announcement) error {
-	return persistence.DB.Updates(&announcement).Error
+func (s announcementService) Update(id string, announcement *domain.Announcement) error {
+	return persistence.DB.Where("id = ?", id).Updates(&announcement).Error
 }
 
 func (s announcementService) Delete(id string) error {

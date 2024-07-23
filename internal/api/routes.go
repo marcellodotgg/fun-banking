@@ -161,6 +161,7 @@ func setupControlPanelRoutes() {
 		GET("users/:id", controlPanel.OpenUserModal).
 		GET("users/search", controlPanel.SearchUsers).
 		GET("announcements", announcements.Dashboard).
+		GET("announcements/:id", announcements.Edit).
 		PUT("announcements", announcements.Create).
 		PATCH("announcements/:id", announcements.Update).
 		DELETE("announcements/:id", announcements.Destroy).
