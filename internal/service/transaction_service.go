@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -40,13 +39,13 @@ func NewTransactionService() TransactionService {
 func (ts transactionService) Create(transaction *domain.Transaction) error {
 	return persistence.DB.Transaction(func(tx *gorm.DB) error {
 		var account domain.Account
-		if err := ts.accountService.FindByID(strconv.Itoa(int(transaction.AccountID)), &account); err != nil {
+		if err := ts.accountService.FindByID(transaction.AccountID, &account); err != nil {
 			return err
 		}
 
 		transaction.Balance = account.Balance
 
-		if account.Customer.Bank.UserID == *transaction.UserID {
+		if account.Customer.Bank.UserID == transaction.UserID {
 			transaction.Status = domain.TransactionApproved
 			account.Balance += transaction.Amount
 
@@ -116,9 +115,7 @@ func (s transactionService) Update(id, userID, status string) error {
 			return err
 		}
 
-		userIDUintPtr, _ := utils.ConvertToUintPointer(userID)
-
-		transaction.UserID = userIDUintPtr
+		transaction.UserID = userID
 		transaction.Status = status
 		transaction.Balance = account.Balance
 

@@ -9,7 +9,6 @@ import (
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/service"
-	"github.com/bytebury/fun-banking/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -67,16 +66,16 @@ func (ah accountHandler) OpenWithdrawOrDepositModal(c *gin.Context) {
 
 func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {
 	ah.Form = GetForm(c)
-	accountID, _ := strconv.Atoi(c.Param("id"))
+	accountID := c.Param("id")
+	userID := c.GetString("user_id")
 	amount, _ := strconv.ParseFloat(ah.Form.Data["amount"], 64)
-	userID, _ := utils.ConvertToUintPointer(c.GetString("user_id"))
 
 	if ah.Form.Data["type"] == "withdraw" {
 		amount = amount * -1
 	}
 
 	transaction := domain.Transaction{
-		AccountID:   uint(accountID),
+		AccountID:   accountID,
 		Amount:      amount,
 		Description: ah.Form.Data["description"],
 		UserID:      userID,

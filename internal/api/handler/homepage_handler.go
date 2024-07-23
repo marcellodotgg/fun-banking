@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -94,7 +93,7 @@ func (h homepageHandler) BankSignIn(c *gin.Context) {
 		return
 	}
 
-	h.Form.Data["bank_id"] = strconv.Itoa(int(h.Bank.ID))
+	h.Form.Data["bank_id"] = h.Bank.ID
 
 	c.HTML(http.StatusOK, "customer_signin", h)
 }

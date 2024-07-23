@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/service"
@@ -44,13 +43,12 @@ func (h announcementHandler) RecentAnnouncements(c *gin.Context) {
 }
 
 func (h announcementHandler) Create(c *gin.Context) {
-	userID, _ := strconv.Atoi(c.GetString("user_id"))
 	h.Form = GetForm(c)
 
 	announcement := domain.Announcement{
 		Title:       h.Form.Data["title"],
 		Description: h.Form.Data["description"],
-		UserID:      uint(userID),
+		UserID:      c.GetString("user_id"),
 	}
 
 	if err := h.announcementService.Create(&announcement); err != nil {
@@ -65,17 +63,15 @@ func (h announcementHandler) Create(c *gin.Context) {
 }
 
 func (h announcementHandler) Update(c *gin.Context) {
-	announcementID := c.Param("id")
-	userID, _ := strconv.Atoi(c.GetString("user_id"))
 	h.Form = GetForm(c)
 
 	announcement := domain.Announcement{
 		Title:       h.Form.Data["title"],
 		Description: h.Form.Data["description"],
-		UserID:      uint(userID),
+		UserID:      c.GetString("user_id"),
 	}
 
-	if err := h.announcementService.Update(announcementID, &announcement); err != nil {
+	if err := h.announcementService.Update(c.Param("id"), &announcement); err != nil {
 		h.Form.Errors["general"] = "Something went wrong posting your announcement."
 		c.HTML(http.StatusUnprocessableEntity, "edit_announcement_form", h.Form)
 		return
@@ -86,8 +82,7 @@ func (h announcementHandler) Update(c *gin.Context) {
 }
 
 func (h announcementHandler) Edit(c *gin.Context) {
-	announcementID := c.Param("id")
-	h.announcementService.FindByID(announcementID, &h.Announcement)
+	h.announcementService.FindByID(c.Param("id"), &h.Announcement)
 
 	h.Form = NewFormData()
 	h.Form.Data["id"] = h.Announcement.ID

@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
@@ -27,7 +26,7 @@ func (a userAuth) Login(usernameOrEmail, password string) (string, error) {
 		return "", errors.New("INVALID password")
 	}
 
-	return a.jwtService.GenerateToken(strconv.Itoa(int(user.ID)))
+	return a.jwtService.GenerateToken(user.ID)
 }
 
 func (a userAuth) verifyPassword(password, passwordHash string) bool {

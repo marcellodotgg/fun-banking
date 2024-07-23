@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"strconv"
 	"time"
 )
 
@@ -18,16 +17,6 @@ var months = map[time.Month]string{
 	time.October:   "10",
 	time.November:  "11",
 	time.December:  "12",
-}
-
-func ConvertToUintPointer(id string) (*uint, error) {
-	returnValue := new(uint)
-	idAsInt, err := strconv.Atoi(id)
-	if err != nil {
-		return returnValue, err
-	}
-	*returnValue = uint(idAsInt)
-	return returnValue, nil
 }
 
 func ConvertMonthToNumeric(month time.Month) string {
