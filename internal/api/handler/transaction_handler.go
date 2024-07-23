@@ -6,6 +6,7 @@ import (
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/service"
+	"github.com/bytebury/fun-banking/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -51,7 +52,7 @@ func (th transactionHandler) Create(c *gin.Context) {
 		return
 	}
 
-	userID := c.GetString("user_id")
+	userID, _ := utils.ConvertToUintPointer(c.GetString("user_id"))
 
 	transaction := domain.Transaction{
 		AccountID:   account.ID,
@@ -66,7 +67,7 @@ func (th transactionHandler) Create(c *gin.Context) {
 		return
 	}
 
-	th.customerService.FindByID(th.Customer.ID, &th.Customer)
+	th.customerService.FindByID(strconv.Itoa(int(th.Customer.ID)), &th.Customer)
 
 	c.HTML(http.StatusOK, "transfer_money_form_oob", th.Customer)
 }

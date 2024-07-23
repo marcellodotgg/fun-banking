@@ -18,9 +18,9 @@ type Transaction struct {
 	Balance     float64 `gorm:"not null; type:decimal(50,2)"`
 	Amount      float64 `gorm:"not null; type:decimal(50,2)"`
 	Status      string  `gorm:"not null; size:20; default:PENDING"`
-	AccountID   string  `gorm:"not null"`
+	AccountID   uint    `gorm:"not null"`
 	Account     Account `gorm:"foreignKey:AccountID; constraint:OnDelete:CASCADE"`
-	UserID      string  `gorm:"default:null"`
+	UserID      *uint   `gorm:"default:null"`
 	User        User    `gorm:"foreignKey:UserID; constraint:OnDelete:CASCADE"`
 }
 

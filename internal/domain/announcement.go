@@ -15,7 +15,8 @@ import (
 
 type Announcement struct {
 	Audit
-	UserID      string
+	ID          string `gorm:"primary_key"`
+	UserID      uint
 	User        User   `gorm:"foreignKey:UserID; constraint:OnDelete:CASCADE"`
 	Title       string `gorm:"not null"`
 	Description string `gorm:"not null"`

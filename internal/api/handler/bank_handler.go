@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -40,8 +41,15 @@ func (h bankHandler) MyBanks(c *gin.Context) {
 func (h bankHandler) CreateBank(c *gin.Context) {
 	h.Form = GetForm(c)
 
+	userID, err := strconv.Atoi(c.GetString("user_id"))
+	if err != nil {
+		h.Form.Errors["general"] = "Bad user. Are you signed in?"
+		c.HTML(http.StatusUnprocessableEntity, "create_bank_form", h)
+		return
+	}
+
 	bank := domain.Bank{
-		UserID:      c.GetString("user_id"),
+		UserID:      uint(userID),
 		Name:        h.Form.Data["name"],
 		Description: h.Form.Data["description"],
 	}
@@ -57,22 +65,23 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 		return
 	}
 
-	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s", bank.ID))
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%d", bank.ID))
 }
 
 func (h bankHandler) UpdateBank(c *gin.Context) {
 	h.Form = GetForm(c)
 
+	bankID := c.Param("id")
 	h.Bank.Name = h.Form.Data["name"]
 	h.Bank.Description = h.Form.Data["description"]
 
-	if err := h.bankService.Update(c.Param("id"), &h.Bank); err != nil {
+	if err := h.bankService.Update(bankID, &h.Bank); err != nil {
 		h.Form.Errors["general"] = "A bank with that name already exists"
 		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return
 	}
 
-	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s", c.Param("id")))
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%s", bankID))
 }
 
 func (h bankHandler) OpenCreateModal(c *gin.Context) {
@@ -90,9 +99,15 @@ func (h bankHandler) OpenCreateCustomerModal(c *gin.Context) {
 
 func (h bankHandler) CreateCustomer(c *gin.Context) {
 	h.Form = GetForm(c)
+	bankID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "create_customer_form", h)
+		return
+	}
 
 	customer := domain.Customer{
-		BankID:    c.Param("id"),
+		BankID:    uint(bankID),
 		FirstName: h.Form.Data["first_name"],
 		LastName:  h.Form.Data["last_name"],
 		PIN:       h.Form.Data["pin"],
@@ -127,8 +142,9 @@ func (h bankHandler) ViewBank(c *gin.Context) {
 func (h bankHandler) OpenSettingsModal(c *gin.Context) {
 	h.Form = NewFormData()
 	h.ModalType = "update_bank_modal"
+	bankID := c.Param("id")
 
-	if err := h.bankService.FindByID(c.Param("id"), &h.Bank); err != nil {
+	if err := h.bankService.FindByID(bankID, &h.Bank); err != nil {
 		c.HTML(http.StatusNotFound, "modal", h)
 		return
 	}
@@ -140,15 +156,21 @@ func (h bankHandler) OpenSettingsModal(c *gin.Context) {
 }
 
 func (h bankHandler) CustomerSearch(c *gin.Context) {
+	bankID := c.Param("id")
+	searchStr := c.Query("name")
+
 	var customers []domain.Customer
-	h.customerService.FindAllByBankIDAndName(c.Param("id"), c.Query("name"), 5, &customers)
+	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 5, &customers)
 
 	c.HTML(http.StatusOK, "search_bank_customers", customers)
 }
 
 func (h bankHandler) FilterCustomers(c *gin.Context) {
+	bankID := c.Param("id")
+	searchStr := c.Query("search")
+
 	var customers []domain.Customer
-	h.customerService.FindAllByBankIDAndName(c.Param("id"), c.Query("search"), 15, &customers)
+	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 15, &customers)
 
 	c.HTML(http.StatusOK, "customers_table", customers)
 }
