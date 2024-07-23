@@ -90,7 +90,7 @@ func (h announcementHandler) Edit(c *gin.Context) {
 	h.announcementService.FindByID(announcementID, &h.Announcement)
 
 	h.Form = NewFormData()
-	h.Form.Data["id"] = h.Announcement.ID
+	h.Form.Data["id"] = strconv.Itoa(h.Announcement.ID)
 	h.Form.Data["title"] = h.Announcement.Title
 	h.Form.Data["description"] = h.Announcement.Description
 
