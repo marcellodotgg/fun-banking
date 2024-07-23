@@ -97,7 +97,77 @@
             Create a Customer
           </button>
         </div>
-        <div id="customers-table">{{ template "customers" . }}</div>
+        <div id="customers-table">
+          {{ template "customers" . }}
+
+          <script>
+            document.body.addEventListener("htmx:load", function (evt) {
+              const bulkTransferMode = document.getElementById("bulk-transfer").checked;
+
+              if (!bulkTransferMode) {
+                clearSelected();
+              } else {
+                selectedCustomerIds.forEach((id) => {
+                  const row = document.getElementById(`customer-${id}`);
+
+                  if (row) {
+                    row.classList.add("selected");
+                  }
+                });
+              }
+            });
+
+            const selectedCustomerIds = new Set();
+            const bulkTransferCheckbox = document.getElementById("bulk-transfer");
+
+            let isBulkTransferMode = bulkTransferCheckbox.checked;
+
+            function goToCustomer(id) {
+              if (!isBulkTransferMode) {
+                window.location.href = `/customers/${id}`;
+              } else {
+                selectCustomerForBulkTransfer(id);
+              }
+            }
+
+            function selectCustomerForBulkTransfer(id) {
+              const customerRow = document.getElementById(`customer-${id}`);
+              const continueToBulkTransferButton = document.getElementById("bulk-transfer-button");
+
+              if (selectedCustomerIds.has(id)) {
+                selectedCustomerIds.delete(id);
+                customerRow.classList.remove("selected");
+              } else {
+                selectedCustomerIds.add(id);
+                customerRow.classList.add("selected");
+              }
+
+              if (selectedCustomerIds.size > 0) {
+                continueToBulkTransferButton.style.display = "block";
+                continueToBulkTransferButton.textContent = `Continue to Bulk Transfer (${selectedCustomerIds.size})`;
+              } else {
+                continueToBulkTransferButton.style.display = "none";
+              }
+            }
+
+            function clearSelected() {
+              selectedCustomerIds.clear();
+              document.querySelectorAll("tr.selected").forEach((element) => {
+                element.classList.remove("selected");
+              });
+              document.getElementById("bulk-transfer-button").style.display = "none";
+            }
+
+            function updateBulkTransferMode() {
+              const bulkTransferCheckbox = document.getElementById("bulk-transfer");
+              isBulkTransferMode = bulkTransferCheckbox.checked;
+
+              if (!isBulkTransferMode) {
+                clearSelected();
+              }
+            }
+          </script>
+        </div>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
