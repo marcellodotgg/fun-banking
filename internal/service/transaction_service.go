@@ -40,7 +40,7 @@ func NewTransactionService() TransactionService {
 func (ts transactionService) Create(transaction *domain.Transaction) error {
 	return persistence.DB.Transaction(func(tx *gorm.DB) error {
 		var account domain.Account
-		if err := ts.accountService.FindByID(strconv.Itoa(int(transaction.AccountID)), &account); err != nil {
+		if err := ts.accountService.FindByID(strconv.Itoa(transaction.AccountID), &account); err != nil {
 			return err
 		}
 
@@ -116,9 +116,9 @@ func (s transactionService) Update(id, userID, status string) error {
 			return err
 		}
 
-		userIDUintPtr, _ := utils.ConvertToUintPointer(userID)
+		userIDPtr, _ := utils.ConvertToIntPointer(userID)
 
-		transaction.UserID = userIDUintPtr
+		transaction.UserID = userIDPtr
 		transaction.Status = status
 		transaction.Balance = account.Balance
 

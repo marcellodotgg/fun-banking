@@ -20,13 +20,13 @@ var months = map[time.Month]string{
 	time.December:  "12",
 }
 
-func ConvertToUintPointer(id string) (*uint, error) {
-	returnValue := new(uint)
+func ConvertToIntPointer(id string) (*int, error) {
+	returnValue := new(int)
 	idAsInt, err := strconv.Atoi(id)
 	if err != nil {
 		return returnValue, err
 	}
-	*returnValue = uint(idAsInt)
+	*returnValue = int(idAsInt)
 	return returnValue, nil
 }
 

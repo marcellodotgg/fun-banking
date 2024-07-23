@@ -50,7 +50,7 @@ func (h announcementHandler) Create(c *gin.Context) {
 	announcement := domain.Announcement{
 		Title:       h.Form.Data["title"],
 		Description: h.Form.Data["description"],
-		UserID:      uint(userID),
+		UserID:      userID,
 	}
 
 	if err := h.announcementService.Create(&announcement); err != nil {
@@ -72,7 +72,7 @@ func (h announcementHandler) Update(c *gin.Context) {
 	announcement := domain.Announcement{
 		Title:       h.Form.Data["title"],
 		Description: h.Form.Data["description"],
-		UserID:      uint(userID),
+		UserID:      userID,
 	}
 
 	if err := h.announcementService.Update(announcementID, &announcement); err != nil {

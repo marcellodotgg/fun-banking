@@ -72,13 +72,8 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 }
 
 func (s userService) Update(id string, user *domain.User) error {
-	userID, err := strconv.Atoi(id)
-
-	if err != nil {
-		return err
-	}
-
-	user.ID = uint(userID)
+	userID, _ := strconv.Atoi(id)
+	user.ID = userID
 
 	return persistence.DB.Updates(&user).Error
 }

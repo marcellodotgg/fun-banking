@@ -52,7 +52,7 @@ func (th transactionHandler) Create(c *gin.Context) {
 		return
 	}
 
-	userID, _ := utils.ConvertToUintPointer(c.GetString("user_id"))
+	userID, _ := utils.ConvertToIntPointer(c.GetString("user_id"))
 
 	transaction := domain.Transaction{
 		AccountID:   account.ID,

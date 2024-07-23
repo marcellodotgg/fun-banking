@@ -49,7 +49,7 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 	}
 
 	bank := domain.Bank{
-		UserID:      uint(userID),
+		UserID:      userID,
 		Name:        h.Form.Data["name"],
 		Description: h.Form.Data["description"],
 	}
@@ -107,7 +107,7 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 	}
 
 	customer := domain.Customer{
-		BankID:    uint(bankID),
+		BankID:    bankID,
 		FirstName: h.Form.Data["first_name"],
 		LastName:  h.Form.Data["last_name"],
 		PIN:       h.Form.Data["pin"],
