@@ -19,7 +19,9 @@ type transactionHandler struct {
 	accountService     service.AccountService
 	customerService    service.CustomerService
 	userService        service.UserService
+	bankService        service.BankService
 	Customer           domain.Customer
+	Bank               domain.Bank
 }
 
 func NewTransactionHandler() transactionHandler {
@@ -28,8 +30,10 @@ func NewTransactionHandler() transactionHandler {
 		Form:               NewFormData(),
 		ModalType:          "",
 		Customer:           domain.Customer{},
+		Bank:               domain.Bank{},
 		accountService:     service.NewAccountService(),
 		customerService:    service.NewCustomerService(),
+		bankService:        service.NewBankService(),
 		userService:        service.NewUserService(),
 		transactionService: service.NewTransactionService(),
 	}
@@ -127,8 +131,18 @@ func (h transactionHandler) BulkTransfer(c *gin.Context) {
 		return
 	}
 
+	if err := h.customerService.FindByID(customerIDs[0], &h.Customer); err != nil {
+		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
+		return
+	}
+
+	if err := h.bankService.FindByID(strconv.Itoa(h.Customer.BankID), &h.Bank); err != nil {
+		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
+		return
+	}
+
 	c.Header("HX-Trigger", "closeModal")
-	// TODO: OOB swap for this, too.
+	c.HTML(http.StatusAccepted, "customers_oob", h)
 }
 
 func (th transactionHandler) getTransferAmount(amount float64, transferType string) float64 {
