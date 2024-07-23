@@ -27,6 +27,7 @@ func RunMigrations() {
 	DB.AutoMigrate(&domain.Customer{})
 	DB.AutoMigrate(&domain.Account{})
 	DB.AutoMigrate(&domain.Transaction{})
+	DB.AutoMigrate(&domain.Announcement{})
 
 	log.Println("🟢 successfully ran the migrations")
 }

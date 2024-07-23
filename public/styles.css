@@ -390,3 +390,46 @@ button {
   gap: 4px;
   margin: 4px 0 0 24px;
 }
+
+article.announcement h1,
+article.announcement h2,
+article.announcement h3 {
+  font-weight: 900;
+}
+
+article.announcement h1 {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+article.announcement h2 {
+  font-size: 1.15rem;
+  line-height: 1.4rem;
+}
+
+article.announcement p {
+  margin: 4px 0;
+}
+
+article.announcement a {
+  text-decoration: underline;
+  color: var(--color-link);
+}
+
+article.announcement blockquote {
+  border-left: 8px solid var(--color-outline);
+  padding: 4px 12px;
+  background: var(--color-bg);
+  margin: 8px 0;
+}
+
+article.announcement ol,
+article.announcement ul {
+  margin-left: 12px;
+}
+
+article.announcement ol li,
+article.announcement ul li {
+  margin-left: 6px;
+  list-style-type: disc;
+}

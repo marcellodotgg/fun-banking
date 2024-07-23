@@ -87,10 +87,6 @@ func (h controlPanelHandler) SearchUsers(c *gin.Context) {
 	c.HTML(http.StatusOK, "control_panel_users_list", h.UserResults)
 }
 
-func (h controlPanelHandler) Announcements(c *gin.Context) {
-	c.HTML(http.StatusOK, "control_panel_announcements", h)
-}
-
 func (h controlPanelHandler) Polls(c *gin.Context) {
 	c.HTML(http.StatusOK, "control_panel_polls", h)
 }

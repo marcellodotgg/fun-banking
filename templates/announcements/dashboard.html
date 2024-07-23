@@ -1,0 +1,63 @@
+{{ define "announcements_dashboard" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fun Banking | Announcements</title>
+    <meta name="description" content="Fun Banking - TODO" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col gap-4 mt-2 mb-4 container">
+      <section class="card outlined flex flex-col gap-4">
+        <div>
+          <h1 class="font-extrabold">Announcements</h1>
+          <div class="text-gray-600 text-sm">
+            Announcements are similar to blogs. They are not high priority, but they are useful for
+            informing users of updates or general knowledge sharing.
+          </div>
+        </div>
+        <div id="announcement-form">{{ template "announcement_form" .Form }}</div>
+      </section>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }} {{ define "announcement_form" }}
+<form
+  hx-put="/control-panel/announcements"
+  hx-swap="outerHTML"
+  hx-disabled-elt="input, textarea, button"
+  class="flex flex-col gap-2"
+>
+  {{ if .Errors.general }}
+  <div class="alert-banner bg-danger">{{.Errors.general}}</div>
+  {{ else if .Data.success }}
+  <div class="alert-banner bg-success">{{.Data.success}}</div>
+  {{ end }}
+  <div class="flex flex-col w-full">
+    <label for="title">Title</label>
+    <input
+      id="title"
+      name="title"
+      type="text"
+      autocomplete="off"
+      value="{{ .Data.title }}"
+      required
+    />
+  </div>
+  <div class="flex flex-col w-full">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" class="min-h-72 p-5" required>
+{{ .Data.description }}</textarea
+    >
+  </div>
+  <div class="mt-2">
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">
+      <span class="htmx-toggle">Post Announcement</span>
+      <span class="htmx-indicator">Posting Announcement...</span>
+    </button>
+    <button type="reset">Cancel</button>
+  </div>
+</form>
+{{ end }}

@@ -16,6 +16,7 @@ var router = gin.Default()
 
 func Start() {
 	router.SetFuncMap(template.FuncMap{
+		"html":     func(text string) template.HTML { return template.HTML(text) },
 		"titleize": func(text string) string { return cases.Title(language.AmericanEnglish).String(text) },
 		"number":   func(amount int64) string { return utils.FormatNumber(amount) },
 		"currency": func(amount float64) string { return utils.FormatCurrency(amount) },
@@ -42,6 +43,7 @@ func Start() {
 	setupTransactionRoutes()
 	setupNotificationRoutes()
 	setupControlPanelRoutes()
+	setupAnnouncementRoutes()
 	// Run the application
 	router.Run()
 }
@@ -149,14 +151,27 @@ func setupActionRoutes() {
 }
 
 func setupControlPanelRoutes() {
-	handler := handler.NewControlPanelHandler()
+	controlPanel := handler.NewControlPanelHandler()
+	announcements := handler.NewAnnouncementHandler()
 
 	router.
 		Group("control-panel", middleware.UserAuth(), middleware.AdminOnly()).
-		GET("", handler.AppInsights).
-		GET("users", handler.GetUsers).
-		GET("users/:id", handler.OpenUserModal).
-		GET("users/search", handler.SearchUsers).
-		GET("announcements", handler.Announcements).
-		GET("polls", handler.Polls)
+		GET("", controlPanel.AppInsights).
+		GET("users", controlPanel.GetUsers).
+		GET("users/:id", controlPanel.OpenUserModal).
+		GET("users/search", controlPanel.SearchUsers).
+		GET("announcements", announcements.Dashboard).
+		PUT("announcements", announcements.Create).
+		PATCH("announcements/:id", announcements.Update).
+		DELETE("announcements/:id", announcements.Destroy).
+		GET("polls", controlPanel.Polls)
+}
+
+func setupAnnouncementRoutes() {
+	handler := handler.NewAnnouncementHandler()
+
+	router.Group("announcements").
+		GET("", middleware.UserAuth(), handler.Announcements).
+		GET(":id", middleware.UserAuth(), handler.FindByID).
+		POST("recent", middleware.UserAuth(), handler.RecentAnnouncements)
 }

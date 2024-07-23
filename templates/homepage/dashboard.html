@@ -52,7 +52,9 @@
           </div>
           <div class="flex flex-col gap-2 card outlined">
             <h1 class="text-lg font-extrabold">Latest News</h1>
-            We'll include some updates from the team here. Lazy loaded, of course.
+            <div id="latest-news" hx-post="/announcements/recent" hx-trigger="load">
+              Gathering latest news...
+            </div>
           </div>
         </section>
       </div>
