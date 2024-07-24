@@ -1,0 +1,32 @@
+{{ define "send_money_form" }}
+<form hx-put="/accounts/{{ .Account.ID }}/send-money">
+  <div>
+    <label for="name">Recipient</label>
+    <input
+      hx-get="/banks/{{.Account.Customer.Bank.ID}}/customers"
+      hx-trigger="input changed delay:500ms, click, search"
+      hx-target="#search-results"
+      id="name"
+      name="name"
+      type="search"
+      autocomplete="off"
+      onblur="hideSuggestions()"
+      class="focus:ring-1 ring-outline"
+    />
+    <div id="search-results"></div>
+    <input id="recipient-field" type="hidden" name="recipient" required />
+  </div>
+  <div>
+    <label for="amount">Amount</label>
+    <input id="amount" name="amount" type="number" step="0.01" required />
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <input id="description" name="description" type="text" required />
+  </div>
+  <div class="actions">
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">Submit</button>
+    <button type="reset">Cancel</button>
+  </div>
+</form>
+{{ end }}

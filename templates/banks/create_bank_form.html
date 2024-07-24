@@ -1,15 +1,10 @@
 {{ define "create_bank_form" }}
-<form
-  hx-put="/banks"
-  hx-swap="outerHTML"
-  hx-disabled-elt="button, input, textarea"
-  class="flex flex-col gap-2"
->
+<form hx-put="/banks" hx-swap="outerHTML" hx-disabled-elt="button, input, textarea">
   {{ if .Form.Errors.general }}
-  <div class="alert-banner bg-warning mb-2">{{ .Form.Errors.general }}</div>
+  <div class="alert-banner bg-warning">{{ .Form.Errors.general }}</div>
   {{ end }}
-  <div class="flex flex-col gap-1">
-    <label for="name">Bank name</label>
+  <div>
+    <label for="name">Bank Name</label>
     <input
       id="name"
       name="name"
@@ -21,7 +16,7 @@
       autofocus
     />
   </div>
-  <div class="flex flex-col gap-1">
+  <div>
     <label for="description">Description</label>
     <textarea
       id="description"
@@ -34,16 +29,12 @@
 {{ .Form.Data.description }}</textarea
     >
   </div>
-  <div class="flex gap-2 mt-2">
-    <button
-      id="submit"
-      class="bg-emerald-700 font-extrabold text-white hover:bg-emerald-800 disabled:bg-gray-200"
-      type="submit"
-    >
+  <div class="actions">
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">
       <div class="htmx-toggle">Create Bank</div>
       <div class="htmx-indicator text-gray-600">Creating...</div>
     </button>
-    <button class="ghost" type="reset" onclick="closeModal()">Cancel</button>
+    <button type="reset" onclick="closeModal()">Cancel</button>
   </div>
 </form>
 {{ end }}

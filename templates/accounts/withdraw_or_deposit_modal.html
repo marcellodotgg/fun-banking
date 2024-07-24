@@ -1,0 +1,8 @@
+{{ define "withdraw_or_deposit_modal" }}
+<section class="wrapper">
+  <header>
+    <h1>Withdraw or Deposit</h1>
+    <p class="text-muted">Create a withdraw or deposit to {{ .Account.Name }}.</p>
+  </header>
+  {{ template "withdraw_or_deposit_form" . }} {{ end }}
+</section>

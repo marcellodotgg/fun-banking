@@ -1,0 +1,5 @@
+{{ define "customer_settings_oob" }}
+<span id="customer-name" hx-swap-oob="innerHTML">{{ .Customer.FullName }}</span>
+<span id="customer-pin" hx-swap-oob="innerHTML">{{ .Customer.PIN }}</span>
+<div id="customer-settings-form" hx-swap-oob="true">{{ template "customer_settings_form" . }}</div>
+{{ end }}

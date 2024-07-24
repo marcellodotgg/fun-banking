@@ -39,7 +39,7 @@ nav {
   background: var(--color-bg);
 }
 
-footer {
+body footer {
   color: hsl(120, 20%, 25%);
   margin-top: auto;
   border-top: 1px solid hsl(120, 20%, 85%);
@@ -127,6 +127,12 @@ form .error-message {
 
 .htmx-request .htmx-indicator {
   display: block;
+}
+
+.text-muted {
+  color: #5d5d5d;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 /** Transitions */
@@ -241,6 +247,39 @@ button {
   animation-name: fadeIn;
   animation-duration: 150ms;
   animation-timing-function: ease;
+}
+
+.modal section.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal section header h1 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 900;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal form label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.modal form .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.modal .alert-banner {
+  margin-bottom: 8px;
 }
 
 .modal > .modal-underlay {
