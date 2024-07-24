@@ -82,6 +82,7 @@ func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Mon
 	return persistence.DB.
 		Model(&domain.Transaction{}).
 		Where("strftime('%m', created_at) = ? AND amount <= ? AND account_id = ?", monthStr, 0, accountID).
+		Where("status = ?", domain.TransactionApproved).
 		Select("sum(amount)").
 		Row().
 		Scan(sum)
@@ -93,6 +94,7 @@ func (s accountService) sumDepositsByAccount(accountID string, month time.Month,
 	return persistence.DB.
 		Model(&domain.Transaction{}).
 		Where("strftime('%m', created_at) = ? AND amount >= ? AND account_id = ?", monthStr, 0, accountID).
+		Where("status = ?", domain.TransactionApproved).
 		Select("sum(amount)").
 		Row().
 		Scan(sum)

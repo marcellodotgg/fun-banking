@@ -24,6 +24,18 @@ type Transaction struct {
 	User        User    `gorm:"foreignKey:UserID; constraint:OnDelete:CASCADE"`
 }
 
+func (t Transaction) IsPending() bool {
+	return t.Status == TransactionPending
+}
+
+func (t Transaction) IsApproved() bool {
+	return t.Status == TransactionApproved
+}
+
+func (t Transaction) IsDeclined() bool {
+	return t.Status == TransactionDeclined
+}
+
 func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
 	if t.Amount == 0 {
 		return errors.New("amount cannot be 0")

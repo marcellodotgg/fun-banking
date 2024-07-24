@@ -8,14 +8,21 @@
   </thead>
   <tbody>
     {{ if gt (len .PagingInfo.Items ) 0 }} {{ range .PagingInfo.Items }}
-    <tr class="border-b hover:bg-ghost/30 hover:cursor-default">
+    <tr
+      class="border-b hover:bg-ghost/30 hover:cursor-default {{ if .IsDeclined }} line-through {{ end }}"
+    >
       <td class="text-left py-1.5 px-2">
+        {{ if .IsPending }}
+        <div class="text-muted">Processing waiting approval...</div>
+        {{ end }}
         <div>{{ .Description }}</div>
         <div class="text-xs text-gray-600">{{ datetime .CreatedAt }}</div>
       </td>
       <td class="text-right px-2">
         <div class="font-extrabold">
-          {{ if gt .Amount 0.0 }}
+          {{ if .IsPending }}
+          <span class="text-gray-700">{{ currency .Amount }}</span>
+          {{ else if gt .Amount 0.0 }}
           <span class="text-emerald-700">{{ currency .Amount }}</span>
           {{ else }}
           <span class="text-red-700">{{ currency (mulfloat .Amount -1) }}</span>

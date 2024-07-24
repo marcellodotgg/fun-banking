@@ -126,9 +126,11 @@ func (s transactionService) Update(id, userID, status string) error {
 			return err
 		}
 
-		account.Balance += transaction.Amount
-
-		return persistence.DB.Select("Balance").Updates(&account).Error
+		if transaction.Status == domain.TransactionApproved {
+			account.Balance += transaction.Amount
+			return persistence.DB.Select("Balance").Updates(&account).Error
+		}
+		return persistence.DB.Select("Balance").First(&account).Error
 	})
 }
 
