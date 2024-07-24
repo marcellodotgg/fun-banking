@@ -99,7 +99,6 @@
         </div>
         <div id="customers-table">
           {{ template "customers" . }}
-
           <script>
             document.body.addEventListener("htmx:load", function (evt) {
               const bulkTransferMode = document.getElementById("bulk-transfer").checked;
@@ -173,9 +172,4 @@
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>
 </html>
-{{ end }} {{ define "customers_oob" }}
-<div id="customers-table" hx-swap-oob="true">{{ template "customers" . }}</div>
-<div id="number-of-customers" hx-swap-oob="true">{{ template "number_of_customers" . }}</div>
-{{ end }} {{ define "number_of_customers" }} {{ if eq (len .Bank.Customers) 1 }}
-<span class="font-semibold">{{ len .Bank.Customers }}</span> customer {{ else }}
-<span class="font-semibold">{{ len .Bank.Customers }}</span> customers {{ end }} {{ end }}
+{{ end }}

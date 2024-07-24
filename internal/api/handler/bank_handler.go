@@ -130,6 +130,12 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 		return
 	}
 
+	if err := h.bankService.FindByID(c.Param("id"), &h.Bank); err != nil {
+		h.Form.Errors["general"] = "Something went wrong fetching bank information, please refresh."
+		c.HTML(http.StatusUnprocessableEntity, "create_customer_form", h)
+		return
+	}
+
 	c.Header("HX-Trigger", "closeModal")
 	c.HTML(http.StatusCreated, "customers_oob", h)
 }
