@@ -90,20 +90,20 @@ func setupNotificationRoutes() {
 }
 
 func setupBankRoutes() {
-	handler := handler.NewBankHandler()
+	bank := handler.NewBankHandler()
 
 	router.
 		Group("banks").
-		GET("", middleware.UserAuth(), handler.MyBanks).
-		PUT("", middleware.UserAuth(), handler.CreateBank).
-		POST("create", middleware.UserAuth(), handler.OpenCreateModal).
-		GET(":id", middleware.UserAuth(), handler.ViewBank).
-		PATCH(":id", middleware.UserAuth(), handler.UpdateBank).
-		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
-		GET(":id/customers", middleware.AnyAuth(), handler.CustomerSearch).
-		GET(":id/customers-filter", middleware.UserAuth(), handler.FilterCustomers).
-		POST(":id/create-customer", middleware.UserAuth(), handler.OpenCreateCustomerModal).
-		PUT(":id/create-customer", middleware.UserAuth(), handler.CreateCustomer)
+		GET("", middleware.UserAuth(), bank.MyBanks).
+		PUT("", middleware.UserAuth(), bank.CreateBank).
+		POST("create", middleware.UserAuth(), bank.OpenCreateModal).
+		GET(":id", middleware.UserAuth(), bank.ViewBank).
+		PATCH(":id", middleware.UserAuth(), bank.UpdateBank).
+		POST(":id/settings", middleware.UserAuth(), bank.OpenSettingsModal).
+		GET(":id/customers", middleware.AnyAuth(), bank.CustomerSearch).
+		GET(":id/customers-filter", middleware.UserAuth(), bank.FilterCustomers).
+		POST(":id/create-customer", middleware.UserAuth(), bank.OpenCreateCustomerModal).
+		PUT(":id/create-customer", middleware.UserAuth(), bank.CreateCustomer)
 }
 
 func setupCustomerRoutes() {

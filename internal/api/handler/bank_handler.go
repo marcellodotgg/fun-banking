@@ -14,6 +14,7 @@ import (
 type bankHandler struct {
 	bankService     service.BankService
 	customerService service.CustomerService
+	userService     service.UserService
 	Banks           []domain.Bank
 	ModalType       string
 	Form            FormData
@@ -25,6 +26,7 @@ func NewBankHandler() bankHandler {
 	return bankHandler{
 		bankService:     service.NewBankService(),
 		customerService: service.NewCustomerService(),
+		userService:     service.NewUserService(),
 		Banks:           []domain.Bank{},
 		ModalType:       "create_bank_modal",
 		Form:            NewFormData(),
@@ -72,6 +74,14 @@ func (h bankHandler) UpdateBank(c *gin.Context) {
 	h.Form = GetForm(c)
 
 	bankID := c.Param("id")
+	userID := c.GetString("user_id")
+
+	if !h.hasAccess(bankID, userID) {
+		h.Form.Errors["general"] = "You don't have access to do that"
+		c.HTML(http.StatusUnauthorized, "update_bank_form", h)
+		return
+	}
+
 	h.Bank.Name = h.Form.Data["name"]
 	h.Bank.Description = h.Form.Data["description"]
 
@@ -99,10 +109,12 @@ func (h bankHandler) OpenCreateCustomerModal(c *gin.Context) {
 
 func (h bankHandler) CreateCustomer(c *gin.Context) {
 	h.Form = GetForm(c)
-	bankID, err := strconv.Atoi(c.Param("id"))
+	bankID, _ := strconv.Atoi(c.Param("id"))
+	userID := c.GetString("user_id")
 
-	if err != nil {
-		c.HTML(http.StatusBadRequest, "create_customer_form", h)
+	if !h.hasAccess(c.Param("id"), userID) {
+		h.Form.Errors["general"] = "You don't have access to do that"
+		c.HTML(http.StatusUnauthorized, "create_customer_form", h)
 		return
 	}
 
@@ -141,6 +153,10 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 }
 
 func (h bankHandler) ViewBank(c *gin.Context) {
+	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+		c.HTML(http.StatusForbidden, "forbidden", h)
+		return
+	}
 	h.bankService.FindByID(c.Param("id"), &h.Bank)
 	c.HTML(http.StatusOK, "bank", h)
 }
@@ -179,4 +195,18 @@ func (h bankHandler) FilterCustomers(c *gin.Context) {
 	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 15, &customers)
 
 	c.HTML(http.StatusOK, "customers_table", customers)
+}
+
+func (h bankHandler) hasAccess(bankID, userID string) bool {
+	var bank domain.Bank
+	if err := h.bankService.FindByID(bankID, &bank); err != nil {
+		return false
+	}
+
+	var user domain.User
+	if err := h.userService.FindByID(userID, &user); err != nil {
+		return false
+	}
+
+	return bank.UserID == user.ID || user.IsAdmin()
 }

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -21,6 +20,7 @@ type accountHandler struct {
 	accountService     service.AccountService
 	transactionService service.TransactionService
 	customerService    service.CustomerService
+	userService        service.UserService
 }
 
 func NewAccountHandler() accountHandler {
@@ -32,14 +32,21 @@ func NewAccountHandler() accountHandler {
 		accountService:     service.NewAccountService(),
 		transactionService: service.NewTransactionService(),
 		customerService:    service.NewCustomerService(),
+		userService:        service.NewUserService(),
 	}
 }
 
 func (h accountHandler) Get(c *gin.Context) {
 	accountID := c.Param("id")
+	customerID, _ := strconv.Atoi(c.GetString("customer_id"))
 
 	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
 		c.HTML(http.StatusNotFound, "not-found", h)
+		return
+	}
+
+	if h.Account.CustomerID != customerID && !h.hasAccess(accountID, c.GetString("user_id")) {
+		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
 	}
 
@@ -104,8 +111,8 @@ func (h accountHandler) CashFlow(c *gin.Context) {
 	var cashflow service.Cashflow
 
 	if err := h.accountService.CashFlow(c.Param("id"), &cashflow); err != nil {
-		// TODO: handle the error with grace
-		fmt.Println(err)
+		c.HTML(http.StatusOK, "chart_deposits_vs_withdrawals", cashflow)
+		return
 	}
 
 	c.HTML(http.StatusOK, "chart_deposits_vs_withdrawals", cashflow)
@@ -113,6 +120,12 @@ func (h accountHandler) CashFlow(c *gin.Context) {
 
 func (h accountHandler) Update(c *gin.Context) {
 	h.Form = GetForm(c)
+
+	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+		h.Form.Errors["general"] = "You don't have access to do that"
+		c.HTML(http.StatusForbidden, "account_settings_form", h)
+		return
+	}
 
 	h.Account.Name = h.Form.Data["name"]
 	if err := h.accountService.Update(c.Param("id"), &h.Account); err != nil {
@@ -191,4 +204,18 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 	}
 
 	c.Header("HX-Redirect", "/accounts/"+accountID)
+}
+
+func (h accountHandler) hasAccess(accountID, userID string) bool {
+	var account domain.Account
+	if err := h.accountService.FindByID(accountID, &account); err != nil {
+		return false
+	}
+
+	var user domain.User
+	if err := h.userService.FindByID(userID, &user); err != nil {
+		return false
+	}
+
+	return account.Customer.Bank.UserID == user.ID || user.IsAdmin()
 }
