@@ -50,6 +50,8 @@ func (h accountHandler) Get(c *gin.Context) {
 		return
 	}
 
+	h.SignedIn = c.GetString("user_id") != ""
+
 	c.HTML(http.StatusOK, "account", h)
 }
 
