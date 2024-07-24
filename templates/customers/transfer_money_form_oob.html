@@ -1,0 +1,5 @@
+{{ define "transfer_money_form_oob" }}
+<strong id="customer-net-worth" hx-swap-oob="true">{{ currency .NetWorth }}</strong>
+<div id="transfer-money-form" hx-swap-oob="true">{{ template "transfer_money_form" . }}</div>
+<div id="customer-accounts" hx-swap-oob="true">{{ template "accounts" . }}</div>
+{{ end }}

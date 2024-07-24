@@ -1,5 +1,10 @@
 {{ define "transfer_money_form" }}
-<form hx-put="/transactions" hx-swap="outerHTML" class="flex flex-col gap-2">
+<form
+  hx-put="/transactions"
+  hx-swap="outerHTML"
+  hx-disabled-elt="select, input, button"
+  class="flex flex-col gap-2"
+>
   {{ if eq (len .Accounts) 1}}
   <input name="account_id" value="{{ (index .Accounts 0).ID }}" type="hidden" />
   {{ else }} Select an account {{ end }}
@@ -14,33 +19,33 @@
     </div>
     <div class="flex flex-col gap-1 w-full">
       <label for="transaction_amount">Amount</label>
-      <input id="transaction_amount" name="amount" type="number" step=".01" required />
+      <input
+        id="transaction_amount"
+        name="amount"
+        type="number"
+        step=".01"
+        autocomplete="off"
+        required
+      />
     </div>
   </div>
   <div class="flex flex-col gap-1">
-    <label for="transaction_description">Short description</label>
+    <label for="transaction_description">Description</label>
     <input
       id="transaction_description"
       name="description"
       type="text"
       required
+      autocomplete="off"
       placeholder="Short description for this"
     />
   </div>
   <div class="flex gap-2 mt-2">
-    <button
-      id="submit"
-      class="bg-emerald-700 font-extrabold text-white hover:bg-emerald-800 disabled:bg-gray-200"
-      type="submit"
-    >
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">
       <div class="htmx-toggle">Complete Transfer</div>
       <div class="htmx-indicator text-gray-600">Creating...</div>
     </button>
-    <button class="ghost" type="reset">Reset</button>
+    <button type="reset">Reset</button>
   </div>
 </form>
-{{ end }} {{ define "transfer_money_form_oob" }}
-<strong id="customer-net-worth" hx-swap-oob="true">{{ currency .NetWorth }}</strong>
-<div id="transfer-money-form" hx-swap-oob="true">{{ template "transfer_money_form" . }}</div>
-<div id="customer-accounts" hx-swap-oob="true">{{ template "accounts" . }}</div>
 {{ end }}

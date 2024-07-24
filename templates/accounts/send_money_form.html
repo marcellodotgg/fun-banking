@@ -14,18 +14,21 @@
       class="focus:ring-1 ring-outline"
     />
     <div id="search-results"></div>
-    <input id="recipient-field" type="hidden" name="recipient" required />
+    <input id="recipient-field" type="hidden" name="recipient" autocomplete="off" required />
   </div>
   <div>
     <label for="amount">Amount</label>
-    <input id="amount" name="amount" type="number" step="0.01" required />
+    <input id="amount" name="amount" type="number" step="0.01" autocomplete="off" required />
   </div>
   <div>
     <label for="description">Description</label>
-    <input id="description" name="description" type="text" required />
+    <input id="description" name="description" type="text" autocomplete="off" required />
   </div>
   <div class="actions">
-    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">Submit</button>
+    <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">
+      <div class="htmx-toggle">Submit</div>
+      <div class="htmx-indicator text-gray-600">Submitting...</div>
+    </button>
     <button type="reset">Cancel</button>
   </div>
 </form>

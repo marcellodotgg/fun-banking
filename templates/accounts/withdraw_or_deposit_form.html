@@ -1,5 +1,9 @@
 {{ define "withdraw_or_deposit_form" }}
-<form hx-put="/accounts/{{.Account.ID}}/withdraw-or-deposit" hx-swap="outerHTML">
+<form
+  hx-put="/accounts/{{.Account.ID}}/withdraw-or-deposit"
+  hx-swap="outerHTML"
+  hx-disabled-elt="input, select, button"
+>
   {{ if .Form.Errors.general }}
   <div class="alert-banner bg-warning">{{ .Form.Errors.general }}</div>
   {{ end }}
@@ -19,6 +23,7 @@
         name="amount"
         type="number"
         step=".01"
+        autocomplete="off"
         value="{{ .Form.Data.amount }}"
         required
       />
@@ -34,6 +39,7 @@
       name="description"
       type="text"
       placeholder="Short description..."
+      autocomplete="off"
       value="{{ .Form.Data.description }}"
       required
     />
