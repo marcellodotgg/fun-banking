@@ -94,12 +94,10 @@ func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {
 		return
 	}
 
-	// refresh the transactions
 	ah.accountService.FindByID(c.Param("id"), &ah.Account)
 
 	c.Header("HX-Trigger", "closeModal")
-	// TODO I think I need to do an oob here
-	c.HTML(http.StatusOK, "account", ah)
+	c.HTML(http.StatusOK, "account_oob", ah)
 }
 
 func (ah accountHandler) CashFlow(c *gin.Context) {

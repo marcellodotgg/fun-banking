@@ -1,0 +1,19 @@
+{{ define "account_oob" }}
+<h1 id="account-balance" hx-swap-oob="innerHTML">{{ currency .Account.Balance }}</h1>
+<div
+  id="transactions-list"
+  hx-get="/accounts/{{ .Account.ID }}/transactions"
+  hx-trigger="load"
+  hx-swap-oob="true"
+>
+  Loading...
+</div>
+<div
+  id="cashflow-charts"
+  hx-get="/accounts/{{ .Account.ID }}/cash-flow"
+  hx-trigger="load"
+  hx-swap-oob="true"
+>
+  Crunching the latest data...
+</div>
+{{ end }}

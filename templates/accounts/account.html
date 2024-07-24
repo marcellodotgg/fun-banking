@@ -16,7 +16,9 @@
             <span class="text-gray-800">/</span>
             <span id="account-name">{{ .Account.Name }}</span>
           </p>
-          <h1 class="font-extrabold text-2xl leading-1">{{ currency .Account.Balance }}</h1>
+          <h1 id="account-balance" class="font-extrabold text-2xl leading-1">
+            {{ currency .Account.Balance }}
+          </h1>
         </div>
         <ul class="flex flex-wrap gap-2 items-center text-sm">
           <li>
@@ -93,7 +95,7 @@
       </section>
       <section class="flex flex-col gap-4 card outlined">
         <h1 class="text-lg font-extrabold">This Month</h1>
-        <div hx-get="/accounts/{{ .Account.ID }}/cash-flow" hx-trigger="load">
+        <div id="cashflow-charts" hx-get="/accounts/{{ .Account.ID }}/cash-flow" hx-trigger="load">
           Crunching the latest data...
         </div>
       </section>
