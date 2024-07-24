@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strconv"
+
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 )
@@ -28,11 +30,17 @@ func (s announcementService) Recent(announcements *[]domain.Announcement) error 
 }
 
 func (s announcementService) Create(announcement *domain.Announcement) error {
-	return persistence.DB.Create(&announcement).Error
+	if err := persistence.DB.Create(&announcement).Error; err != nil {
+		return err
+	}
+	return s.FindByID(strconv.Itoa(announcement.ID), announcement)
 }
 
 func (s announcementService) Update(id string, announcement *domain.Announcement) error {
-	return persistence.DB.Where("id = ?", id).Updates(&announcement).Error
+	if err := persistence.DB.Where("id = ?", id).Updates(&announcement).Error; err != nil {
+		return err
+	}
+	return s.FindByID(strconv.Itoa(announcement.ID), announcement)
 }
 
 func (s announcementService) Delete(id string) error {

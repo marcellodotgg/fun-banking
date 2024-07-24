@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type actionHandler struct {
+type appDrawerHandler struct {
 	SignedIn         bool
 	CustomerSignedIn bool
 	CurrentUser      domain.User
@@ -17,8 +17,8 @@ type actionHandler struct {
 	customerService  service.CustomerService
 }
 
-func NewActionHandler() actionHandler {
-	return actionHandler{
+func NewAppDrawerHandler() appDrawerHandler {
+	return appDrawerHandler{
 		SignedIn:         false,
 		CustomerSignedIn: false,
 		CurrentUser:      domain.User{},
@@ -28,7 +28,7 @@ func NewActionHandler() actionHandler {
 	}
 }
 
-func (h actionHandler) OpenAppDrawer(c *gin.Context) {
+func (h appDrawerHandler) Open(c *gin.Context) {
 	userID := c.GetString("user_id")
 	customerID := c.GetString("customer_id")
 

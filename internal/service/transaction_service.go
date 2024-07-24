@@ -4,10 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/bytebury/fun-banking/internal/domain"
-	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/bytebury/fun-banking/internal/utils"
 	"gorm.io/gorm"
@@ -22,9 +20,6 @@ type TransactionService interface {
 	Create(transaction *domain.Transaction) error
 	Update(id, userID, status string) error
 	SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error
-	FindAllByAccount(accountID string, transactions *[]domain.Transaction, pagingInfo pagination.PagingInfo[domain.Transaction]) error
-	CountAllByAccount(accountID string, count *int64) error
-	CashflowByAccount(accountID string, cashflow *Cashflow) error
 	BulkTransfer(customerIDs []string, transaction *domain.Transaction) error
 }
 
@@ -135,47 +130,6 @@ func (s transactionService) Update(id, userID, status string) error {
 
 		return persistence.DB.Select("Balance").Updates(&account).Error
 	})
-}
-
-func (ts transactionService) FindAllByAccount(accountID string, transactions *[]domain.Transaction, pagingInfo pagination.PagingInfo[domain.Transaction]) error {
-	return persistence.DB.
-		Offset((pagingInfo.PageNumber-1)*pagingInfo.ItemsPerPage).
-		Limit(pagingInfo.ItemsPerPage).
-		Order("created_at DESC").
-		Find(&transactions, "account_id = ?", accountID).Error
-}
-
-func (ts transactionService) CountAllByAccount(accountID string, count *int64) error {
-	return persistence.DB.Model(&domain.Transaction{}).Where("account_id = ?", accountID).Count(count).Error
-}
-
-func (ts transactionService) CashflowByAccount(accountID string, cashflow *Cashflow) error {
-	month := utils.ConvertMonthToNumeric(time.Now().Month())
-
-	var deposits float64
-	if err := persistence.DB.
-		Model(&domain.Transaction{}).
-		Where("strftime('%m', created_at) = ? AND amount >= ? AND account_id = ?", month, 0, accountID).
-		Select("sum(amount)").
-		Row().
-		Scan(&deposits); err != nil {
-		deposits = 0
-	}
-
-	var withdrawals float64
-	if err := persistence.DB.
-		Model(&domain.Transaction{}).
-		Where("strftime('%m', created_at) = ? AND amount <= ? AND account_id = ?", month, 0, accountID).
-		Select("sum(amount)").
-		Row().
-		Scan(&withdrawals); err != nil {
-		withdrawals = 0
-	}
-
-	cashflow.Deposits = deposits
-	cashflow.Withdrawals = withdrawals
-
-	return nil
 }
 
 func (s transactionService) BulkTransfer(customerIDs []string, transaction *domain.Transaction) error {

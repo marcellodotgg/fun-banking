@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strconv"
+
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"gorm.io/gorm"
@@ -28,7 +30,7 @@ func (s bankService) Create(bank *domain.Bank) error {
 	if err := persistence.DB.Create(&bank).Error; err != nil {
 		return err
 	}
-	return persistence.DB.Preload("User").First(&bank).Error
+	return s.FindByID(strconv.Itoa(bank.ID), bank)
 }
 
 func (s bankService) Update(id string, bank *domain.Bank) error {

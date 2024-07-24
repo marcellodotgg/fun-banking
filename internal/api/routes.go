@@ -34,7 +34,7 @@ func Start() {
 	router.Use(middleware.Audit(), middleware.CustomerAudit())
 	// Setup Routes
 	setupHomepageRoutes()
-	setupActionRoutes()
+	setupAppDrawerRoutes()
 	setupUserRoutes()
 	setupSessionRoutes()
 	setupBankRoutes()
@@ -117,19 +117,19 @@ func setupCustomerRoutes() {
 }
 
 func setupAccountRoutes() {
-	handler := handler.NewAccountHandler()
+	account := handler.NewAccountHandler()
 
 	router.
 		Group("accounts").
-		GET(":id", middleware.AnyAuth(), handler.Get).
-		PATCH(":id", middleware.UserAuth(), handler.Update).
-		GET(":id/transactions", middleware.AnyAuth(), handler.GetTransactions).
-		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
-		GET(":id/cash-flow", middleware.AnyAuth(), handler.CashFlow).
-		POST(":id/withdraw-or-deposit", middleware.AnyAuth(), handler.OpenWithdrawOrDepositModal).
-		PUT(":id/withdraw-or-deposit", middleware.AnyAuth(), handler.WithdrawOrDeposit).
-		GET(":id/send-money", middleware.AnyAuth(), handler.OpenSendMoneyModal).
-		PUT(":id/send-money", middleware.AnyAuth(), handler.SendMoney)
+		GET(":id", middleware.AnyAuth(), account.Get).
+		PATCH(":id", middleware.UserAuth(), account.Update).
+		GET(":id/transactions", middleware.AnyAuth(), account.GetTransactions).
+		POST(":id/settings", middleware.UserAuth(), account.OpenSettingsModal).
+		GET(":id/cash-flow", middleware.AnyAuth(), account.CashFlow).
+		POST(":id/withdraw-or-deposit", middleware.AnyAuth(), account.OpenWithdrawOrDepositModal).
+		PUT(":id/withdraw-or-deposit", middleware.AnyAuth(), account.WithdrawOrDeposit).
+		GET(":id/send-money", middleware.AnyAuth(), account.OpenSendMoneyModal).
+		PUT(":id/send-money", middleware.AnyAuth(), account.SendMoney)
 }
 
 func setupTransactionRoutes() {
@@ -144,11 +144,11 @@ func setupTransactionRoutes() {
 		PUT("bulk", middleware.UserAuth(), handler.BulkTransfer)
 }
 
-func setupActionRoutes() {
-	handler := handler.NewActionHandler()
+func setupAppDrawerRoutes() {
+	appDrawer := handler.NewAppDrawerHandler()
 
-	router.Group("actions").
-		GET("open-app-drawer", handler.OpenAppDrawer)
+	router.Group("app-drawer").
+		POST("open", appDrawer.Open)
 }
 
 func setupControlPanelRoutes() {

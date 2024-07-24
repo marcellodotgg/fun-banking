@@ -35,95 +35,96 @@ func NewAccountHandler() accountHandler {
 	}
 }
 
-func (ah accountHandler) Get(c *gin.Context) {
+func (h accountHandler) Get(c *gin.Context) {
 	accountID := c.Param("id")
 
-	if err := ah.accountService.FindByID(accountID, &ah.Account); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", ah)
+	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", h)
 		return
 	}
 
-	c.HTML(http.StatusOK, "account", ah)
+	c.HTML(http.StatusOK, "account", h)
 }
 
-func (ah accountHandler) OpenSettingsModal(c *gin.Context) {
+func (h accountHandler) OpenSettingsModal(c *gin.Context) {
 	accountID := c.Param("id")
-	ah.Form = NewFormData()
-	ah.ModalType = "account_settings"
-	ah.accountService.FindByID(accountID, &ah.Account)
-	ah.Form.Data["name"] = ah.Account.Name
+	h.Form = NewFormData()
+	h.ModalType = "account_settings"
+	h.accountService.FindByID(accountID, &h.Account)
+	h.Form.Data["name"] = h.Account.Name
 
-	c.HTML(http.StatusOK, "modal", ah)
+	c.HTML(http.StatusOK, "modal", h)
 }
 
-func (ah accountHandler) OpenWithdrawOrDepositModal(c *gin.Context) {
+func (h accountHandler) OpenWithdrawOrDepositModal(c *gin.Context) {
 	accountID := c.Param("id")
-	ah.Form = NewFormData()
-	ah.ModalType = "withdraw_or_deposit_modal"
-	ah.accountService.FindByID(accountID, &ah.Account)
+	h.Form = NewFormData()
+	h.ModalType = "withdraw_or_deposit_modal"
+	h.accountService.FindByID(accountID, &h.Account)
 
-	c.HTML(http.StatusOK, "modal", ah)
+	c.HTML(http.StatusOK, "modal", h)
 }
 
-func (ah accountHandler) WithdrawOrDeposit(c *gin.Context) {
-	ah.Form = GetForm(c)
+func (h accountHandler) WithdrawOrDeposit(c *gin.Context) {
+	h.Form = GetForm(c)
 	accountID, _ := strconv.Atoi(c.Param("id"))
-	amount, _ := strconv.ParseFloat(ah.Form.Data["amount"], 64)
+	amount, _ := strconv.ParseFloat(h.Form.Data["amount"], 64)
 	userID, _ := utils.ConvertToIntPointer(c.GetString("user_id"))
 
-	if ah.Form.Data["type"] == "withdraw" {
+	if h.Form.Data["type"] == "withdraw" {
 		amount = amount * -1
 	}
 
 	transaction := domain.Transaction{
 		AccountID:   accountID,
 		Amount:      amount,
-		Description: ah.Form.Data["description"],
+		Description: h.Form.Data["description"],
 		UserID:      userID,
 	}
 
-	if err := ah.transactionService.Create(&transaction); err != nil {
+	if err := h.transactionService.Create(&transaction); err != nil {
 		if strings.Contains(err.Error(), "cannot be 0") {
-			ah.Form.Errors["general"] = "Please fix the fields marked with errors"
-			ah.Form.Errors["amount"] = "Amount cannot be 0"
-			c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", ah)
+			h.Form.Errors["general"] = "Please fix the fields marked with errors"
+			h.Form.Errors["amount"] = "Amount cannot be 0"
+			c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", h)
 			return
 		}
-		ah.Form.Errors["general"] = "Something happened trying to create that transaction"
-		c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", ah)
+		h.Form.Errors["general"] = "Something happened trying to create that transaction"
+		c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", h)
 		return
 	}
 
-	ah.accountService.FindByID(c.Param("id"), &ah.Account)
+	h.accountService.FindByID(c.Param("id"), &h.Account)
 
 	c.Header("HX-Trigger", "closeModal")
-	c.HTML(http.StatusOK, "account_oob", ah)
+	c.HTML(http.StatusOK, "account_oob", h)
 }
 
-func (ah accountHandler) CashFlow(c *gin.Context) {
+func (h accountHandler) CashFlow(c *gin.Context) {
 	var cashflow service.Cashflow
 
-	if err := ah.transactionService.CashflowByAccount(c.Param("id"), &cashflow); err != nil {
+	if err := h.accountService.CashFlow(c.Param("id"), &cashflow); err != nil {
+		// TODO: handle the error with grace
 		fmt.Println(err)
 	}
 
 	c.HTML(http.StatusOK, "chart_deposits_vs_withdrawals", cashflow)
 }
 
-func (ah accountHandler) Update(c *gin.Context) {
-	ah.Form = GetForm(c)
+func (h accountHandler) Update(c *gin.Context) {
+	h.Form = GetForm(c)
 
-	ah.Account.Name = ah.Form.Data["name"]
-	if err := ah.accountService.Update(c.Param("id"), &ah.Account); err != nil {
-		ah.Form.Errors["general"] = "Something happened trying to update your account"
-		c.HTML(http.StatusUnprocessableEntity, "account_settings_form", ah)
+	h.Account.Name = h.Form.Data["name"]
+	if err := h.accountService.Update(c.Param("id"), &h.Account); err != nil {
+		h.Form.Errors["general"] = "Something happened trying to update your account"
+		c.HTML(http.StatusUnprocessableEntity, "account_settings_form", h)
 		return
 	}
 
-	c.HTML(http.StatusOK, "account_settings_oob", ah)
+	c.HTML(http.StatusOK, "account_settings_oob", h)
 }
 
-func (ah accountHandler) GetTransactions(c *gin.Context) {
+func (h accountHandler) GetTransactions(c *gin.Context) {
 	accountID := c.Param("id")
 	pageNumber, _ := strconv.Atoi(c.Query("page"))
 
@@ -138,13 +139,8 @@ func (ah accountHandler) GetTransactions(c *gin.Context) {
 		Items:        nil,
 	}
 
-	if err := ah.transactionService.FindAllByAccount(accountID, &pagingInfo.Items, pagingInfo); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", ah)
-		return
-	}
-
-	if err := ah.transactionService.CountAllByAccount(accountID, &pagingInfo.TotalItems); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", ah)
+	if err := h.accountService.Transactions(accountID, &pagingInfo); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", h)
 		return
 	}
 
