@@ -10,7 +10,7 @@
     {{ template "layout/navbar" . }}
     <main class="mt-2 mb-4">
       <div class="container flex flex-col md:flex-row gap-4">
-        <aside class="shrink-0 md:w-72 w-full">
+        <aside class="shrink-0 md:w-72 w-full flex flex-col gap-4">
           <div class="flex flex-col gap-4 card outlined">
             <div class="flex items-center justify-between">
               <h1 class="font-extrabold">Banks</h1>
@@ -26,6 +26,18 @@
             <ul hx-get="banks" hx-trigger="load" class="text-sm">
               Loading banks...
             </ul>
+          </div>
+          <div class="card outlined flex flex-col items-center gap-2">
+            <h1 class="font-extrabold">Help Support Fun Banking</h1>
+            <a
+              class="font-extrabold bg-emerald-700 hover:bg-emerald-800 text-white pill"
+              href="https://donate.stripe.com/dR6cPfh1T8EB6VqdQQ"
+            >
+              Donate To Fun Banking <span class="text-red-300">&hearts;</span>
+            </a>
+            <div class="text-muted text-xs text-center">
+              Donations are through Stripe. All proceeds go towards the upkeep of Fun Banking.
+            </div>
           </div>
         </aside>
         <section class="flex flex-col gap-4 grow">
