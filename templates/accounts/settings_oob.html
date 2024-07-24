@@ -1,6 +1,4 @@
 {{ define "account_settings_oob" }}
-<span id="account-name" hx-swap-oob="innerHTML">{{ .Account.Name }}</span>
-<div id="account-settings-form" hx-swap-oob="innerHTML">
-  {{ template "account_settings_form" . }}
-</div>
+<span id="account-name" hx-swap-oob="true">{{ .Account.Name }}</span>
+<div id="account-settings-form" hx-swap-oob="true">{{ template "account_settings_form" . }}</div>
 {{ end }}

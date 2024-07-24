@@ -121,6 +121,7 @@ func (h accountHandler) Update(c *gin.Context) {
 		return
 	}
 
+	c.Header("HX-Trigger", "closeModal")
 	c.HTML(http.StatusOK, "account_settings_oob", h)
 }
 
