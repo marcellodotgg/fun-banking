@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/mail"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/bytebury/fun-banking/internal/service"
 	"github.com/gin-gonic/gin"
@@ -25,6 +26,8 @@ type homepageHandler struct {
 	Customer        domain.Customer
 	bankService     service.BankService
 	customerService service.CustomerService
+	userService     service.UserService
+	tokenService    service.TokenService
 	Form            FormData
 }
 
@@ -41,6 +44,8 @@ func NewHomePageHandler() homepageHandler {
 		Customer:        domain.Customer{},
 		bankService:     service.NewBankService(),
 		customerService: service.NewCustomerService(),
+		tokenService:    service.NewTokenService(),
+		userService:     service.NewUserService(),
 		Form:            NewFormData(),
 	}
 }
@@ -63,6 +68,42 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 	} else {
 		c.HTML(http.StatusOK, "index.html", h)
 	}
+}
+
+func (h homepageHandler) VerifyEmail(c *gin.Context) {
+	userID, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
+
+	if err != nil {
+		h.Form = NewFormData()
+		h.Form.Errors["general"] = "Token was invalid or has been expired"
+		c.HTML(http.StatusUnprocessableEntity, "resend_verification", h)
+		return
+	}
+
+	token, _ := h.tokenService.GenerateUserToken(userID)
+
+	c.SetCookie("auth_token", token, 3_600*24*365, "/", "localhost:8080", true, true)
+	c.HTML(http.StatusOK, "dashboard", h)
+}
+
+func (h homepageHandler) ResendVerifyEmail(c *gin.Context) {
+	h.Form = GetForm(c)
+
+	var user domain.User
+	if err := h.userService.FindByEmail(h.Form.Data["email"], &user); err != nil {
+		h.Form.Data["success"] = "We have sent an e-mail to that account if it exists."
+		c.HTML(http.StatusUnprocessableEntity, "resend_verification_form", h.Form)
+		return
+	}
+
+	if err := mail.NewWelcomeMailer().Send(user.Email, user); err != nil {
+		h.Form.Errors["general"] = "Email service is down, unable to send. Please try again later."
+		c.HTML(http.StatusUnprocessableEntity, "resend_verification_form", h.Form)
+		return
+	}
+
+	h.Form.Data["success"] = "We have sent an e-mail to that account if it exists."
+	c.HTML(http.StatusUnprocessableEntity, "resend_verification_form", h.Form)
 }
 
 func (h homepageHandler) Dashboard(c *gin.Context) {

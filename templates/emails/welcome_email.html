@@ -1,0 +1,22 @@
+<p>Hey {{ .User.FirstName }},</p>
+<p>
+  Welcome to Fun Banking! We're glad you're here. If you have any questions about how the
+  application works, or feedback for the Fun Banking team, please don't hesitate to reach out to us
+  at bytebury@gmail.com
+</p>
+<p>
+  To start using the features within Fun Banking, you will need to verify your e-mail address. You
+  can do this by clicking the link below. This link will be valid for 15 minutes.
+</p>
+<p>
+  <a
+    style="font-weight: 900; font-size: 20px; text-decoration: underline"
+    href="http://localhost:8080/verify-account?token={{.Token}}"
+  >
+    Verify My E-mail
+  </a>
+</p>
+<p>
+  Your online banking simulator,<br />
+  Fun Banking by Bytebury LLC.
+</p>

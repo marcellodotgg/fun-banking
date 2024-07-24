@@ -64,7 +64,9 @@ func (h userHandler) Create(c *gin.Context) {
 		return
 	}
 
-	c.Header("HX-Redirect", "/signin")
+	h.Form = NewFormData()
+	h.Form.Data["success"] = "Successfully created your account. We have sent you an e-mail with instructions to activate your account. If you do not see an e-mail, please check your spam folder. If you still do not see an e-mail after 5 minutes, please send us an e-mail at bytebury@gmail.com"
+	c.HTML(http.StatusAccepted, "users/signup_form", h)
 }
 
 func (h userHandler) Settings(c *gin.Context) {

@@ -53,6 +53,8 @@ func setupHomepageRoutes() {
 
 	router.
 		GET("", handler.Homepage).
+		GET("verify-account", middleware.NoAuth(), handler.VerifyEmail).
+		POST("verify-account", middleware.NoAuth(), handler.ResendVerifyEmail).
 		GET(":username/:slug", middleware.NoAuth(), handler.BankSignIn)
 }
 

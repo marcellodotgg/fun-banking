@@ -1,0 +1,13 @@
+Hey {{ .User.FirstName }},
+
+Welcome to Fun Banking! We're glad you're here. If you have any questions about how the application works,
+or feedback for the Fun Banking team, please don't hesitate to reach out to us at bytebury@gmail.com
+
+To start using the features within Fun Banking, you will need to verify youre-mail address.
+You can do this by copying and pasting the link below in a web browser. This link will be valid
+for 15 minutes.
+
+{TODO_INSERT_VERIFY_LINK}
+
+Your online banking simulator,
+Fun Banking by Bytebury LLC.

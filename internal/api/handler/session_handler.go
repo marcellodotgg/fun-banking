@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -29,7 +28,6 @@ func NewSessionHandler() sessionHandler {
 
 func (h sessionHandler) SignIn(c *gin.Context) {
 	h.Form = NewFormData()
-	fmt.Println(h.Form)
 	c.HTML(http.StatusOK, "sessions/signin", h)
 }
 

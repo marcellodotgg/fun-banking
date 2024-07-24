@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/mail"
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"golang.org/x/crypto/bcrypt"
@@ -13,6 +14,7 @@ type UserService interface {
 	Create(user *domain.User) error
 	Update(id string, user *domain.User) error
 	FindByID(id string, user *domain.User) error
+	FindByEmail(email string, user *domain.User) error
 	Search(search string, pagingInfo *pagination.PagingInfo[domain.User]) error
 	FindPendingTransactions(id string, transactions *[]domain.Transaction) error
 }
@@ -32,11 +34,19 @@ func (s userService) Create(user *domain.User) error {
 
 	user.Password = passwordHash
 
-	return persistence.DB.Create(&user).Error
+	if err := persistence.DB.Create(&user).Error; err != nil {
+		return err
+	}
+
+	return mail.NewWelcomeMailer().Send(user.Email, *user)
 }
 
 func (s userService) FindByID(id string, user *domain.User) error {
 	return persistence.DB.Preload("Banks").First(&user, "id = ?", id).Error
+}
+
+func (s userService) FindByEmail(email string, user *domain.User) error {
+	return persistence.DB.First(&user, "email = ?", strings.TrimSpace(strings.ToLower(email))).Error
 }
 
 func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[domain.User]) error {
