@@ -28,7 +28,7 @@ func NewCustomerHandler() customerHandler {
 		ModalType:       "create_customer_modal",
 		Form:            NewFormData(),
 		Bank:            domain.Bank{},
-		SignedIn:        true,
+		SignedIn:        false,
 	}
 }
 
@@ -41,6 +41,7 @@ func (h customerHandler) OpenCreateModal(c *gin.Context) {
 
 func (h customerHandler) GetCustomer(c *gin.Context) {
 	id := c.Param("id")
+	h.SignedIn = c.GetString("user_id") != ""
 
 	isCustomer := c.GetString("customer_id") == c.Param("id")
 	if !isCustomer && !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
