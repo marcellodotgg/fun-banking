@@ -12,6 +12,11 @@
       <section class="card bg-white border max-w-xl w-full">
         <h1 class="font-extrabold text-xl">Resend Verification E-mail</h1>
         {{ template "resend_verification_form" .Form }}
+        <div class="text-muted mt-4">
+          If you are not getting any e-mails after checking your spam folder too. You can e-mail us
+          at <a class="link" href="bytebury@gmail.com">bytebury@gmail.com</a> for help. Sometimes,
+          companies will block our e-mails from going to certain mailboxes.
+        </div>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
