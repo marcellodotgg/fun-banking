@@ -1,6 +1,7 @@
 package mail
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -26,10 +27,12 @@ func (m passwordResetMailer) Send(to string, user domain.User) error {
 	token, _ := m.jwtService.GenerateTempToken(strconv.Itoa(user.ID))
 
 	return m.mailer.Send(to, "Fun Banking - Reset Your Password", "reset_password", struct {
-		User  domain.User
-		Token string
+		User       domain.User
+		Token      string
+		WebsiteURL string
 	}{
-		User:  user,
-		Token: token,
+		User:       user,
+		Token:      token,
+		WebsiteURL: os.Getenv("WEBSITE_URL"),
 	})
 }

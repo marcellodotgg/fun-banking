@@ -7,7 +7,7 @@ To start using the features within Fun Banking, you will need to verify youre-ma
 You can do this by copying and pasting the link below in a web browser. This link will be valid
 for 15 minutes.
 
-{TODO_INSERT_VERIFY_LINK}
+{{.WebsiteURL}}/verify-account?token={{.Token}}
 
 Your online banking simulator,
 Fun Banking by Bytebury LLC.

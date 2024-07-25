@@ -11,6 +11,11 @@ cost down so that we can be in business; thus the "boring" architecture.
 ```.env
 DATABASE_URL=fun_banking.db
 JWT_SECRET=something_secret
+EMAIL_USERNAME=bytebury@gmail.com
+EMAIL_PASSWORD=PASSWORD
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+WEBSITE_URL=http://localhost:8080
 ```
 
 # Local Environment
