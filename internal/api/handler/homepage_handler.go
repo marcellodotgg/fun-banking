@@ -72,10 +72,16 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 
 func (h homepageHandler) VerifyEmail(c *gin.Context) {
 	userID, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
+	h.Form = NewFormData()
 
 	if err != nil {
-		h.Form = NewFormData()
 		h.Form.Errors["general"] = "Token was invalid or has been expired"
+		c.HTML(http.StatusUnprocessableEntity, "resend_verification", h)
+		return
+	}
+
+	if err := h.userService.Update(userID, &domain.User{Verified: true}); err != nil {
+		h.Form.Errors["general"] = "We were unable to verify your account. Please try again later"
 		c.HTML(http.StatusUnprocessableEntity, "resend_verification", h)
 		return
 	}
