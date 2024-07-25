@@ -56,8 +56,10 @@
         value="{{ .Form.Data.username }}"
         autocomplete="username"
         placeholder="Username"
+        maxlength="12"
         required
       />
+      <div class="error-message">{{ .Form.Errors.username }}</div>
     </div>
     <div>
       <label for="password">Password</label>
@@ -67,10 +69,13 @@
         type="password"
         autocomplete="new-password"
         placeholder="Password"
+        maxlength="50"
         required
       />
       {{ if and . .Form.Errors.passwords_dont_match }}
       <div class="error-message">{{ .Form.Errors.passwords_dont_match }}</div>
+      {{ end }} {{ if and . .Form.Errors.password }}
+      <div class="error-message">{{ .Form.Errors.password }}</div>
       {{ end }}
     </div>
     <div>
@@ -81,6 +86,7 @@
         type="password"
         autocomplete="new-password"
         placeholder="Confirm Password"
+        maxlength="50"
         required
       />
       {{ if and . .Form.Errors.passwords_dont_match }}

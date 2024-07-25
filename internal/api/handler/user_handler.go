@@ -50,6 +50,12 @@ func (h userHandler) Create(c *gin.Context) {
 		return
 	}
 
+	if len(h.Form.Data["password"]) < 6 {
+		h.Form.Errors["password"] = "Passwords must be at least 6 characters"
+		c.HTML(http.StatusUnprocessableEntity, "users/signup_form", h)
+		return
+	}
+
 	user := domain.User{
 		FirstName: h.Form.Data["first_name"],
 		LastName:  h.Form.Data["last_name"],
@@ -60,6 +66,8 @@ func (h userHandler) Create(c *gin.Context) {
 	if err := h.userService.Create(&user); err != nil {
 		if strings.Contains(err.Error(), "UNIQUE") {
 			h.Form.Errors["general"] = "An account with that username or e-mail already exists"
+		} else if strings.Contains(err.Error(), "usernames can only contain letters or numbers") {
+			h.Form.Errors["username"] = "Usernames can only contain letters or numbers"
 		} else {
 			h.Form.Errors["general"] = "Something went wrong creating your account. If the problem persists, please contact us."
 		}

@@ -1,7 +1,9 @@
 package domain
 
 import (
+	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"golang.org/x/text/cases"
@@ -44,7 +46,8 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	u.Email = strings.TrimSpace(strings.ToLower(u.Email))
 	u.FirstName = strings.TrimSpace(strings.ToLower(u.FirstName))
 	u.LastName = strings.TrimSpace(strings.ToLower(u.LastName))
-	return nil
+
+	return u.validate()
 }
 
 func (u *User) BeforeUpdate(tx *gorm.DB) error {
@@ -52,5 +55,23 @@ func (u *User) BeforeUpdate(tx *gorm.DB) error {
 	u.Email = strings.TrimSpace(strings.ToLower(u.Email))
 	u.FirstName = strings.TrimSpace(strings.ToLower(u.FirstName))
 	u.LastName = strings.TrimSpace(strings.ToLower(u.LastName))
+	return nil
+}
+
+func (u User) validate() error {
+	if len(u.Username) > 12 {
+		return errors.New("username is too long")
+	}
+
+	if len(u.FirstName) > 20 || len(u.LastName) > 20 {
+		return errors.New("first or last name is too long")
+	}
+
+	// usernames can only contain letters or numbers
+	re := regexp.MustCompile("^[a-zA-Z0-9]+$")
+	if !re.Match([]byte(u.Username)) {
+		return errors.New("usernames can only contain letters or numbers")
+	}
+
 	return nil
 }
