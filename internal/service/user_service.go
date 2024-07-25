@@ -13,6 +13,7 @@ import (
 type UserService interface {
 	Create(user *domain.User) error
 	Update(id string, user *domain.User) error
+	UpdatePassword(id, password string) error
 	FindByID(id string, user *domain.User) error
 	FindByEmail(email string, user *domain.User) error
 	Search(search string, pagingInfo *pagination.PagingInfo[domain.User]) error
@@ -82,6 +83,23 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 func (s userService) Update(id string, user *domain.User) error {
 	return persistence.DB.Where("id = ?", id).Updates(&user).Error
+}
+
+func (s userService) UpdatePassword(id, password string) error {
+	var user domain.User
+	if err := s.FindByID(id, &user); err != nil {
+		return err
+	}
+
+	newPassword, err := s.hashPassword(password)
+
+	if err != nil {
+		return err
+	}
+
+	user.Password = newPassword
+
+	return persistence.DB.Updates(&user).Error
 }
 
 func (s userService) FindPendingTransactions(id string, transactions *[]domain.Transaction) error {

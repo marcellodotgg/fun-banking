@@ -11,18 +11,20 @@ import (
 )
 
 type userHandler struct {
-	userService service.UserService
-	Form        FormData
-	SignedIn    bool
-	User        domain.User
+	userService  service.UserService
+	tokenService service.TokenService
+	Form         FormData
+	SignedIn     bool
+	User         domain.User
 }
 
 func NewUserHandler() userHandler {
 	return userHandler{
-		userService: service.NewUserService(),
-		Form:        NewFormData(),
-		SignedIn:    false,
-		User:        domain.User{},
+		userService:  service.NewUserService(),
+		tokenService: service.NewTokenService(),
+		Form:         NewFormData(),
+		SignedIn:     false,
+		User:         domain.User{},
 	}
 }
 
@@ -116,6 +118,50 @@ func (h userHandler) Update(c *gin.Context) {
 func (h userHandler) ForgotPassword(c *gin.Context) {
 	h.Form = NewFormData()
 	c.HTML(http.StatusOK, "forgot_password", h)
+}
+
+func (h userHandler) ResetPassword(c *gin.Context) {
+	h.Form = NewFormData()
+
+	_, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
+	if err != nil {
+		// bad token
+	}
+
+	h.Form.Data["token"] = c.Query("token")
+	c.HTML(http.StatusOK, "reset_password", h)
+}
+
+func (h userHandler) UpdatePassword(c *gin.Context) {
+	h.Form = GetForm(c)
+
+	if h.Form.Data["password"] != h.Form.Data["password_confirmation"] {
+		h.Form.Errors["general"] = "Passwords do not match."
+		c.HTML(http.StatusUnprocessableEntity, "reset_password_form", h.Form)
+		return
+	}
+
+	userID, err := h.tokenService.GetUserIDFromToken(h.Form.Data["token"])
+
+	if err != nil {
+		h.Form.Errors["general"] = "Token is invalid or expired, please generate a new one."
+		c.HTML(http.StatusUnprocessableEntity, "reset_password_form", h.Form)
+		return
+	}
+
+	if err := h.userService.FindByID(userID, &h.User); err != nil {
+		h.Form.Errors["general"] = "Unable to reset password. Could not find user."
+		c.HTML(http.StatusUnprocessableEntity, "reset_password_form", h.Form)
+		return
+	}
+
+	if err := h.userService.UpdatePassword(userID, h.Form.Data["password"]); err != nil {
+		h.Form.Errors["general"] = "Something went wrong updating your password. Please try again."
+		c.HTML(http.StatusUnprocessableEntity, "reset_password_form", h.Form)
+	}
+
+	h.Form.Data["success"] = "Successfully updated your password. You may now log in."
+	c.HTML(http.StatusOK, "reset_password_form", h.Form)
 }
 
 func (h userHandler) SendForgotPasswordEmail(c *gin.Context) {
