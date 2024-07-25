@@ -112,6 +112,11 @@ func (h userHandler) Update(c *gin.Context) {
 	c.HTML(http.StatusAccepted, "user_settings_form", h)
 }
 
+func (h userHandler) ForgotPassword(c *gin.Context) {
+	h.Form = NewFormData()
+	c.HTML(http.StatusOK, "forgot_password", h)
+}
+
 func (h userHandler) Notifications(c *gin.Context) {
 	h.SignedIn = true
 	c.HTML(http.StatusOK, "notifications", h)

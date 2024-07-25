@@ -74,6 +74,7 @@ func setupUserRoutes() {
 
 	router.GET("signup", middleware.NoAuth(), handler.SignUp)
 	router.GET("settings", middleware.UserAuth(), handler.Settings)
+	router.GET("forgot", middleware.NoAuth(), handler.ForgotPassword)
 
 	router.
 		Group("users").

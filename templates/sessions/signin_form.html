@@ -1,5 +1,5 @@
 {{ define "sessions/signin_form" }}
-<form hx-post="signin" hx-disabled-elt="button, input" class="flex flex-col gap-5">
+<form hx-post="signin" hx-disabled-elt="button, input" class="flex flex-col gap-4">
   {{ if and . .Form.Errors.email_or_username }}
   <div class="alert-banner bg-danger">{{ .Form.Errors.email_or_username }}</div>
   {{ end }}
@@ -26,6 +26,9 @@
         required
         placeholder="Password"
       />
+      <div class="text-right">
+        <a class="link text-xs" href="/forgot">Forgot Password?</a>
+      </div>
     </div>
   </div>
   <div class="flex gap-2">
@@ -35,9 +38,9 @@
       type="submit"
     >
       <div class="htmx-toggle">Sign In</div>
-      <div class="htmx-indicator text-gray-600">Signing in...</div>
+      <div class="htmx-indicator">Signing in...</div>
     </button>
-    <button class="ghost" type="reset">Cancel</button>
+    <button type="reset">Cancel</button>
   </div>
 </form>
 {{ end }}
