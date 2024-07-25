@@ -27,7 +27,9 @@
   {{ end }}
 </ul>
 {{ else }}
-<div>Yeah, dawg. You got nothing.</div>
+<div>
+  <p>You're all caught up on approvals! Kudos for staying on top of everything. 👏</p>
+</div>
 {{ end }} {{ end }} {{ define "notifications_list_oob" }}
 <div hx-swap-oob="true" id="notifications">{{ template "notifications_list" . }}</div>
 <div hx-swap-oob="true" id="inbox-badge">{{ template "inbox_badge" gt (len .) 0 }}</div>

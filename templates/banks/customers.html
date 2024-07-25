@@ -10,15 +10,19 @@
   placeholder="Search..."
   class="mb-4"
 />
-{{ end }}
+{{ end }} {{ if gt (len .Bank.Customers) 1 }}
 <div>
-  <label for="bulk-transfer">Bulk Transfer</label>
-  <input
-    id="bulk-transfer"
-    name="bulk-transfer"
-    type="checkbox"
-    onclick="updateBulkTransferMode()"
-  />
+  <div class="flex items-center gap-1">
+    <label class="switch" for="bulk-transfer">
+      <input
+        id="bulk-transfer"
+        name="bulk-transfer"
+        type="checkbox"
+        onclick="updateBulkTransferMode()"
+      />
+    </label>
+    <label for="bulk-transfer">Bulk Transfer</label>
+  </div>
   <button
     id="bulk-transfer-button"
     hx-get="/transactions/open-bulk-transfer"
@@ -30,7 +34,7 @@
     Continue to Bulk Transfer
   </button>
 </div>
-{{template "customers_table" .Bank.Customers }} {{ end }} {{ define "customers_table" }}
+{{ end }} {{template "customers_table" .Bank.Customers }} {{ end }} {{ define "customers_table" }}
 <table id="results" class="w-full table-auto overflow-hidden">
   <thead class="border-b-2 border-black">
     <tr>

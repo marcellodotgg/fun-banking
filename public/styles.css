@@ -481,3 +481,50 @@ table tr.selected {
 table tr.selected:hover {
   background: var(--color-ghost-darker);
 }
+
+label:hover {
+  cursor: pointer;
+}
+
+label.switch input[type="checkbox"] {
+  display: none;
+}
+
+label.switch {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 52px;
+  height: 28px;
+  border-radius: 20px;
+  border: 2px solid #5a5a5a;
+  transition-duration: 500ms;
+  transition-timing-function: ease;
+  cursor: pointer;
+}
+
+label.switch:has(input:not(:checked))::before {
+  position: absolute;
+  left: 3px;
+  content: "";
+  height: 16px;
+  width: 16px;
+  background: #5a5a5a;
+  border-radius: 100%;
+}
+
+label.switch:has(input:checked) {
+  background: #047857;
+  border-color: #047857;
+}
+
+label.switch:has(input:checked)::before {
+  position: absolute;
+  text-align: center;
+  right: 0;
+  content: "";
+  height: 24px;
+  width: 24px;
+  background: white;
+  border-radius: 100%;
+}
