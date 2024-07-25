@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/mail"
 	"github.com/bytebury/fun-banking/internal/service"
 	"github.com/gin-gonic/gin"
 )
@@ -115,6 +116,25 @@ func (h userHandler) Update(c *gin.Context) {
 func (h userHandler) ForgotPassword(c *gin.Context) {
 	h.Form = NewFormData()
 	c.HTML(http.StatusOK, "forgot_password", h)
+}
+
+func (h userHandler) SendForgotPasswordEmail(c *gin.Context) {
+	h.Form = GetForm(c)
+
+	if err := h.userService.FindByEmail(h.Form.Data["email"], &h.User); err != nil {
+		h.Form.Data["success"] = "Sent password reset instructions to that e-mail if it exists"
+		c.HTML(http.StatusOK, "forgot_password_form", h.Form)
+		return
+	}
+
+	if err := mail.NewPasswordResetMailer().Send(h.Form.Data["email"], h.User); err != nil {
+		h.Form.Errors["general"] = "Our e-mail service is down, please try again later."
+		c.HTML(http.StatusUnprocessableEntity, "forgot_password_form", h.Form)
+		return
+	}
+
+	h.Form.Data["success"] = "Sent password reset instructions to that e-mail if it exists"
+	c.HTML(http.StatusOK, "forgot_password_form", h.Form)
 }
 
 func (h userHandler) Notifications(c *gin.Context) {
