@@ -146,8 +146,14 @@ func (s transactionService) BulkTransfer(customerIDs []string, transaction *doma
 				return err
 			}
 
+			primaryAccount, err := customer.PrimaryAccount()
+
+			if err != nil {
+				return err
+			}
+
 			newTransaction := domain.Transaction{
-				AccountID:   customer.Accounts[0].ID,
+				AccountID:   primaryAccount.ID,
 				Amount:      transaction.Amount,
 				Description: transaction.Description,
 				UserID:      transaction.UserID,
