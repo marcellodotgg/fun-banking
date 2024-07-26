@@ -38,7 +38,7 @@ func (c Customer) PrimaryAccount() (Account, error) {
 		return Account{}, errors.New("no accounts")
 	}
 	for _, account := range c.Accounts {
-		if account.Primary {
+		if account.IsPrimary {
 			return account, nil
 		}
 	}
@@ -63,7 +63,7 @@ func (c Customer) validate() error {
 	}
 
 	re := regexp.MustCompile("^[0-9]{4,6}$")
-	if !re.MatchString(c.PIN) {
+	if len(c.PIN) > 0 && !re.MatchString(c.PIN) {
 		return errors.New("invalid PIN")
 	}
 	return nil

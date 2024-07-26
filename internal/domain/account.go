@@ -13,7 +13,7 @@ type Account struct {
 	Balance    float64  `gorm:"decimal(50,2); default:0.00"`
 	CustomerID int      `gorm:"not null"`
 	Customer   Customer `gorm:"foreignKey:CustomerID; constraint:OnDelete:CASCADE"`
-	Primary    bool     `gorm:"not null;default:0"`
+	IsPrimary  bool     `gorm:"not null;default:0"`
 }
 
 func (a *Account) BeforeCreate(tx *gorm.DB) error {

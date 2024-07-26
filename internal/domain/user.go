@@ -70,7 +70,7 @@ func (u User) validate() error {
 
 	// usernames can only contain letters or numbers
 	re := regexp.MustCompile("^[a-zA-Z0-9]+$")
-	if !re.MatchString(u.Username) {
+	if len(u.Username) > 0 && !re.MatchString(u.Username) {
 		return errors.New("usernames can only contain letters or numbers")
 	}
 

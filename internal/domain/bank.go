@@ -38,7 +38,7 @@ func (b Bank) validate() error {
 	}
 
 	re := regexp.MustCompile(`^[A-Za-z0-9](?:\s?[A-Za-z0-9])*$`)
-	if !re.MatchString(b.Name) {
+	if len(b.Name) > 0 && !re.MatchString(b.Name) {
 		return errors.New("invalid name")
 	}
 

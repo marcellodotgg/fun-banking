@@ -136,6 +136,12 @@ func (h transactionHandler) BulkTransfer(c *gin.Context) {
 		return
 	}
 
+	if err := h.customerService.FindByID(customerIDs[0], &h.Customer); err != nil {
+		h.Form.Errors["general"] = "Something went wrong finding your bank"
+		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
+		return
+	}
+
 	if err := h.bankService.FindByID(strconv.Itoa(h.Customer.BankID), &h.Bank); err != nil {
 		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
 		return

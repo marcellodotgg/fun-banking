@@ -101,7 +101,8 @@
           {{ template "customers" . }}
           <script>
             document.body.addEventListener("htmx:load", function (evt) {
-              const bulkTransferMode = document.getElementById("bulk-transfer").checked;
+              const bulkTransferEl = document.getElementById("bulk-transfer");
+              const bulkTransferMode = bulkTransferEl && bulkTransferEl.checked;
 
               if (!bulkTransferMode) {
                 clearSelected();
@@ -119,7 +120,7 @@
             const selectedCustomerIds = new Set();
             const bulkTransferCheckbox = document.getElementById("bulk-transfer");
 
-            let isBulkTransferMode = bulkTransferCheckbox.checked;
+            let isBulkTransferMode = false;
 
             function goToCustomer(id) {
               if (!isBulkTransferMode) {
@@ -141,11 +142,13 @@
                 customerRow.classList.add("selected");
               }
 
-              if (selectedCustomerIds.size > 0) {
-                continueToBulkTransferButton.style.display = "block";
-                continueToBulkTransferButton.textContent = `Continue to Bulk Transfer (${selectedCustomerIds.size})`;
-              } else {
-                continueToBulkTransferButton.style.display = "none";
+              if (continueToBulkTransferButton) {
+                if (selectedCustomerIds.size > 0) {
+                  continueToBulkTransferButton.style.display = "block";
+                  continueToBulkTransferButton.textContent = `Continue to Bulk Transfer (${selectedCustomerIds.size})`;
+                } else {
+                  continueToBulkTransferButton.style.display = "none";
+                }
               }
             }
 
@@ -154,12 +157,18 @@
               document.querySelectorAll("tr.selected").forEach((element) => {
                 element.classList.remove("selected");
               });
-              document.getElementById("bulk-transfer-button").style.display = "none";
+              const button = document.getElementById("bulk-transfer-button");
+              if (button) {
+                button.style.display = "none";
+              }
             }
 
             function updateBulkTransferMode() {
               const bulkTransferCheckbox = document.getElementById("bulk-transfer");
-              isBulkTransferMode = bulkTransferCheckbox.checked;
+
+              if (bulkTransferCheckbox) {
+                isBulkTransferMode = bulkTransferCheckbox.checked;
+              }
 
               if (!isBulkTransferMode) {
                 clearSelected();

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/auth"
@@ -32,12 +33,10 @@ func (h sessionHandler) SignIn(c *gin.Context) {
 }
 
 func (h sessionHandler) CreateSession(c *gin.Context) {
-	c.Request.ParseForm()
+	h.Form = GetForm(c)
 
-	username := c.PostForm("email_or_username")
-	password := c.PostForm("password")
-
-	h.Form = NewFormData()
+	username := h.Form.Data["email_or_username"]
+	password := h.Form.Data["password"]
 
 	var user domain.User
 	if err := persistence.DB.First(&user, "username = ? OR email = ?", username, username).Error; err != nil {
@@ -48,8 +47,14 @@ func (h sessionHandler) CreateSession(c *gin.Context) {
 
 	token, err := auth.NewUserAuth().Login(username, password)
 
+	if err != nil && strings.Contains(err.Error(), "not verified") {
+		h.Form.Errors["general"] = "You are not verified, please check your e-mail"
+		c.HTML(http.StatusUnauthorized, "sessions/signin_form", h)
+		return
+	}
+
 	if err != nil || token == "" {
-		h.Form.Errors["email_or_username"] = "Unable to sign you in. Invalid credentials."
+		h.Form.Errors["general"] = "Unable to sign you in. Invalid credentials."
 		c.HTML(http.StatusUnauthorized, "sessions/signin_form", h)
 		return
 	}
