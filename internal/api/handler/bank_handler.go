@@ -94,7 +94,7 @@ func (h bankHandler) UpdateBank(c *gin.Context) {
 		} else if strings.Contains(err.Error(), "invalid name") {
 			h.Form.Errors["name"] = "Name can only contain letters, numbers, or spaces"
 		} else {
-			h.Form.Errors["general"] = "Something went wrong creating your bank"
+			h.Form.Errors["general"] = "Something went wrong updating your bank"
 		}
 		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return

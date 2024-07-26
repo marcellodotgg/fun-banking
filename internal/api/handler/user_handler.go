@@ -133,7 +133,9 @@ func (h userHandler) ResetPassword(c *gin.Context) {
 
 	_, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
 	if err != nil {
-		// bad token
+		h.Form.Errors["general"] = "Token is invalid, please generate a new one"
+		c.HTML(http.StatusUnprocessableEntity, "reset_password_form", h)
+		return
 	}
 
 	h.Form.Data["token"] = c.Query("token")
