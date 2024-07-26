@@ -67,6 +67,7 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 	// Find the users
 	persistence.DB.
+		Order("created_at DESC").
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").
 		Or("first_name LIKE ?", "%"+search+"%").
