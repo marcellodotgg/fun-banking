@@ -126,12 +126,12 @@ func (h transactionHandler) BulkTransfer(c *gin.Context) {
 		UserID:      userID,
 	}
 
-	if err := h.transactionService.BulkTransfer(customerIDs, &transaction); err != nil {
+	if len(customerIDs) <= 0 {
 		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
 		return
 	}
 
-	if err := h.customerService.FindByID(customerIDs[0], &h.Customer); err != nil {
+	if err := h.transactionService.BulkTransfer(customerIDs, &transaction); err != nil {
 		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
 		return
 	}
