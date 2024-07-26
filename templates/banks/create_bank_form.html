@@ -13,8 +13,12 @@
       placeholder="Bank name"
       required
       value="{{ .Form.Data.name }}"
+      maxlength="25"
       autofocus
     />
+    {{ if .Form.Errors.name }}
+    <div class="error-message">{{ .Form.Errors.name }}</div>
+    {{ end }}
   </div>
   <div>
     <label for="description">Description</label>

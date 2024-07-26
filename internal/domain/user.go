@@ -55,7 +55,8 @@ func (u *User) BeforeUpdate(tx *gorm.DB) error {
 	u.Email = strings.TrimSpace(strings.ToLower(u.Email))
 	u.FirstName = strings.TrimSpace(strings.ToLower(u.FirstName))
 	u.LastName = strings.TrimSpace(strings.ToLower(u.LastName))
-	return nil
+
+	return u.validate()
 }
 
 func (u User) validate() error {

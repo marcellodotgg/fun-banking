@@ -60,6 +60,8 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 		if strings.Contains(err.Error(), "UNIQUE") {
 			h.Form.Errors["general"] = "You already have a bank by that name"
 			h.Form.Data["name"] = ""
+		} else if strings.Contains(err.Error(), "invalid name") {
+			h.Form.Errors["name"] = "Name can only contain letters, numbers, or spaces"
 		} else {
 			h.Form.Errors["general"] = "Something went wrong creating your bank"
 		}
@@ -86,7 +88,14 @@ func (h bankHandler) UpdateBank(c *gin.Context) {
 	h.Bank.Description = h.Form.Data["description"]
 
 	if err := h.bankService.Update(bankID, &h.Bank); err != nil {
-		h.Form.Errors["general"] = "A bank with that name already exists"
+		if strings.Contains(err.Error(), "UNIQUE") {
+			h.Form.Errors["general"] = "You already have a bank by that name"
+			h.Form.Data["name"] = ""
+		} else if strings.Contains(err.Error(), "invalid name") {
+			h.Form.Errors["name"] = "Name can only contain letters, numbers, or spaces"
+		} else {
+			h.Form.Errors["general"] = "Something went wrong creating your bank"
+		}
 		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return
 	}

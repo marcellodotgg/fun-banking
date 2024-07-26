@@ -14,7 +14,11 @@
       required
       value="{{ .Form.Data.name }}"
       autofocus
+      maxlength="25"
     />
+    {{ if .Form.Errors.name }}
+    <div class="error-message">{{ .Form.Errors.name }}</div>
+    {{ end }}
   </div>
   <div>
     <label for="description">Description</label>
