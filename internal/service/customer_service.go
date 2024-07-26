@@ -27,7 +27,7 @@ func (s customerService) Create(customer *domain.Customer) error {
 		if err := tx.Create(&customer).Error; err != nil {
 			return err
 		}
-		return tx.Create(&domain.Account{Name: "Checking", CustomerID: customer.ID}).Error
+		return tx.Create(&domain.Account{Name: "Checking", Primary: true, CustomerID: customer.ID}).Error
 	})
 
 }

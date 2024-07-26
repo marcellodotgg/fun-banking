@@ -84,7 +84,11 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 			return err
 		}
 
-		toAccount := recipient.Accounts[0]
+		toAccount, err := recipient.PrimaryAccount()
+
+		if err != nil {
+			return err
+		}
 
 		secondTransaction := domain.Transaction{}
 

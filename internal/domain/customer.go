@@ -33,6 +33,18 @@ func (c Customer) NetWorth() float64 {
 	return netWorth
 }
 
+func (c Customer) PrimaryAccount() (Account, error) {
+	if len(c.Accounts) == 0 {
+		return Account{}, errors.New("no accounts")
+	}
+	for _, account := range c.Accounts {
+		if account.Primary {
+			return account, nil
+		}
+	}
+	return Account{}, errors.New("not found")
+}
+
 func (c *Customer) BeforeCreate(tx *gorm.DB) error {
 	c.FirstName = strings.ToLower(c.FirstName)
 	c.LastName = strings.ToLower(c.LastName)
