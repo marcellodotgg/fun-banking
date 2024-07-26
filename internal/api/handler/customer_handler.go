@@ -92,6 +92,11 @@ func (h customerHandler) Update(c *gin.Context) {
 			c.HTML(http.StatusOK, "customer_settings_form", h)
 			return
 		}
+		if strings.Contains(err.Error(), "invalid PIN") {
+			h.Form.Errors["pin"] = "PINs can only be 4 to 6 digits"
+			c.HTML(http.StatusOK, "customer_settings_form", h)
+			return
+		}
 
 		h.Form.Errors["general"] = "Something went wrong updating your customer"
 		c.HTML(http.StatusOK, "customer_settings_form", h)

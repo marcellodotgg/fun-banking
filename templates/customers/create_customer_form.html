@@ -17,32 +17,36 @@
       type="text"
       autocomplete="off"
       placeholder="First name"
+      maxlength="20"
       required
       value="{{ .Form.Data.first_name }}"
       autofocus
     />
   </div>
   <div>
-    <label for="first_name">Last name</label>
+    <label for="last_name">Last name</label>
     <input
       id="last_name"
       name="last_name"
       type="text"
       autocomplete="off"
       placeholder="Last name"
+      maxlength="20"
       required
       value="{{ .Form.Data.last_name }}"
       autofocus
     />
   </div>
   <div>
-    <label for="first_name">PIN</label>
+    <label for="pin">PIN</label>
     <input
       id="pin"
       name="pin"
       type="text"
       autocomplete="off"
       placeholder="PIN"
+      maxlength="6"
+      minlength="4"
       required
       autofocus
     />

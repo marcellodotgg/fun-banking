@@ -1,7 +1,9 @@
 package domain
 
 import (
+	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"golang.org/x/text/cases"
@@ -19,18 +21,6 @@ type Customer struct {
 	Accounts  []Account
 }
 
-func (c *Customer) BeforeCreate(tx *gorm.DB) error {
-	c.FirstName = strings.ToLower(c.FirstName)
-	c.LastName = strings.ToLower(c.LastName)
-	return nil
-}
-
-func (c *Customer) BeforeUpdate(tx *gorm.DB) error {
-	c.FirstName = strings.ToLower(c.FirstName)
-	c.LastName = strings.ToLower(c.LastName)
-	return nil
-}
-
 func (c Customer) FullName() string {
 	return cases.Title(language.AmericanEnglish).String(fmt.Sprintf("%s %s", c.FirstName, c.LastName))
 }
@@ -41,4 +31,28 @@ func (c Customer) NetWorth() float64 {
 		netWorth += account.Balance
 	}
 	return netWorth
+}
+
+func (c *Customer) BeforeCreate(tx *gorm.DB) error {
+	c.FirstName = strings.ToLower(c.FirstName)
+	c.LastName = strings.ToLower(c.LastName)
+	return c.validate()
+}
+
+func (c *Customer) BeforeUpdate(tx *gorm.DB) error {
+	c.FirstName = strings.ToLower(c.FirstName)
+	c.LastName = strings.ToLower(c.LastName)
+	return c.validate()
+}
+
+func (c Customer) validate() error {
+	if len(c.FirstName) > 20 || len(c.LastName) > 20 {
+		return errors.New("first or last name is too long")
+	}
+
+	re := regexp.MustCompile("^[0-9]{4,6}$")
+	if !re.MatchString(c.PIN) {
+		return errors.New("invalid PIN")
+	}
+	return nil
 }

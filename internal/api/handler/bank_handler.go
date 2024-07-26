@@ -143,6 +143,8 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 		if strings.Contains(err.Error(), "UNIQUE") {
 			h.Form.Errors["general"] = "A customer with that PIN already exists in this bank"
 			h.Form.Errors["pin"] = "A customer with that PIN already exists in this bank"
+		} else if strings.Contains(err.Error(), "invalid PIN") {
+			h.Form.Errors["pin"] = "PINs can only be 4 to 6 digits"
 		} else {
 			h.Form.Errors["general"] = "Something went wrong creating your customer"
 		}
