@@ -131,6 +131,7 @@ func (h transactionHandler) BulkTransfer(c *gin.Context) {
 		return
 	}
 
+	// TODO - this should really all be transactional
 	if err := h.transactionService.BulkTransfer(customerIDs, &transaction); err != nil {
 		c.HTML(http.StatusUnprocessableEntity, "bulk_transfer_form", h)
 		return
