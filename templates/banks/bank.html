@@ -23,7 +23,7 @@
             d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
           />
         </svg>
-        Copy the link in your address bar to share with your customers, so that they can sign in.
+        Click the link below to do the thing. TODO update this
       </div>
       <section class="card outlined flex flex-col gap-2">
         <div>
@@ -35,6 +35,30 @@
         <p>{{ .Bank.Description }}</p>
         <div>
           <ul class="flex gap-2 items-center text-sm">
+            <li>
+              <button
+                id="share-button"
+                class="flex items-center gap-1 hover:text-link font-semibold"
+                onclick="copyToClipboard()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+                  />
+                </svg>
+
+                Copy Link
+              </button>
+            </li>
             <li class="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -173,6 +197,14 @@
               if (!isBulkTransferMode) {
                 clearSelected();
               }
+            }
+          </script>
+          <script>
+            function copyToClipboard() {
+              navigator.clipboard.writeText(
+                "{{.WebsiteURL}}/{{.Bank.User.Username}}/{{.Bank.Slug}}"
+              );
+              // TODO add a popup
             }
           </script>
         </div>
