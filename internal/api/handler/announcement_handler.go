@@ -5,27 +5,30 @@ import (
 	"strconv"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 type announcementHandler struct {
-	SignedIn            bool
-	CurrentUser         domain.User
-	Form                FormData
-	Announcement        domain.Announcement
-	userService         service.UserService
-	announcementService service.AnnouncementService
+	SignedIn                bool
+	CurrentUser             domain.User
+	Form                    FormData
+	Announcement            domain.Announcement
+	AnnouncementsPagination pagination.PagingInfo[domain.Announcement]
+	userService             service.UserService
+	announcementService     service.AnnouncementService
 }
 
 func NewAnnouncementHandler() announcementHandler {
 	return announcementHandler{
-		SignedIn:            true,
-		CurrentUser:         domain.User{},
-		Form:                NewFormData(),
-		Announcement:        domain.Announcement{},
-		userService:         service.NewUserService(),
-		announcementService: service.NewAnnoucementService(),
+		SignedIn:                true,
+		CurrentUser:             domain.User{},
+		Form:                    NewFormData(),
+		Announcement:            domain.Announcement{},
+		AnnouncementsPagination: pagination.PagingInfo[domain.Announcement]{},
+		userService:             service.NewUserService(),
+		announcementService:     service.NewAnnoucementService(),
 	}
 }
 
@@ -33,14 +36,28 @@ func (h announcementHandler) Dashboard(c *gin.Context) {
 	c.HTML(http.StatusOK, "announcements_dashboard", h)
 }
 
-func (h announcementHandler) Announcements(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", h)
-}
-
 func (h announcementHandler) RecentAnnouncements(c *gin.Context) {
 	var announcements []domain.Announcement
 	h.announcementService.Recent(&announcements)
 	c.HTML(http.StatusOK, "recent_announcements", announcements)
+}
+
+func (h announcementHandler) FindAll(c *gin.Context) {
+	pageNumber, err := strconv.Atoi(c.Query("page"))
+
+	if err != nil {
+		pageNumber = 1
+	}
+
+	h.AnnouncementsPagination.PageNumber = pageNumber
+	h.AnnouncementsPagination.ItemsPerPage = 8
+
+	if err := h.announcementService.FindAll(&h.AnnouncementsPagination); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", h)
+		return
+	}
+
+	c.HTML(http.StatusOK, "announcements", h)
 }
 
 func (h announcementHandler) Create(c *gin.Context) {

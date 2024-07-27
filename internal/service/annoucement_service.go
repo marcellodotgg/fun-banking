@@ -4,10 +4,12 @@ import (
 	"strconv"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 )
 
 type AnnouncementService interface {
+	FindAll(pagingInfo *pagination.PagingInfo[domain.Announcement]) error
 	FindByID(id string, announcement *domain.Announcement) error
 	Recent(announcements *[]domain.Announcement) error
 	Create(announcement *domain.Announcement) error
@@ -19,6 +21,16 @@ type announcementService struct{}
 
 func NewAnnoucementService() AnnouncementService {
 	return announcementService{}
+}
+
+func (s announcementService) FindAll(pagingInfo *pagination.PagingInfo[domain.Announcement]) error {
+	return persistence.DB.
+		Model(&domain.Announcement{}).
+		Count(&pagingInfo.TotalItems).
+		Order("created_at desc").
+		Offset(pagingInfo.PageNumber).
+		Limit(pagingInfo.ItemsPerPage).
+		Find(&pagingInfo.Items).Error
 }
 
 func (s announcementService) FindByID(id string, announcement *domain.Announcement) error {

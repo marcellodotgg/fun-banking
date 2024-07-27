@@ -176,10 +176,10 @@ func setupControlPanelRoutes() {
 }
 
 func setupAnnouncementRoutes() {
-	handler := handler.NewAnnouncementHandler()
+	announcements := handler.NewAnnouncementHandler()
 
 	router.Group("announcements").
-		GET("", middleware.UserAuth(), handler.Announcements).
-		GET(":id", middleware.UserAuth(), handler.FindByID).
-		POST("recent", middleware.UserAuth(), handler.RecentAnnouncements)
+		GET("", middleware.UserAuth(), announcements.FindAll).
+		GET(":id", middleware.UserAuth(), announcements.FindByID).
+		POST("recent", middleware.UserAuth(), announcements.RecentAnnouncements)
 }
