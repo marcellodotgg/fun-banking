@@ -23,7 +23,7 @@
               <h2 class="text-lg font-extrabold -mb-1">{{ .Title }}</h2>
               <time class="text-muted text-xs -mt-3">Posted on {{ datetime .CreatedAt }}</time>
             </div>
-            <div>{{ .Description }}</div>
+            <div>{{ html .ShortDescription }}...</div>
             <a
               class="pill bg-emerald-100 hover:bg-emerald-200 w-fit font-semibold mt-2 text-sm"
               href="/announcements/{{.ID}}"

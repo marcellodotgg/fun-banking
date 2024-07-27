@@ -3,6 +3,7 @@ package domain
 import (
 	"bytes"
 	"errors"
+	"regexp"
 	"strings"
 
 	"gorm.io/gorm"
@@ -36,6 +37,11 @@ func (a Announcement) HTML() string {
 	}
 
 	return buf.String()
+}
+
+func (a Announcement) ShortDescription() string {
+	re := regexp.MustCompile(`<.*?>`)
+	return re.ReplaceAllString(a.HTML(), "")[:400]
 }
 
 func (a *Announcement) BeforeCreate(tx *gorm.DB) error {
