@@ -50,7 +50,7 @@ func (h announcementHandler) FindAll(c *gin.Context) {
 	}
 
 	h.AnnouncementsPagination.PageNumber = pageNumber
-	h.AnnouncementsPagination.ItemsPerPage = 8
+	h.AnnouncementsPagination.ItemsPerPage = 5
 
 	if err := h.announcementService.FindAll(&h.AnnouncementsPagination); err != nil {
 		c.HTML(http.StatusNotFound, "not-found", h)

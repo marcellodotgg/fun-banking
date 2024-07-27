@@ -28,7 +28,7 @@ func (s announcementService) FindAll(pagingInfo *pagination.PagingInfo[domain.An
 		Model(&domain.Announcement{}).
 		Count(&pagingInfo.TotalItems).
 		Order("created_at desc").
-		Offset(pagingInfo.PageNumber).
+		Offset((pagingInfo.PageNumber - 1) * pagingInfo.ItemsPerPage).
 		Limit(pagingInfo.ItemsPerPage).
 		Find(&pagingInfo.Items).Error
 }

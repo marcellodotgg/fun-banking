@@ -10,10 +10,26 @@
     {{ template "layout/navbar" . }}
     <main class="flex flex-col gap-4 mt-2 mb-4 container">
       <section class="card outlined flex flex-col gap-4">
-        <ol>
+        <div>
+          <h1 class="text-xl font-extrabold">Recent Announcements</h1>
+          <p class="text-muted">
+            Stay in the loop! Here are some of the latest updates from the Fun Banking team.
+          </p>
+        </div>
+        <ol class="flex flex-col gap-4">
           {{ range .AnnouncementsPagination.Items }}
-          <li>
-            <div>{{ .Title }}</div>
+          <li class="flex flex-col gap-2 border-b pb-4 last:border-b-0">
+            <div>
+              <h2 class="text-lg font-extrabold -mb-1">{{ .Title }}</h2>
+              <time class="text-muted text-xs -mt-3">Posted on {{ datetime .CreatedAt }}</time>
+            </div>
+            <div>{{ .Description }}</div>
+            <a
+              class="pill bg-emerald-100 hover:bg-emerald-200 w-fit font-semibold mt-2 text-sm"
+              href="/announcements/{{.ID}}"
+            >
+              Read Full Article
+            </a>
           </li>
           {{ end }}
         </ol>
