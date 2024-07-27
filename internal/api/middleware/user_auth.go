@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"net/http"
+
 	"github.com/bytebury/fun-banking/internal/api/handler"
 	"github.com/gin-gonic/gin"
 )
@@ -21,6 +23,9 @@ func UserAuth() gin.HandlerFunc {
 
 func renderUnauthorized(c *gin.Context) {
 	signInHandler := handler.NewSessionHandler()
-	signInHandler.Form.Errors["general"] = "You need to be signed in to access that resource"
 	signInHandler.SignIn(c)
+}
+
+func renderForbidden(c *gin.Context) {
+	c.HTML(http.StatusForbidden, "forbidden", nil)
 }
