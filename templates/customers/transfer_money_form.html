@@ -6,8 +6,16 @@
   class="flex flex-col gap-2"
 >
   {{ if eq (len .Accounts) 1}}
-  <input name="account_id" value="{{ (index .Accounts 0).ID }}" type="hidden" />
-  {{ else }} Select an account {{ end }}
+  <input name="account_id" value="{{ .PrimaryAccount.ID }}" type="hidden" />
+  {{ else }}
+  <label for="account">Select an Account</label>
+  <select id="account" name="account_id" required>
+    <option disabled selected value="">Select an Account...</option>
+    {{ range .Accounts }}
+    <option value="{{ .ID }}">{{ .Name }}</option>
+    {{ end }}
+  </select>
+  {{ end }}
   <div class="flex gap-4">
     <div class="flex flex-col gap-1 w-full">
       <label for="transaction_type">Transfer Type</label>
