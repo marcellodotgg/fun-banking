@@ -1,4 +1,6 @@
-{{ define "send_money_form" }}
+{{ define "send_money_form" }} {{ if .Form.Errors.general }}
+<div class="alert-banner bg-danger">{{ .Form.Errors.general }}</div>
+{{ end }}
 <form hx-put="/accounts/{{ .Account.ID }}/send-money">
   <div>
     <label for="name">Recipient</label>

@@ -62,7 +62,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 func (s transactionService) SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error {
 	return persistence.DB.Transaction(func(tx *gorm.DB) error {
 		if fromAccount.Balance < transaction.Amount {
-			return errors.New("you do not have enough money")
+			return errors.New("not enough money")
 		}
 
 		amount := transaction.Amount

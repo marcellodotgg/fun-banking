@@ -202,7 +202,11 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 	}
 
 	if err := h.transactionService.SendMoney(h.Account, recipient, &transaction); err != nil {
-		// TODO: handl the error
+		if strings.Contains(err.Error(), "not enough money") {
+			h.Form.Errors["general"] = "You do not have enough money"
+		}
+		c.HTML(http.StatusUnprocessableEntity, "send_money_form", h)
+		return
 	}
 
 	c.Header("HX-Redirect", "/accounts/"+accountID)
