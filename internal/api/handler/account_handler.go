@@ -37,6 +37,7 @@ func NewAccountHandler() accountHandler {
 }
 
 func (h accountHandler) Get(c *gin.Context) {
+	h.SignedIn = c.GetString("user_id") != ""
 	accountID := c.Param("id")
 	customerID, _ := strconv.Atoi(c.GetString("customer_id"))
 

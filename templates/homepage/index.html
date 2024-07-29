@@ -67,19 +67,19 @@
         <h1 class="text-3xl font-extrabold text-emerald-900 mb-4">We Are Serving</h1>
         <ul class="flex w-fit gap-8">
           <li>
-            <div class="text-2xl font-extrabold">{{ .SiteInfo.UserCount }}</div>
+            <div class="text-2xl font-extrabold">{{ number .SiteInfo.UserCount }}</div>
             <div class="text-base font-semibold">Users</div>
           </li>
           <li>
-            <div class="text-2xl font-extrabold">{{ .SiteInfo.CustomerCount }}</div>
+            <div class="text-2xl font-extrabold">{{ number .SiteInfo.CustomerCount }}</div>
             <div class="text-base font-semibold">Customers</div>
           </li>
           <li>
-            <div class="text-2xl font-extrabold">{{ .SiteInfo.BankCount }}</div>
+            <div class="text-2xl font-extrabold">{{ number .SiteInfo.BankCount }}</div>
             <div class="text-base font-semibold">Banks</div>
           </li>
           <li>
-            <div class="text-2xl font-extrabold">{{ .SiteInfo.TransactionCount }}</div>
+            <div class="text-2xl font-extrabold">{{ number .SiteInfo.TransactionCount }}</div>
             <div class="text-base font-semibold">Transactions</div>
           </li>
         </ul>
