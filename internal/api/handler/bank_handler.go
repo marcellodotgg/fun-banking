@@ -109,13 +109,13 @@ func (h bankHandler) UpdateBank(c *gin.Context) {
 func (h bankHandler) Delete(c *gin.Context) {
 	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You do not have access to do that"
-		c.HTML(http.StatusForbidden, "update_bank_form", h)
+		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return
 	}
 
 	if err := h.bankService.Delete(c.Param("id")); err != nil {
 		h.Form.Errors["general"] = "Something went wrong deleting your bank"
-		c.HTML(http.StatusForbidden, "update_bank_form", h)
+		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return
 	}
 
