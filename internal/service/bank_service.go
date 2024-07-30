@@ -14,6 +14,7 @@ type BankService interface {
 	Update(id string, bank *domain.Bank) error
 	FindByID(id string, bank *domain.Bank) error
 	FindByUsernameAndSlug(username, slug string, bank *domain.Bank) error
+	Delete(id string) error
 }
 
 type bankService struct{}
@@ -56,4 +57,8 @@ func (s bankService) FindByUsernameAndSlug(username, slug string, bank *domain.B
 		Joins("JOIN users ON users.id = banks.user_id").
 		Where("users.username = ? AND banks.slug = ?", username, slug).
 		First(&bank).Error
+}
+
+func (s bankService) Delete(id string) error {
+	return persistence.DB.Delete(&domain.Bank{}, "id = ?", id).Error
 }

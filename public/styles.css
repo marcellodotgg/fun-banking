@@ -296,6 +296,8 @@ button {
 .modal > .modal-content {
   /* Sizing for visible dialog */
   max-width: 600px;
+  max-height: calc(100% - 96px);
+  overflow-y: auto;
 
   /* Display properties for visible dialog*/
   background-color: white;
