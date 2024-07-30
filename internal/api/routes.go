@@ -120,6 +120,7 @@ func setupCustomerRoutes() {
 		Group("customers").
 		GET(":id", middleware.AnyAuth(), handler.GetCustomer).
 		PATCH(":id", middleware.UserAuth(), handler.Update).
+		DELETE(":id", middleware.UserAuth(), handler.Delete).
 		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal)
 }
 

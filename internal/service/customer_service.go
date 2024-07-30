@@ -14,6 +14,7 @@ type CustomerService interface {
 	Update(id string, customer *domain.Customer) error
 	FindAllByBankIDAndName(bankID, name string, limit int, customers *[]domain.Customer) error
 	FindByBankIDAndPIN(bankID, pin string, customer *domain.Customer) error
+	Delete(id string) error
 }
 
 type customerService struct{}
@@ -67,4 +68,8 @@ func (s customerService) FindByBankIDAndPIN(bankID, pin string, customer *domain
 		Joins("JOIN banks ON banks.id = customers.bank_id").
 		Where("banks.id = ? AND customers.pin = ?", bankID, pin).
 		First(&customer).Error
+}
+
+func (s customerService) Delete(id string) error {
+	return persistence.DB.Delete(&domain.Customer{}, "id = ?", id).Error
 }
