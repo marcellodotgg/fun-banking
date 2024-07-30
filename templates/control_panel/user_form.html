@@ -10,12 +10,12 @@
   </div>
   <div>
     <label for="verified">Verified</label>
-    <input id="verified" name="verified" type="checkbox" {{ if .User.IsAdmin }} checked {{ end }} />
+    <input id="verified" name="verified" type="checkbox" {{ if .User.Verified }} checked {{ end }} />
   </div>
   <div>
     <label for="image_url">Image URL</label>
     <input id="image_url" name="image_url" type="text" value="{{ .User.ImageURL }}" />
-    <span class="text-xs text-gray-600">https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg</span>
+    <span class="text-xs text-gray-600 break-all">https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg</span>
   </div>
   <div class="actions">
     <button class="bg-emerald-700 hover:bg-emerald-800" type="submit">Update User</button>
