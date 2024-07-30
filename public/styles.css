@@ -428,12 +428,13 @@ button {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin: 4px 0 0 24px;
+  margin: 16px 0 0 24px;
 }
 
 article.announcement h1,
 article.announcement h2,
 article.announcement h3 {
+  margin-top: 16px;
   font-weight: 900;
 }
 
@@ -448,7 +449,7 @@ article.announcement h2 {
 }
 
 article.announcement p {
-  margin: 4px 0;
+  margin: 16px 0;
 }
 
 article.announcement a {
@@ -463,9 +464,13 @@ article.announcement blockquote {
   margin: 8px 0;
 }
 
+article.announcement blockquote p {
+  margin: 8px 0;
+}
+
 article.announcement ol,
 article.announcement ul {
-  margin-left: 12px;
+  margin-left: 24px;
 }
 
 article.announcement ol li,

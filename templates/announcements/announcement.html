@@ -9,7 +9,7 @@
   <body>
     {{ template "layout/navbar" . }}
     <main class="flex flex-col gap-4 mt-2 mb-4 container">
-      <section class="card outlined flex flex-col gap-4">
+      <section class="card outlined flex flex-col">
         <div>
           <h1 class="font-extrabold text-2xl">{{ .Announcement.Title }}</h1>
           <div class="text-gray-600 text-sm">On {{ datetime .Announcement.CreatedAt }}</div>
