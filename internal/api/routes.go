@@ -105,6 +105,7 @@ func setupBankRoutes() {
 		POST("create", middleware.UserAuth(), bank.OpenCreateModal).
 		GET(":id", middleware.UserAuth(), bank.ViewBank).
 		PATCH(":id", middleware.UserAuth(), bank.UpdateBank).
+		DELETE(":id", middleware.UserAuth(), bank.Delete).
 		POST(":id/settings", middleware.UserAuth(), bank.OpenSettingsModal).
 		GET(":id/customers", middleware.AnyAuth(), bank.CustomerSearch).
 		GET(":id/customers-filter", middleware.UserAuth(), bank.FilterCustomers).

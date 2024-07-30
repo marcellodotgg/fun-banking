@@ -5,5 +5,19 @@
     <p class="text-muted">A bank lets you create and manage customer's accounts.</p>
   </header>
   {{ template "update_bank_form" . }}
+  <hr class="my-2" />
+  <div class="danger bg-danger/50 pill">
+    <h2 class="font-semibold">Danger Zone</h2>
+    <p class="text-sm">
+      Anything you do in this section will be permanent. We hope you're sure about this.
+    </p>
+    <button
+      hx-delete="/banks/{{.Bank.ID}}"
+      hx-confirm="Are you sure you want to delete this bank and all of its data?"
+      class="bg-red-500 hover:bg-red-600 font-bold text-white text-sm px-4 py-2 mt-4 rounded-[20px]"
+    >
+      Permanently Delete Bank
+    </button>
+  </div>
 </section>
 {{ end }}
