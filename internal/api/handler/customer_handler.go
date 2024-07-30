@@ -111,13 +111,13 @@ func (h customerHandler) Update(c *gin.Context) {
 func (h customerHandler) Delete(c *gin.Context) {
 	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You do not have access to do that"
-		c.HTML(http.StatusForbidden, "customer_settings_form", h)
+		c.HTML(http.StatusUnprocessableEntity, "customer_settings_form", h)
 		return
 	}
 
 	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
 		h.Form.Errors["general"] = "Something went wrong deleting this customer"
-		c.HTML(http.StatusForbidden, "customer_settings_form", h)
+		c.HTML(http.StatusUnprocessableEntity, "customer_settings_form", h)
 		return
 	}
 
