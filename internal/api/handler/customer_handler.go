@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -105,6 +106,29 @@ func (h customerHandler) Update(c *gin.Context) {
 
 	h.Form.Data["success"] = "Successfully updated the customer"
 	c.HTML(http.StatusOK, "customer_settings_oob", h)
+}
+
+func (h customerHandler) Delete(c *gin.Context) {
+	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+		h.Form.Errors["general"] = "You do not have access to do that"
+		c.HTML(http.StatusForbidden, "customer_settings_form", h)
+		return
+	}
+
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
+		h.Form.Errors["general"] = "Something went wrong deleting this customer"
+		c.HTML(http.StatusForbidden, "customer_settings_form", h)
+		return
+	}
+
+	if err := h.customerService.Delete(c.Param("id")); err != nil {
+		h.Form.Errors["general"] = "Something went wrong deleting this customer"
+		c.HTML(http.StatusForbidden, "customer_settings_form", h)
+		return
+	}
+
+	c.Header("HX-Trigger", "closeModal")
+	c.Header("HX-Redirect", fmt.Sprintf("/banks/%d", h.Customer.BankID))
 }
 
 func (h customerHandler) hasAccess(customerID, userID string) bool {
