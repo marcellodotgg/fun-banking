@@ -46,7 +46,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 
 		if account.Customer.Bank.UserID == *transaction.UserID {
 			transaction.Status = domain.TransactionApproved
-			account.Balance += transaction.Amount
+			account.Balance = utils.SafelyAddDollars(account.Balance, transaction.Amount)
 			transaction.Balance = account.Balance
 
 			if err := ts.accountService.UpdateBalance(accountID, &account); err != nil {
@@ -55,7 +55,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 		}
 
 		if transaction.Status == domain.TransactionPending {
-			transaction.Balance = account.Balance + transaction.Amount
+			transaction.Balance = utils.SafelyAddDollars(account.Balance, transaction.Amount)
 		}
 
 		return persistence.DB.Create(&transaction).Error
@@ -71,7 +71,7 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 		amount := transaction.Amount
 		description := transaction.Description
 
-		fromAccount.Balance -= amount
+		fromAccount.Balance = utils.SafelySubtractDollars(fromAccount.Balance, amount)
 
 		transaction.Amount = amount * -1
 		transaction.Balance = fromAccount.Balance
@@ -95,7 +95,7 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 
 		secondTransaction := domain.Transaction{}
 
-		toAccount.Balance += amount
+		toAccount.Balance = utils.SafelyAddDollars(toAccount.Balance, amount)
 
 		secondTransaction.Amount = amount
 		secondTransaction.Balance = toAccount.Balance

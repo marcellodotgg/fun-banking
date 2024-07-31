@@ -45,3 +45,13 @@ func GetDollarAmount(amount string) (float64, error) {
 	floatAmount = math.Round(floatAmount*100) / 100
 	return floatAmount, nil
 }
+
+func SafelyAddDollars(a, b float64) float64 {
+	sum := a + b
+	return math.Round(sum*100) / 100
+}
+
+func SafelySubtractDollars(a, b float64) float64 {
+	sum := a - b
+	return math.Round(sum*100) / 100
+}
