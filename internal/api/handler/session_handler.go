@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -59,7 +60,7 @@ func (h sessionHandler) CreateSession(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("auth_token", token, 3_600*24*365, "/", "localhost:8080", true, true)
+	c.SetCookie("auth_token", token, 3_600*24*365, "/", os.Getenv("COOKIE_URL"), true, true)
 	c.Header("HX-Redirect", "/")
 }
 
@@ -81,16 +82,16 @@ func (h sessionHandler) CreateCustomerSession(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("customer_auth_token", token, 3_600*24*365, "/", "localhost:8080", true, true)
+	c.SetCookie("customer_auth_token", token, 3_600*24*365, "/", os.Getenv("COOKIE_URL"), true, true)
 	c.Header("HX-Redirect", "/")
 }
 
 func (h sessionHandler) DestroySession(c *gin.Context) {
-	c.SetCookie("auth_token", "", -1, "/", "localhost:8080", true, true)
+	c.SetCookie("auth_token", "", -1, "/", os.Getenv("COOKIE_URL"), true, true)
 	c.Header("HX-Redirect", "/")
 }
 
 func (h sessionHandler) DestroyCustomerSession(c *gin.Context) {
-	c.SetCookie("customer_auth_token", "", -1, "/", "localhost:8080", true, true)
+	c.SetCookie("customer_auth_token", "", -1, "/", os.Getenv("COOKIE_URL"), true, true)
 	c.Header("HX-Redirect", "/")
 }

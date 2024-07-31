@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -88,7 +89,7 @@ func (h homepageHandler) VerifyEmail(c *gin.Context) {
 
 	token, _ := h.tokenService.GenerateUserToken(userID)
 
-	c.SetCookie("auth_token", token, 3_600*24*365, "/", "localhost:8080", true, true)
+	c.SetCookie("auth_token", token, 3_600*24*365, "/", os.Getenv("COOKIE_URL"), true, true)
 	c.HTML(http.StatusOK, "dashboard", h)
 }
 
