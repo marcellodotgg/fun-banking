@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"math"
 	"strconv"
 	"time"
 )
@@ -32,4 +33,15 @@ func ConvertToIntPointer(id string) (*int, error) {
 
 func ConvertMonthToNumeric(month time.Month) string {
 	return months[month]
+}
+
+func GetDollarAmount(amount string) (float64, error) {
+	floatAmount, err := strconv.ParseFloat(amount, 64)
+
+	if err != nil {
+		return 0, err
+	}
+
+	floatAmount = math.Round(floatAmount*100) / 100
+	return floatAmount, nil
 }

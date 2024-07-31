@@ -51,7 +51,7 @@ func (th transactionHandler) Create(c *gin.Context) {
 
 	th.Customer = account.Customer
 
-	amount, err := strconv.ParseFloat(th.Form.Data["amount"], 64)
+	amount, err := utils.GetDollarAmount(th.Form.Data["amount"])
 
 	if err != nil {
 		th.Form.Errors["amount"] = "Amount is not a valid number"
@@ -117,7 +117,7 @@ func (h transactionHandler) BulkTransfer(c *gin.Context) {
 	h.Form = GetForm(c)
 	customerIDs := strings.Split(h.Form.Data["customer_ids"], ",")
 
-	amount, _ := strconv.ParseFloat(h.Form.Data["amount"], 64)
+	amount, _ := utils.GetDollarAmount(h.Form.Data["amount"])
 	userID, _ := utils.ConvertToIntPointer(c.GetString("user_id"))
 
 	transaction := domain.Transaction{

@@ -78,7 +78,7 @@ func (h accountHandler) OpenWithdrawOrDepositModal(c *gin.Context) {
 func (h accountHandler) WithdrawOrDeposit(c *gin.Context) {
 	h.Form = GetForm(c)
 	accountID, _ := strconv.Atoi(c.Param("id"))
-	amount, _ := strconv.ParseFloat(h.Form.Data["amount"], 64)
+	amount, _ := utils.GetDollarAmount(h.Form.Data["amount"])
 	userID, _ := utils.ConvertToIntPointer(c.GetString("user_id"))
 
 	if h.Form.Data["type"] == "withdraw" {
@@ -195,7 +195,7 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 		return
 	}
 
-	amount, _ := strconv.ParseFloat(h.Form.Data["amount"], 64)
+	amount, _ := utils.GetDollarAmount(h.Form.Data["amount"])
 
 	transaction := domain.Transaction{
 		Amount:      amount,
