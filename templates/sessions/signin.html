@@ -18,7 +18,7 @@
           <div hx-boost="true">Need an account? <a class="link" href="signup">Create one</a>.</div>
         </div>
         {{ if and . .Form.Errors.general }}
-        <div class="alert-banner bg-warning">{{ .Form.Errors.general }}</div>
+        <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
         {{ end }} {{ template "sessions/signin_form" . }}
       </section>
     </main>

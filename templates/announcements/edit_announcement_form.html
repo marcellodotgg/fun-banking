@@ -6,9 +6,9 @@
   class="flex flex-col gap-2"
 >
   {{ if .Errors.general }}
-  <div class="alert-banner bg-danger">{{.Errors.general}}</div>
+  <div class="alert-banner danger">{{.Errors.general}}</div>
   {{ else if .Data.success }}
-  <div class="alert-banner bg-success">{{.Data.success}}</div>
+  <div class="alert-banner success">{{.Data.success}}</div>
   {{ end }}
   <div class="flex flex-col w-full">
     <label for="title">Title</label>

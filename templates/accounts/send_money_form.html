@@ -1,5 +1,5 @@
 {{ define "send_money_form" }} {{ if .Form.Errors.general }}
-<div class="alert-banner bg-danger">{{ .Form.Errors.general }}</div>
+<div class="alert-banner danger">{{ .Form.Errors.general }}</div>
 {{ end }}
 <form hx-put="/accounts/{{ .Account.ID }}/send-money">
   <div>
@@ -13,7 +13,6 @@
       type="search"
       autocomplete="off"
       onblur="hideSuggestions()"
-      class="focus:ring-1 ring-outline"
     />
     <div id="search-results"></div>
     <input id="recipient-field" type="hidden" name="recipient" autocomplete="off" required />

@@ -30,9 +30,9 @@
   class="flex flex-col gap-2"
 >
   {{ if .Form.Errors.general }}
-  <div class="alert-banner bg-danger mb-2">{{ .Form.Errors.general }}</div>
+  <div class="alert-banner danger mb-2">{{ .Form.Errors.general }}</div>
   {{ end }} {{ if .Form.Data.success }}
-  <div class="alert-banner bg-success mb-2">{{ .Form.Data.success }}</div>
+  <div class="alert-banner success mb-2">{{ .Form.Data.success }}</div>
   {{ end }}
   <div class="flex gap-4">
     <div class="w-full">

@@ -1,7 +1,7 @@
 {{ define "update_bank_form" }}
 <form hx-patch="/banks/{{.Bank.ID}}" hx-swap="outerHTML" hx-disabled-elt="button, input, textarea">
   {{ if .Form.Errors.general }}
-  <div class="alert-banner bg-warning">{{ .Form.Errors.general }}</div>
+  <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
   {{ end }}
   <div>
     <label for="name">Bank name</label>

@@ -165,6 +165,22 @@ button {
   font-size: 0.9rem;
 }
 
+.alert-banner.success {
+  background: var(--color-success);
+}
+
+.alert-banner.danger {
+  background: var(--color-danger);
+}
+
+.alert-banner.warning {
+  background: var(--color-warning);
+}
+
+.alert-banner.info {
+  background: var(--color-info);
+}
+
 .card {
   padding: var(--card-padding);
   border-radius: var(--pill-rounded);
@@ -229,7 +245,6 @@ button {
 }
 
 .modal {
-  /* Underlay covers entire screen. */
   position: fixed;
   top: 0px;
   bottom: 0px;
@@ -237,13 +252,9 @@ button {
   right: 0px;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-
-  /* Flexbox centers the .modal-content vertically and horizontally */
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  /* Animate when opening */
   animation-name: fadeIn;
   animation-duration: 150ms;
   animation-timing-function: ease;
@@ -283,8 +294,6 @@ button {
 }
 
 .modal > .modal-underlay {
-  /* underlay takes up the entire viewport. This is only
-	required if you want to click to dismiss the popup */
   position: absolute;
   z-index: -1;
   top: 0px;
@@ -294,29 +303,22 @@ button {
 }
 
 .modal > .modal-content {
-  /* Sizing for visible dialog */
   max-width: 600px;
   max-height: calc(100% - 96px);
   overflow-y: auto;
-
-  /* Display properties for visible dialog*/
   background-color: white;
-
-  /* Animate when opening */
   animation-name: zoomIn;
   animation-duration: 150ms;
   animation-timing-function: ease;
 }
 
 .modal.closing {
-  /* Animate when closing */
   animation-name: fadeOut;
   animation-duration: 150ms;
   animation-timing-function: ease;
 }
 
 .modal.closing > .modal-content {
-  /* Animate when closing */
   animation-name: zoomOut;
   animation-duration: 150ms;
   animation-timing-function: ease;
@@ -556,4 +558,8 @@ label.switch:has(input:checked)::before {
   width: 24px;
   background: white;
   border-radius: 100%;
+}
+
+ol#recent_announcements li div:first-of-type {
+  background: var(--color-outline);
 }

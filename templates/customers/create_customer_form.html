@@ -5,9 +5,9 @@
   hx-disabled-elt="button, input, textarea"
 >
   {{ if .Form.Errors.general }}
-  <div class="alert-banner bg-warning">{{ .Form.Errors.general }}</div>
+  <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
   {{ end }} {{ if .Form.Data.success }}
-  <div class="alert-banner bg-success">{{ .Form.Data.success }}</div>
+  <div class="alert-banner success">{{ .Form.Data.success }}</div>
   {{ end }}
   <div>
     <label for="first_name">First name</label>

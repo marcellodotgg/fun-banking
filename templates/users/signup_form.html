@@ -1,9 +1,9 @@
 {{ define "users/signup_form" }}
 <form hx-put="users" hx-disabled-elt="button, input" class="flex flex-col gap-5">
   {{ if and . .Form.Errors.general }}
-  <div class="alert-banner bg-danger">{{ .Form.Errors.general }}</div>
+  <div class="alert-banner danger">{{ .Form.Errors.general }}</div>
   {{ end }} {{ if and . .Form.Data.success }}
-  <div class="alert-banner bg-success">{{ .Form.Data.success }}</div>
+  <div class="alert-banner success">{{ .Form.Data.success }}</div>
   {{ end }}
   <div class="flex flex-col gap-2">
     <div class="flex gap-4">
@@ -108,7 +108,7 @@
       <div class="htmx-toggle">Sign up</div>
       <div class="htmx-indicator text-gray-600">Creating your Account...</div>
     </button>
-    <button class="ghost" type="reset">Cancel</button>
+    <button type="reset">Cancel</button>
   </div>
 </form>
 {{ end }}
