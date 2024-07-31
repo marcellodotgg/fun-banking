@@ -44,11 +44,10 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 			return err
 		}
 
-		transaction.Balance = account.Balance
-
 		if account.Customer.Bank.UserID == *transaction.UserID {
 			transaction.Status = domain.TransactionApproved
 			account.Balance += transaction.Amount
+			transaction.Balance = account.Balance
 
 			if err := ts.accountService.UpdateBalance(accountID, &account); err != nil {
 				return err
@@ -68,13 +67,13 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 		amount := transaction.Amount
 		description := transaction.Description
 
+		fromAccount.Balance -= amount
+
 		transaction.Amount = amount * -1
 		transaction.Balance = fromAccount.Balance
 		transaction.AccountID = fromAccount.ID
 		transaction.Description = fmt.Sprintf("Money sent to %s. Note: %s", recipient.FullName(), description)
 		transaction.Status = domain.TransactionApproved
-
-		fromAccount.Balance -= amount
 
 		if err := s.accountService.UpdateBalance(strconv.Itoa(fromAccount.ID), &fromAccount); err != nil {
 			return err
@@ -92,13 +91,13 @@ func (s transactionService) SendMoney(fromAccount domain.Account, recipient doma
 
 		secondTransaction := domain.Transaction{}
 
+		toAccount.Balance += amount
+
 		secondTransaction.Amount = amount
 		secondTransaction.Balance = toAccount.Balance
 		secondTransaction.AccountID = toAccount.ID
 		secondTransaction.Description = fmt.Sprintf("Money sent from %s. Note: %s", fromAccount.Customer.FullName(), description)
 		secondTransaction.Status = domain.TransactionApproved
-
-		toAccount.Balance += amount
 
 		if err := s.accountService.UpdateBalance(strconv.Itoa(toAccount.ID), &toAccount); err != nil {
 			return err
