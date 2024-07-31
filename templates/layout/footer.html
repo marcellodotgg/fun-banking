@@ -1,8 +1,15 @@
 {{ define "layout/footer" }}
 <footer class="text-sm py-2 text-center md:text-left">
-  <div class="container">
-    <h1 class="font-extrabold text-base">Let's Work Together</h1>
-    &copy; Created by Bytebury LLC. All Rights Reserved.
+  <div class="container flex flex-col gap-2 items-center md:flex-row md:justify-between">
+    <div>
+      <h1 class="font-extrabold text-base">Let's Work Together</h1>
+      &copy; Created by Bytebury LLC. All Rights Reserved.
+    </div>
+    <ul class="flex items-center gap-2 text-xs">
+      <li><a href="/privacy" class="link">Privacy</a></li>
+      <li><a href="/terms" class="link">Terms of Service</a></li>
+      <li><a href="mailto:bytebury@gmail.com" class="link">Contact Us</a></li>
+    </ul>
   </div>
 </footer>
 {{ end }}

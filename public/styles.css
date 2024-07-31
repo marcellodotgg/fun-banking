@@ -444,6 +444,9 @@ button {
   margin: 4px 0 0 24px;
 }
 
+article.legalize h1,
+article.legalize h2,
+article.legalize h3,
 article.announcement h1,
 article.announcement h2,
 article.announcement h3 {
@@ -451,20 +454,24 @@ article.announcement h3 {
   font-weight: 900;
 }
 
+article.legalize h1,
 article.announcement h1 {
   font-size: 1.25rem;
   line-height: 1.5rem;
 }
 
+article.legalize h2,
 article.announcement h2 {
   font-size: 1.15rem;
   line-height: 1.4rem;
 }
 
+article.legalize p,
 article.announcement p {
   margin: 16px 0;
 }
 
+article.legalize a,
 article.announcement a {
   text-decoration: underline;
   color: var(--color-link);
@@ -481,11 +488,15 @@ article.announcement blockquote p {
   margin: 8px 0;
 }
 
+article.legalize ol,
+article.legalize ul,
 article.announcement ol,
 article.announcement ul {
   margin-left: 24px;
 }
 
+article.legalize ol li,
+article.legalize ul li,
 article.announcement ol li,
 article.announcement ul li {
   margin-left: 6px;

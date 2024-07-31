@@ -71,6 +71,10 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 	}
 }
 
+func (h homepageHandler) TermsOfService(c *gin.Context) {
+	c.HTML(http.StatusOK, "terms", h)
+}
+
 func (h homepageHandler) VerifyEmail(c *gin.Context) {
 	userID, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
 	h.Form = NewFormData()
