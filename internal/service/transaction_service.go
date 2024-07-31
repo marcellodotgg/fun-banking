@@ -55,7 +55,7 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 		}
 
 		if transaction.Status == domain.TransactionPending {
-			transaction.Balance = utils.SafelyAddDollars(account.Balance, transaction.Amount)
+			transaction.Balance = account.Balance
 		}
 
 		return persistence.DB.Create(&transaction).Error
