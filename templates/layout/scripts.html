@@ -1,5 +1,8 @@
 {{ define "layout/scripts" }}
 <script>
+  htmx.config.scrollBehavior = "smooth";
+</script>
+<script>
   document.body.addEventListener("htmx:beforeSwap", function (evt) {
     const responseStatus = evt.detail.xhr.status;
 

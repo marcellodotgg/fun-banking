@@ -41,6 +41,12 @@ func (a Announcement) HTML() string {
 
 func (a Announcement) ShortDescription() string {
 	re := regexp.MustCompile(`<.*?>`)
+	text := re.ReplaceAllString(a.HTML(), "")
+
+	if len(text) <= 400 {
+		return text
+	}
+
 	return re.ReplaceAllString(a.HTML(), "")[:400]
 }
 

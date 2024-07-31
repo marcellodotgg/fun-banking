@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <title>Fun Banking | Announcements from the Team</title>
-    <meta name="description" content="Fun Banking - TODO" />
+    <meta name="description" content="Fun Banking - Announcements from the team" />
     {{ template "layout/head" . }}
   </head>
   <body>
@@ -33,6 +33,22 @@
           </li>
           {{ end }}
         </ol>
+        <div hx-boost="true" class="flex items-center justify-between">
+          {{ if .AnnouncementsPagination.HasPreviousPage }}
+          <a
+            class="px-4 py-2 rounded-[20px] bg-gray-100 hover:bg-gray-200 border"
+            href="/announcements?page={{sub .AnnouncementsPagination.PageNumber 1}}"
+            >Previous</a
+          >
+          {{ end }} {{ if .AnnouncementsPagination.HasNextPage }}
+          <a
+            class="px-4 py-2 rounded-[20px] bg-gray-100 hover:bg-gray-200 border"
+            href="/announcements?page={{add .AnnouncementsPagination.PageNumber 1}}"
+          >
+            Next
+          </a>
+          {{ end }}
+        </div>
       </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
