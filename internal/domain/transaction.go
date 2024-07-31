@@ -40,5 +40,10 @@ func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
 	if t.Amount == 0 {
 		return errors.New("amount cannot be 0")
 	}
+
+	if t.Amount > 25_000_000 {
+		return errors.New("amount cannot be greater than 25,000,000")
+	}
+
 	return nil
 }
