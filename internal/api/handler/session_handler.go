@@ -36,12 +36,12 @@ func (h sessionHandler) SignIn(c *gin.Context) {
 func (h sessionHandler) CreateSession(c *gin.Context) {
 	h.Form = GetForm(c)
 
-	username := h.Form.Data["email_or_username"]
+	username := strings.TrimSpace(strings.ToLower(h.Form.Data["email_or_username"]))
 	password := h.Form.Data["password"]
 
 	var user domain.User
 	if err := persistence.DB.First(&user, "username = ? OR email = ?", username, username).Error; err != nil {
-		h.Form.Errors["email_or_username"] = "Unable to sign you in. Invalid credentials."
+		h.Form.Errors["general"] = "Unable to sign you in. Invalid credentials."
 		c.HTML(http.StatusUnauthorized, "sessions/signin_form", h)
 		return
 	}
