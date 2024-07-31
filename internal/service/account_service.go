@@ -68,12 +68,14 @@ func (s accountService) CashFlow(accountID string, cashflow *Cashflow) error {
 }
 
 func (s accountService) Transactions(accountID string, pagingInfo *pagination.PagingInfo[domain.Transaction]) error {
+	if err := persistence.DB.Find(&domain.Transaction{}, "account_id = ?", accountID).Count(&pagingInfo.TotalItems).Error; err != nil {
+		return err
+	}
 	return persistence.DB.
 		Offset((pagingInfo.PageNumber-1)*pagingInfo.ItemsPerPage).
 		Limit(pagingInfo.ItemsPerPage).
 		Order("created_at DESC").
-		Find(&pagingInfo.Items, "account_id = ?", accountID).
-		Count(&pagingInfo.TotalItems).Error
+		Find(&pagingInfo.Items, "account_id = ?", accountID).Error
 }
 
 func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Month, sum *float64) error {
