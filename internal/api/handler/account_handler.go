@@ -99,6 +99,12 @@ func (h accountHandler) WithdrawOrDeposit(c *gin.Context) {
 			c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", h)
 			return
 		}
+		if strings.Contains(err.Error(), "greater than") {
+			h.Form.Errors["general"] = "Please fix the fields marked with errors"
+			h.Form.Errors["amount"] = "Amount cannot be greater than 25,000,000"
+			c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", h)
+			return
+		}
 		h.Form.Errors["general"] = "Something happened trying to create that transaction"
 		c.HTML(http.StatusUnprocessableEntity, "withdraw_or_deposit_form", h)
 		return
