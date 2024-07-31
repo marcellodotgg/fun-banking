@@ -401,36 +401,47 @@ button {
   background: hsl(120, 20%, 83%);
 }
 
-#app-drawer ul li details summary {
+#app-drawer ul li .details .summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
   border-radius: 20px;
   font-weight: 500;
+  transition-timing-function: ease;
+  transition-duration: 400ms;
+  cursor: pointer;
 }
 
-#app-drawer ul li details > summary:after {
+#app-drawer ul li .details ul li {
+  display: none;
+}
+
+#app-drawer ul li .details.opened ul li {
+  display: block;
+}
+
+#app-drawer ul li .details > .summary:after {
   content: "▼";
 }
 
-#app-drawer ul li details[open] > summary:after {
+#app-drawer ul li .details.opened > .summary:after {
   content: "▲";
 }
 
-#app-drawer ul li details[open] summary {
+#app-drawer ul li .details.opened .summary {
   background: hsl(120, 20%, 95%);
 }
 
-#app-drawer ul li details summary:hover {
+#app-drawer ul li .details .summary:hover {
   background: hsl(120, 20%, 95%);
 }
 
-#app-drawer ul li details ul {
+#app-drawer ul li .details ul {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin: 16px 0 0 24px;
+  margin: 4px 0 0 24px;
 }
 
 article.announcement h1,

@@ -17,15 +17,15 @@
       <li><a href="/" class="active">Dashboard</a></li>
       {{ if .CurrentUser.IsAdmin }}
         <li>
-          <details>
-            <summary>Control Panel</summary>
+          <div id="control-panel" class="details">
+            <div class="summary" onclick="toggleAccordion('control-panel')">Control Panel</div>
             <ul>
               <li><a href="/control-panel">Application Insights</a></li>
               <li><a href="/control-panel/users">Manage Users</a></li>
               <li><a href="/control-panel/announcements">Announcements</a></li>
               <li><a href="/control-panel/polls">Polls</a></li>
             </ul>
-          </details>
+          </div>
         </li>
       {{ end }}
       <li><a href="/settings">Settings</a></li>
@@ -46,6 +46,16 @@
 <script>
   setActiveLink();
 
+  function toggleAccordion(elementId) {
+    const details = document.getElementById(elementId);
+
+    if (details.classList.contains('opened')) {
+      details.classList.remove('opened');
+    } else {
+      details.classList.add('opened');
+    }
+  }
+
   function setActiveLink() {
     const links = document.querySelectorAll('#app-drawer ul li a');
     const currentUrl = window.location;
@@ -58,9 +68,8 @@
 
         // This will open any details if a child is active
         const parent = link.parentElement.parentElement.parentElement;
-        if (parent && parent.localName === 'details') {
-          parent.setAttribute('open', 'open');
-          console.dir(parent);
+        if (parent && parent.classList.contains('details')) {
+          parent.classList.add('opened');
         }
       }
     });
