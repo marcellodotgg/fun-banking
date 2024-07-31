@@ -134,8 +134,14 @@ func (s transactionService) Update(id, userID, status string) error {
 		}
 
 		if transaction.Status == domain.TransactionApproved {
-			account.Balance += transaction.Amount
-			return persistence.DB.Select("Balance").Updates(&account).Error
+			account.Balance = utils.SafelyAddDollars(account.Balance, transaction.Amount)
+
+			if err := persistence.DB.Select("Balance").Updates(&account).Error; err != nil {
+				return err
+			}
+
+			transaction.Balance = account.Balance
+			return persistence.DB.Select("Balance").Updates(&transaction).Error
 		}
 		return persistence.DB.Select("Balance").First(&account).Error
 	})

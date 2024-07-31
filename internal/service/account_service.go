@@ -74,7 +74,7 @@ func (s accountService) Transactions(accountID string, pagingInfo *pagination.Pa
 	return persistence.DB.
 		Offset((pagingInfo.PageNumber-1)*pagingInfo.ItemsPerPage).
 		Limit(pagingInfo.ItemsPerPage).
-		Order("created_at DESC").
+		Order("updated_at DESC").
 		Find(&pagingInfo.Items, "account_id = ?", accountID).Error
 }
 
