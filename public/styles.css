@@ -1,18 +1,16 @@
 :root {
-  --color-default: #222;
-  --color-info: hsl(120, 20%, 88%);
-  --color-warning: hsl(9, 69%, 88%);
-  --color-success: hsl(133, 75%, 88%);
-  --color-danger: hsl(0, 100%, 90%);
-  --color-danger-dark: hsl(0, 100%, 37%);
-  --color-ghost: hsl(120, 20%, 88%);
-  --color-ghost-darker: hsl(120, 20%, 83%);
-  --color-bg: hsl(120, 20%, 96%);
-  --color-link: hsl(120, 20%, 25%);
-  --color-outline: hsl(120, 20%, 75%);
-  --pill-rounded: 20px;
-  --pill-padding: 10px 20px;
-  --card-padding: 20px;
+  --default: #222;
+  --info: hsl(120, 20%, 88%);
+  --warning: hsl(9, 69%, 88%);
+  --success: hsl(133, 75%, 88%);
+  --danger: hsl(0, 100%, 90%);
+  --danger-dark: hsl(0, 100%, 37%);
+  --ghost: hsl(120, 20%, 88%);
+  --ghost-darker: hsl(120, 20%, 83%);
+  --bg: hsl(120, 20%, 96%);
+  --link: hsl(120, 20%, 25%);
+  --outline: hsl(120, 20%, 75%);
+  --table-row-hover: hsla(120, 20%, 88%, 0.4);
 }
 
 textarea:disabled,
@@ -26,8 +24,8 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: var(--color-default);
-  background: var(--color-bg);
+  color: var(--default);
+  background: var(--bg);
   scroll-behavior: smooth;
 }
 
@@ -36,7 +34,7 @@ body {
 }
 
 nav {
-  background: var(--color-bg);
+  background: var(--bg);
 }
 
 body footer {
@@ -48,7 +46,7 @@ body footer {
 
 button.link,
 a.link {
-  color: var(--color-link);
+  color: var(--link);
   text-decoration: underline;
 }
 
@@ -57,7 +55,7 @@ button,
 input,
 textarea,
 select {
-  outline-color: var(--color-outline);
+  outline-color: var(--outline);
 }
 
 input[type="search"] {
@@ -77,7 +75,7 @@ input[type="search"],
 input[type="email"] {
   border-width: 1px;
   padding: 8px 15px;
-  border-radius: var(--pill-rounded);
+  border-radius: 20px;
   width: 100%;
 }
 
@@ -91,24 +89,24 @@ button[type="submit"]:disabled {
 }
 
 button[type="reset"]:hover {
-  background: var(--color-ghost);
+  background: var(--ghost);
 }
 
 form select {
   border-width: 1px;
   padding: 10px;
-  border-radius: var(--pill-rounded);
+  border-radius: 20px;
   width: 100%;
 }
 
 button[type="submit"],
 button[type="reset"] {
-  border-radius: var(--pill-rounded);
+  border-radius: 20px;
   padding: 8px 16px;
 }
 
 form .error-message {
-  color: var(--color-danger-dark);
+  color: var(--danger-dark);
   margin-top: 4px;
   font-size: 0.9rem;
 }
@@ -147,12 +145,11 @@ button {
 
 /** Utilities */
 .pill {
-  padding: var(--pill-padding);
-  border-radius: var(--pill-rounded);
+  border-radius: 20px;
 }
 
 .ghost:hover {
-  background: var(--color-ghost);
+  background: var(--ghost);
 }
 
 /* Custom Components */
@@ -160,34 +157,34 @@ button {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: var(--pill-padding);
-  border-radius: var(--pill-rounded);
+  padding: 10px 20px;
+  border-radius: 20px;
   font-size: 0.9rem;
 }
 
 .alert-banner.success {
-  background: var(--color-success);
+  background: var(--success);
 }
 
 .alert-banner.danger {
-  background: var(--color-danger);
+  background: var(--danger);
 }
 
 .alert-banner.warning {
-  background: var(--color-warning);
+  background: var(--warning);
 }
 
 .alert-banner.info {
-  background: var(--color-info);
+  background: var(--info);
 }
 
 .card {
-  padding: var(--card-padding);
-  border-radius: var(--pill-rounded);
+  padding: 20px;
+  border-radius: 20px;
 }
 
 .card.filled {
-  background: var(--color-ghost);
+  background: var(--ghost);
 }
 
 .card.outlined {
@@ -396,7 +393,7 @@ button {
 }
 
 #app-drawer ul li a.active {
-  background: var(--color-ghost);
+  background: var(--ghost);
 }
 
 #app-drawer ul li a.active:hover {
@@ -476,13 +473,13 @@ article.announcement p {
 article.legalize a,
 article.announcement a {
   text-decoration: underline;
-  color: var(--color-link);
+  color: var(--link);
 }
 
 article.announcement blockquote {
-  border-left: 8px solid var(--color-outline);
+  border-left: 8px solid var(--outline);
   padding: 4px 12px;
-  background: var(--color-bg);
+  background: var(--bg);
   margin: 8px 0;
 }
 
@@ -506,11 +503,11 @@ article.announcement ul li {
 }
 
 table tr.selected {
-  background: var(--color-ghost);
+  background: var(--ghost);
 }
 
 table tr.selected:hover {
-  background: var(--color-ghost-darker);
+  background: var(--ghost-darker);
 }
 
 label:hover {
@@ -561,5 +558,20 @@ label.switch:has(input:checked)::before {
 }
 
 ol#recent_announcements li div:first-of-type {
-  background: var(--color-outline);
+  background: var(--outline);
+}
+
+.filled {
+  background: var(--ghost);
+}
+button.filled:hover {
+  background: var(--ghost-darker);
+}
+
+table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+table tbody tr:hover {
+  background: var(--table-row-hover);
 }

@@ -29,7 +29,7 @@
           </div>
           <div class="flex items-center gap-1">
             <button type="submit" class="bg-emerald-700 hover:bg-emerald-800">Search</button>
-            <a href="/control-panel/users" class="pill ghost">Reset</a>
+            <button type="reset">Reset</a>
           </div>
         </form>
         <div id="user-list">{{ template "control_panel_users_list" .UserResults }}</div>
@@ -52,7 +52,7 @@
       hx-trigger="click"
       hx-target="body"
       hx-swap="beforeend"
-      class="border-b hover:bg-ghost/30 hover:cursor-pointer"
+      class="hover:cursor-pointer"
     >
       <td class="flex gap-3 items-center text-left p-2">
         <div>
@@ -89,7 +89,7 @@
       </td>
     </tr>
     {{ end }} {{ else }}
-    <tr class="border-b">
+    <tr>
       <td colspan="2" class="text-left p-2 text-gray-600">There are no users registered.</td>
     </tr>
     {{ end }}

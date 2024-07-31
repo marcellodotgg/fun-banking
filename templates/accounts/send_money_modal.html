@@ -14,9 +14,7 @@
   <strong class="text-sm">Suggestions:</strong>
   <ul class="flex flex-col w-full border rounded-xl mt-2 shadow">
     {{ if gt (len .) 0 }} {{ range . }}
-    <li
-      class="w-full border-b first:rounded-t-xl last:border-0 last:rounded-b-xl hover:bg-ghost/75"
-    >
+    <li class="w-full border-b first:rounded-t-xl last:border-0 last:rounded-b-xl ghost">
       <button
         type="button"
         onmousedown="selectRecipient({{ .ID }}, {{ .FullName }})"

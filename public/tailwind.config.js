@@ -2,8 +2,6 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        ghost: "hsl(120, 20%, 88%)",
-        "ghost-dark": "hsl(120, 20%, 83%)",
         link: "hsl(120, 20%, 25%)",
       },
       borderColor: {

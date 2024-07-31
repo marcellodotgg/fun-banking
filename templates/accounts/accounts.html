@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     {{ range .Accounts }}
-    <tr onclick="goToAccount('{{.ID}}')" class="border-b hover:bg-ghost/30 hover:cursor-pointer">
+    <tr onclick="goToAccount('{{.ID}}')" class="border-b hover:cursor-pointer">
       <td class="text-left py-1.5 px-2">
         <div class="font-semibold">{{ .Name }}</div>
       </td>
