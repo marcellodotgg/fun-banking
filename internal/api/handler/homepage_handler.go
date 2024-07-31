@@ -75,6 +75,10 @@ func (h homepageHandler) TermsOfService(c *gin.Context) {
 	c.HTML(http.StatusOK, "terms", h)
 }
 
+func (h homepageHandler) PrivacyPolicy(c *gin.Context) {
+	c.HTML(http.StatusOK, "privacy", h)
+}
+
 func (h homepageHandler) VerifyEmail(c *gin.Context) {
 	userID, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
 	h.Form = NewFormData()
