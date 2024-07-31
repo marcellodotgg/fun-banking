@@ -16,6 +16,7 @@ EMAIL_PASSWORD=PASSWORD
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 WEBSITE_URL=http://localhost:8080
+COOKIE_URL=localhost:8080 # or .fun-banking.com
 ```
 
 # Local Environment
