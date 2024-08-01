@@ -14,7 +14,7 @@
         <div class="text-muted">Processing waiting approval...</div>
         {{ end }}
         <div>{{ .Description }}</div>
-        <div class="text-xs text-gray-600">{{ datetime .UpdatedAt }}</div>
+        <div class="text-xs text-muted">{{ datetime .UpdatedAt }}</div>
       </td>
       <td class="text-right px-2">
         <div class="font-extrabold">
@@ -26,12 +26,12 @@
           <span class="text-red-700">{{ currency (mulfloat .Amount -1) }}</span>
           {{ end }}
         </div>
-        <div class="text-sm text-gray-600">{{ currency .Balance }}</div>
+        <div class="text-sm text-muted">{{ currency .Balance }}</div>
       </td>
     </tr>
     {{ end }} {{ else }}
     <tr>
-      <td colspan="2" class="text-left py-1.5 px-2 text-gray-600">
+      <td colspan="2" class="text-left py-1.5 px-2 text-base text-muted">
         You don't have any transactions yet.
       </td>
     </tr>

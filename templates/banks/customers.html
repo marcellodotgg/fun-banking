@@ -51,13 +51,13 @@
     >
       <td class="text-left py-1.5 px-2">
         <div class="font-semibold">{{ .FullName }}</div>
-        <div class="text-xs text-gray-600">PIN-{{ .PIN }}</div>
+        <div class="text-xs text-muted">PIN-{{ .PIN }}</div>
       </td>
       <td class="text-right px-2">{{ currency .NetWorth }}</td>
     </tr>
     {{ end }} {{ else }}
     <tr>
-      <td colspan="2" class="text-left py-1.5 px-2 text-gray-600">
+      <td colspan="2" class="text-left py-1.5 px-2 text-base text-muted">
         You don't have any customers yet.
       </td>
     </tr>

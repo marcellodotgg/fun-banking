@@ -1,6 +1,6 @@
 {{ define "customer" }}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" theme="dark">
   <head>
     <title>Fun Banking | {{ .Customer.FullName }}</title>
     <meta name="description" content="Fun Banking - TODO" />
@@ -135,7 +135,7 @@
         <section class="flex flex-col gap-2 card outlined grow">
           <div>
             <h1 class="text-lg font-extrabold">Transfer Money</h1>
-            <p class="text-sm text-gray-600">
+            <p class="text-muted">
               Transfers you do are immediately reflected to the customer's bank account.
             </p>
           </div>
@@ -144,7 +144,7 @@
         <section class="flex flex-col gap-2 card outlined">
           <div>
             <h1 class="text-lg font-extrabold">Banking</h1>
-            <p class="text-sm text-gray-600">Account(s) available for this customer.</p>
+            <p class="text-muted">Account(s) available for this customer.</p>
           </div>
           <div id="customer-accounts">{{ template "accounts" .Customer }}</div>
         </section>

@@ -6,11 +6,44 @@
   --danger: hsl(0, 100%, 90%);
   --danger-dark: hsl(0, 100%, 37%);
   --ghost: hsl(120, 20%, 88%);
-  --ghost-darker: hsl(120, 20%, 83%);
+  --ghost-hover: hsl(120, 20%, 83%);
   --bg: hsl(120, 20%, 96%);
+  --bg-card: white;
   --link: hsl(120, 20%, 25%);
+  --border-color: rgba(0, 0, 0, 0.15);
   --outline: hsl(120, 20%, 75%);
   --table-row-hover: hsla(120, 20%, 88%, 0.4);
+  --muted-color: #4b5563;
+  --bg-footer: hsl(120, 20%, 90%);
+  --underlay: rgba(0, 0, 0, 0.5);
+  --app-drawer-hover: hsl(120, 20%, 83%);
+  --text-footer: hsl(120, 20%, 25%);
+  --bg-input: white;
+  --bg-modal: white;
+}
+
+:root[theme="dark"] {
+  --default: #dfdfdf;
+  --info: hsl(120, 8%, 20%);
+  --warning: hsl(9, 69%, 20%);
+  --success: hsl(133, 75%, 20%);
+  --danger: hsl(0, 100%, 20%);
+  --danger-dark: hsl(0, 100%, 37%);
+  --ghost: hsl(120, 20%, 20%);
+  --ghost-hover: hsl(120, 20%, 25%);
+  --bg: #1b1c1d;
+  --bg-card: #111;
+  --link: hsl(120, 20%, 75%);
+  --outline: hsl(0, 0%, 27%);
+  --border-color: rgba(255, 255, 255, 0.15);
+  --table-row-hover: hsla(120, 20%, 88%, 0.4);
+  --muted-color: #888;
+  --bg-footer: #151616;
+  --underlay: rgba(0, 0, 0, 0.5);
+  --app-drawer-hover: hsla(120, 20%, 60%, 0.5);
+  --text-footer: hsl(120, 20%, 75%);
+  --bg-input: #000;
+  --bg-modal: var(--bg);
 }
 
 textarea:disabled,
@@ -38,10 +71,10 @@ nav {
 }
 
 body footer {
-  color: hsl(120, 20%, 25%);
+  color: var(--text-footer);
   margin-top: auto;
-  border-top: 1px solid hsl(120, 20%, 85%);
-  background: hsl(120, 20%, 90%);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-footer);
 }
 
 button.link,
@@ -50,12 +83,26 @@ a.link {
   text-decoration: underline;
 }
 
-a,
-button,
+a.link-hover:hover {
+  color: var(--link);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--outline);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: rgba(0, 0, 0, 0) auto 0px;
+}
+
 input,
 textarea,
 select {
-  outline-color: var(--outline);
+  background: var(--bg-input);
 }
 
 input[type="search"] {
@@ -127,8 +174,12 @@ form .error-message {
   display: block;
 }
 
+.htmx-request button .htmx-indicator {
+  color: #333;
+}
+
 .text-muted {
-  color: #4b5563;
+  color: var(--muted-color);
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
@@ -188,13 +239,14 @@ button {
 }
 
 .card.outlined {
-  background: white;
+  background: var(--bg-card);
   border-width: 1px;
+  border-color: var(--border-color);
 }
 
 .app-drawer {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--underlay);
   z-index: 900;
   top: 0;
   right: 0;
@@ -222,7 +274,7 @@ button {
   width: 400px;
   max-width: 80%;
   height: 100dvh;
-  background: white;
+  background: var(--bg-card);
   animation-name: slideIn;
   animation-duration: 250ms;
   animation-timing-function: ease;
@@ -247,7 +299,7 @@ button {
   bottom: 0px;
   left: 0px;
   right: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--underlay);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -303,7 +355,7 @@ button {
   max-width: 600px;
   max-height: calc(100% - 96px);
   overflow-y: auto;
-  background-color: white;
+  background-color: var(--bg-modal);
   animation-name: zoomIn;
   animation-duration: 150ms;
   animation-timing-function: ease;
@@ -389,7 +441,7 @@ button {
 }
 
 #app-drawer ul li a:hover {
-  background: hsl(120, 20%, 95%);
+  background: var(--app-drawer-hover);
 }
 
 #app-drawer ul li a.active {
@@ -397,7 +449,7 @@ button {
 }
 
 #app-drawer ul li a.active:hover {
-  background: hsl(120, 20%, 83%);
+  background: var(--ghost-hover);
 }
 
 #app-drawer ul li .details .summary {
@@ -428,12 +480,9 @@ button {
   content: "▲";
 }
 
-#app-drawer ul li .details.opened .summary {
-  background: hsl(120, 20%, 95%);
-}
-
+#app-drawer ul li .details.opened .summary,
 #app-drawer ul li .details .summary:hover {
-  background: hsl(120, 20%, 95%);
+  background: var(--app-drawer-hover);
 }
 
 #app-drawer ul li .details ul {
@@ -557,7 +606,18 @@ label.switch:has(input:checked)::before {
   border-radius: 100%;
 }
 
+ol {
+  border-color: var(--outline);
+}
+
 ol#recent_announcements li div:first-of-type {
+  position: absolute;
+  left: -6px;
+  border-radius: 100%;
+  width: 11px;
+  height: 11px;
+  margin-top: 4px;
+  border: 2px solid var(--bg-card);
   background: var(--outline);
 }
 
@@ -569,9 +629,13 @@ button.filled:hover {
 }
 
 table tbody tr {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid var(--border-color);
 }
 
 table tbody tr:hover {
   background: var(--table-row-hover);
+}
+
+.border {
+  border-color: var(--border-color);
 }

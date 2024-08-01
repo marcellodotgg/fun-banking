@@ -12,7 +12,7 @@
       <section class="flex flex-col gap-2 card bg-white border max-w-xl w-full">
         <div>
           <h1 class="font-extrabold text-xl">Sign in to {{ .Bank.Name }}</h1>
-          <div class="text-sm text-gray-600">{{ .Bank.Description }}</div>
+          <div class="text-muted">{{ .Bank.Description }}</div>
         </div>
         {{ template "customer_signin_form" . }}
       </section>

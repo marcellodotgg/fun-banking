@@ -79,18 +79,18 @@
               />
             </svg>
             {{ end }}
-            <span class="text-xs text-gray-600">(@{{ .Username }})</span>
+            <span class="text-xs text-muted">(@{{ .Username }})</span>
           </div>
           <div class="leading-none">
             <a href="mailto:{{ .Email }}" class="link text-xs">{{ .Email }}</a>
           </div>
-          <div class="text-xs text-gray-600">Joined on {{ datetime .CreatedAt }}</div>
+          <div class="text-xs text-muted">Joined on {{ datetime .CreatedAt }}</div>
         </div>
       </td>
     </tr>
     {{ end }} {{ else }}
     <tr>
-      <td colspan="2" class="text-left p-2 text-gray-600">There are no users registered.</td>
+      <td colspan="2" class="text-left p-2 text-muted">There are no users registered.</td>
     </tr>
     {{ end }}
   </tbody>
