@@ -16,6 +16,7 @@ type userHandler struct {
 	Form         FormData
 	SignedIn     bool
 	User         domain.User
+	Theme        string
 }
 
 func NewUserHandler() userHandler {
@@ -25,6 +26,7 @@ func NewUserHandler() userHandler {
 		Form:         NewFormData(),
 		SignedIn:     false,
 		User:         domain.User{},
+		Theme:        "light",
 	}
 }
 
@@ -95,6 +97,38 @@ func (h userHandler) Settings(c *gin.Context) {
 	h.Form.Data["image_url"] = h.User.ImageURL
 
 	c.HTML(http.StatusOK, "user_settings", h)
+}
+
+func (h userHandler) Preferences(c *gin.Context) {
+	userID := c.GetString("user_id")
+
+	if err := h.userService.FindByID(userID, &h.User); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "user_preferences", h)
+}
+
+func (h userHandler) UpdatePreferences(c *gin.Context) {
+	userID := c.GetString("user_id")
+
+	if err := h.userService.FindByID(userID, &h.User); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	h.Form = GetForm(c)
+	h.User.Theme = h.Form.Data["theme"]
+
+	if err := h.userService.Update(userID, &h.User); err != nil {
+		h.Form.Errors["general"] = "Something went wrong updating your preferences"
+		c.HTML(http.StatusUnprocessableEntity, "user_preferences_form", h)
+		return
+	}
+
+	h.Form.Data["success"] = "Successfully updated your preferences"
+	c.Header("HX-Redirect", "/preferences")
 }
 
 func (h userHandler) Update(c *gin.Context) {
@@ -194,6 +228,7 @@ func (h userHandler) SendForgotPasswordEmail(c *gin.Context) {
 }
 
 func (h userHandler) Notifications(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	h.SignedIn = true
 	c.HTML(http.StatusOK, "notifications", h)
 }

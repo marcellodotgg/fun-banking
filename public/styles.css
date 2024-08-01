@@ -21,6 +21,7 @@
   --bg-input: white;
   --bg-modal: white;
   --thead-border: black;
+  --eyebrow: rgb(30, 112, 25);
 }
 
 :root[theme="dark"] {
@@ -41,11 +42,12 @@
   --muted-color: #888;
   --bg-footer: #151616;
   --underlay: rgba(0, 0, 0, 0.5);
-  --app-drawer-hover: hsla(120, 20%, 60%, 0.5);
+  --app-drawer-hover: hsla(120, 20%, 24%, 0.5);
   --text-footer: hsl(120, 20%, 75%);
   --bg-input: #000;
   --bg-modal: var(--bg);
   --thead-border: rgba(193, 193, 193, 0.6);
+  --eyebrow: rgb(153, 181, 153);
 }
 
 textarea:disabled,
@@ -286,6 +288,7 @@ button.filled:hover {
   animation-duration: 250ms;
   animation-timing-function: ease;
   padding: 16px;
+  overflow-y: auto;
 }
 
 .app-drawer.closing {
@@ -650,4 +653,8 @@ table tbody tr:hover {
 
 .border {
   border-color: var(--border-color);
+}
+
+.eyebrow {
+  color: var(--eyebrow);
 }

@@ -30,6 +30,7 @@ type homepageHandler struct {
 	userService     service.UserService
 	tokenService    service.TokenService
 	Form            FormData
+	Theme           string
 }
 
 func NewHomePageHandler() homepageHandler {
@@ -48,10 +49,13 @@ func NewHomePageHandler() homepageHandler {
 		tokenService:    service.NewTokenService(),
 		userService:     service.NewUserService(),
 		Form:            NewFormData(),
+		Theme:           "light",
 	}
 }
 
 func (h homepageHandler) Homepage(c *gin.Context) {
+	h.Theme = c.GetString("theme")
+
 	persistence.DB.Model(&domain.User{}).Count(&h.SiteInfo.UserCount)
 	persistence.DB.Model(&domain.Customer{}).Count(&h.SiteInfo.CustomerCount)
 	persistence.DB.Model(&domain.Bank{}).Count(&h.SiteInfo.BankCount)
@@ -72,14 +76,17 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 }
 
 func (h homepageHandler) TermsOfService(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "terms", h)
 }
 
 func (h homepageHandler) PrivacyPolicy(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "privacy", h)
 }
 
 func (h homepageHandler) VerifyEmail(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	userID, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
 	h.Form = NewFormData()
 
@@ -122,10 +129,12 @@ func (h homepageHandler) ResendVerifyEmail(c *gin.Context) {
 }
 
 func (h homepageHandler) Dashboard(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "dashboard", h)
 }
 
 func (h homepageHandler) CustomerDashboard(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	customerID := c.GetString("customer_id")
 
 	if err := h.customerService.FindByID(customerID, &h.Customer); err != nil {
@@ -137,6 +146,7 @@ func (h homepageHandler) CustomerDashboard(c *gin.Context) {
 }
 
 func (h homepageHandler) SignUp(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "signup.html", h)
 }
 
@@ -150,6 +160,7 @@ func (h homepageHandler) BankSignIn(c *gin.Context) {
 		return
 	}
 
+	h.Theme = h.Bank.User.Theme
 	h.Form.Data["bank_id"] = strconv.Itoa(int(h.Bank.ID))
 
 	c.HTML(http.StatusOK, "customer_signin", h)

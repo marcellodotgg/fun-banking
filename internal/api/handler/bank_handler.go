@@ -22,6 +22,7 @@ type bankHandler struct {
 	Form            FormData
 	Bank            domain.Bank
 	SignedIn        bool
+	Theme           string
 }
 
 func NewBankHandler() bankHandler {
@@ -35,6 +36,7 @@ func NewBankHandler() bankHandler {
 		Bank:            domain.Bank{},
 		SignedIn:        true,
 		WebsiteURL:      os.Getenv("WEBSITE_URL"),
+		Theme:           "light",
 	}
 }
 
@@ -184,6 +186,7 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 }
 
 func (h bankHandler) ViewBank(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
 		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
