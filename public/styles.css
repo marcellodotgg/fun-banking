@@ -20,6 +20,7 @@
   --text-footer: hsl(120, 20%, 25%);
   --bg-input: white;
   --bg-modal: white;
+  --thead-border: black;
 }
 
 :root[theme="dark"] {
@@ -29,14 +30,14 @@
   --success: hsl(133, 75%, 20%);
   --danger: hsl(0, 100%, 20%);
   --danger-dark: hsl(0, 100%, 37%);
-  --ghost: hsl(120, 20%, 20%);
+  --ghost: var(--info);
   --ghost-hover: hsl(120, 20%, 25%);
   --bg: #1b1c1d;
   --bg-card: #111;
   --link: hsl(120, 20%, 75%);
   --outline: hsl(0, 0%, 27%);
   --border-color: rgba(255, 255, 255, 0.15);
-  --table-row-hover: hsla(120, 20%, 88%, 0.4);
+  --table-row-hover: hsla(120, 20%, 30%, 0.15);
   --muted-color: #888;
   --bg-footer: #151616;
   --underlay: rgba(0, 0, 0, 0.5);
@@ -44,6 +45,7 @@
   --text-footer: hsl(120, 20%, 75%);
   --bg-input: #000;
   --bg-modal: var(--bg);
+  --thead-border: rgba(193, 193, 193, 0.6);
 }
 
 textarea:disabled,
@@ -83,6 +85,7 @@ a.link {
   text-decoration: underline;
 }
 
+button.link-hover:hover,
 a.link-hover:hover {
   color: var(--link);
 }
@@ -236,6 +239,10 @@ button {
 
 .card.filled {
   background: var(--ghost);
+}
+
+button.filled:hover {
+  background: var(--ghost-hover);
 }
 
 .card.outlined {
@@ -556,7 +563,11 @@ table tr.selected {
 }
 
 table tr.selected:hover {
-  background: var(--ghost-darker);
+  background: var(--ghost-hover);
+}
+
+table thead {
+  border-bottom: 2px solid var(--thead-border);
 }
 
 label:hover {
@@ -624,8 +635,9 @@ ol#recent_announcements li div:first-of-type {
 .filled {
   background: var(--ghost);
 }
+
 button.filled:hover {
-  background: var(--ghost-darker);
+  background: var(--ghost-hover);
 }
 
 table tbody tr {
