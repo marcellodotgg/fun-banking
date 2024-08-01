@@ -18,6 +18,7 @@ type announcementHandler struct {
 	AnnouncementsPagination pagination.PagingInfo[domain.Announcement]
 	userService             service.UserService
 	announcementService     service.AnnouncementService
+	Theme                   string
 }
 
 func NewAnnouncementHandler() announcementHandler {
@@ -29,10 +30,12 @@ func NewAnnouncementHandler() announcementHandler {
 		AnnouncementsPagination: pagination.PagingInfo[domain.Announcement]{},
 		userService:             service.NewUserService(),
 		announcementService:     service.NewAnnoucementService(),
+		Theme:                   "light",
 	}
 }
 
 func (h announcementHandler) Dashboard(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "announcements_dashboard", h)
 }
 
@@ -43,6 +46,7 @@ func (h announcementHandler) RecentAnnouncements(c *gin.Context) {
 }
 
 func (h announcementHandler) FindAll(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	pageNumber, err := strconv.Atoi(c.Query("page"))
 
 	if err != nil {
@@ -103,6 +107,7 @@ func (h announcementHandler) Update(c *gin.Context) {
 }
 
 func (h announcementHandler) Edit(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	announcementID := c.Param("id")
 	h.announcementService.FindByID(announcementID, &h.Announcement)
 
@@ -115,6 +120,7 @@ func (h announcementHandler) Edit(c *gin.Context) {
 }
 
 func (h announcementHandler) FindByID(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	userID := c.GetString("user_id")
 	h.userService.FindByID(userID, &h.CurrentUser)
 	h.announcementService.FindByID(c.Param("id"), &h.Announcement)
@@ -122,5 +128,6 @@ func (h announcementHandler) FindByID(c *gin.Context) {
 }
 
 func (h announcementHandler) Destroy(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "index.html", h)
 }

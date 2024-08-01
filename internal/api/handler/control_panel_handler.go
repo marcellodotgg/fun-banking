@@ -18,6 +18,7 @@ type controlPanelHandler struct {
 	ModalType   string
 	User        domain.User
 	userService service.UserService
+	Theme       string
 }
 
 func NewControlPanelHandler() controlPanelHandler {
@@ -28,10 +29,13 @@ func NewControlPanelHandler() controlPanelHandler {
 		userService: service.NewUserService(),
 		ModalType:   "",
 		User:        domain.User{},
+		Theme:       "light",
 	}
 }
 
 func (h controlPanelHandler) AppInsights(c *gin.Context) {
+	h.Theme = c.GetString("theme")
+
 	persistence.DB.Model(&domain.User{}).Count(&h.SiteInfo.UserCount)
 	persistence.DB.Model(&domain.Customer{}).Count(&h.SiteInfo.CustomerCount)
 	persistence.DB.Model(&domain.Bank{}).Count(&h.SiteInfo.BankCount)
@@ -41,6 +45,8 @@ func (h controlPanelHandler) AppInsights(c *gin.Context) {
 }
 
 func (h controlPanelHandler) GetUsers(c *gin.Context) {
+	h.Theme = c.GetString("theme")
+
 	pageNumber, err := strconv.Atoi(c.Query("page"))
 	search := c.Query("search")
 
@@ -88,5 +94,6 @@ func (h controlPanelHandler) SearchUsers(c *gin.Context) {
 }
 
 func (h controlPanelHandler) Polls(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	c.HTML(http.StatusOK, "control_panel_polls", h)
 }

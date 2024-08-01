@@ -27,6 +27,7 @@ type User struct {
 	Banks     []Bank
 	ImageURL  string `gorm:"not null; default:https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg"`
 	Verified  bool   `gorm:"not null;default:0"`
+	Theme     string `gorm:"not null;default:light"`
 }
 
 func (u User) FullName() string {

@@ -21,6 +21,7 @@ type accountHandler struct {
 	transactionService service.TransactionService
 	customerService    service.CustomerService
 	userService        service.UserService
+	Theme              string
 }
 
 func NewAccountHandler() accountHandler {
@@ -33,10 +34,12 @@ func NewAccountHandler() accountHandler {
 		transactionService: service.NewTransactionService(),
 		customerService:    service.NewCustomerService(),
 		userService:        service.NewUserService(),
+		Theme:              "light",
 	}
 }
 
 func (h accountHandler) Get(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	h.SignedIn = c.GetString("user_id") != ""
 	accountID := c.Param("id")
 	customerID, _ := strconv.Atoi(c.GetString("customer_id"))
@@ -148,6 +151,7 @@ func (h accountHandler) Update(c *gin.Context) {
 }
 
 func (h accountHandler) GetTransactions(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	accountID := c.Param("id")
 	pageNumber, _ := strconv.Atoi(c.Query("page"))
 

@@ -31,7 +31,7 @@ func Start() {
 	// Load Static Files
 	router.Static("/static", "public/")
 	// Middleware
-	router.Use(middleware.Audit(), middleware.CustomerAudit())
+	router.Use(middleware.Audit(), middleware.CustomerAudit(), middleware.PreferencesAudit())
 	// Setup Routes
 	setupHomepageRoutes()
 	setupAppDrawerRoutes()
@@ -76,6 +76,8 @@ func setupUserRoutes() {
 
 	router.GET("signup", middleware.NoAuth(), handler.SignUp)
 	router.GET("settings", middleware.UserAuth(), handler.Settings)
+	router.GET("preferences", middleware.UserAuth(), handler.Preferences)
+	router.PATCH("preferences", middleware.UserAuth(), handler.UpdatePreferences)
 	router.GET("forgot", handler.ForgotPassword)
 	router.POST("forgot", handler.SendForgotPasswordEmail)
 	router.GET("reset-password", handler.ResetPassword)

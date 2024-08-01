@@ -41,7 +41,7 @@
   --muted-color: #888;
   --bg-footer: #151616;
   --underlay: rgba(0, 0, 0, 0.5);
-  --app-drawer-hover: hsla(120, 20%, 60%, 0.5);
+  --app-drawer-hover: hsla(120, 20%, 24%, 0.5);
   --text-footer: hsl(120, 20%, 75%);
   --bg-input: #000;
   --bg-modal: var(--bg);

@@ -19,6 +19,7 @@ type customerHandler struct {
 	Bank            domain.Bank
 	Customer        domain.Customer
 	SignedIn        bool
+	Theme           string
 }
 
 func NewCustomerHandler() customerHandler {
@@ -30,6 +31,7 @@ func NewCustomerHandler() customerHandler {
 		Form:            NewFormData(),
 		Bank:            domain.Bank{},
 		SignedIn:        false,
+		Theme:           "light",
 	}
 }
 
@@ -41,6 +43,7 @@ func (h customerHandler) OpenCreateModal(c *gin.Context) {
 }
 
 func (h customerHandler) GetCustomer(c *gin.Context) {
+	h.Theme = c.GetString("theme")
 	id := c.Param("id")
 	h.SignedIn = c.GetString("user_id") != ""
 

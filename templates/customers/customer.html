@@ -1,9 +1,9 @@
 {{ define "customer" }}
 <!DOCTYPE html>
-<html lang="en" theme="dark">
+<html lang="en" theme="{{.Theme}}">
   <head>
     <title>Fun Banking | {{ .Customer.FullName }}</title>
-    <meta name="description" content="Fun Banking - TODO" />
+    <meta name="description" content="Fun Banking - {{.Customer.FullName}}" />
     {{ template "layout/head" . }}
   </head>
   <body>

@@ -1,0 +1,11 @@
+{{ define "user_preferences_form" }}
+<form id="user_preferences_form">
+  <div class="w-full">
+    <label for="theme">Theme (applies to banks)</label>
+    <select id="theme" name="theme" hx-patch="/preferences" hx-swap="outerHTML" hx-target="#user_preferences_form" hx-trigger="change">
+      <option value="light" {{ if eq .User.Theme "light" }} selected {{ end }}>Light</option>
+      <option value="dark" {{ if eq .User.Theme "dark" }} selected {{ end }}>Dark</option>
+    </select>
+  </div>
+</form>
+{{ end }}

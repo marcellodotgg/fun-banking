@@ -28,7 +28,15 @@
           </div>
         </li>
       {{ end }}
-      <li><a href="/settings">Settings</a></li>
+      <li>
+        <div id="settings" class="details">
+          <div class="summary" onclick="toggleAccordion('settings')">Settings</div>
+          <ul>
+            <li><a href="/settings">Profile</a></li>
+            <li><a href="/preferences">Preferences</a></li>
+          </ul>
+        </div>
+      </li>
       <li><a hx-delete="/signout">Sign out</a></li>
       {{ else if .CustomerSignedIn }}
       <li><a href="/">Dashboard</a></li>

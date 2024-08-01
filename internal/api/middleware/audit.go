@@ -3,7 +3,9 @@ package middleware
 import (
 	"os"
 
+	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/auth"
+	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
@@ -59,5 +61,36 @@ func CustomerAudit() gin.HandlerFunc {
 		} else {
 			c.Next()
 		}
+	}
+}
+
+func PreferencesAudit() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userID := c.GetString("user_id")
+		customerID := c.GetString("customer_id")
+
+		if userID != "" {
+			var user domain.User
+			if err := persistence.DB.First(&user, "id = ?", userID).Error; err != nil {
+				c.Next()
+				return
+			}
+			c.Set("theme", user.Theme)
+			c.Next()
+			return
+		}
+
+		if customerID != "" {
+			var customer domain.Customer
+			if err := persistence.DB.Preload("Bank.User").First(&customer, "id = ?", customerID).Error; err != nil {
+				c.Next()
+				return
+			}
+			c.Set("theme", customer.Bank.User.Theme)
+			c.Next()
+			return
+		}
+
+		c.Next()
 	}
 }
