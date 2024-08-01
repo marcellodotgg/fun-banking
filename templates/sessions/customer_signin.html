@@ -9,7 +9,7 @@
   <body>
     {{ template "layout/navbar" . }}
     <main class="flex flex-col items-center container mt-2 mb-4">
-      <section class="flex flex-col gap-2 card bg-white border max-w-xl w-full">
+      <section class="flex flex-col gap-2 card outlined border max-w-xl w-full">
         <div>
           <h1 class="font-extrabold text-xl">Sign in to {{ .Bank.Name }}</h1>
           <div class="text-muted">{{ .Bank.Description }}</div>

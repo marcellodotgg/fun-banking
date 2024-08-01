@@ -115,8 +115,10 @@ input[type="search"] {
 }
 
 label {
+  display: block;
   font-size: 0.9rem;
   font-weight: 600;
+  margin-bottom: 8px;
 }
 
 textarea,
