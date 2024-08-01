@@ -3,7 +3,7 @@
 <html lang="en" theme="{{.Theme}}">
   <head>
     <title>Fun Banking | {{ .Bank.Name }}</title>
-    <meta name="description" content="Fun Banking - TODO" />
+    <meta name="description" content="Fun Banking - {{.Bank.Name}}" />
     {{ template "layout/head" . }}
   </head>
   <body>
@@ -30,7 +30,7 @@
       </div>
       <section class="card outlined flex flex-col gap-2">
         <div>
-          <p class="font-bold text-emerald-700">
+          <p class="font-bold eyebrow">
             {{ .Bank.User.Username }} <span class="text-gray-800">/</span> {{ .Bank.Slug }}
           </p>
           <h1 class="font-extrabold text-2xl leading-1">{{ .Bank.Name }}</h1>
@@ -61,7 +61,7 @@
             </button>
             <div
               id="copied"
-              class="flex items-center gap-1 text-emerald-700 cursor-default font-semibold hidden"
+              class="flex items-center gap-1 eyebrow cursor-default font-semibold hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
