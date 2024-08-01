@@ -641,6 +641,7 @@ ol#recent_announcements li div:first-of-type {
   background: var(--ghost);
 }
 
+a.filled:hover,
 button.filled:hover {
   background: var(--ghost-hover);
 }
