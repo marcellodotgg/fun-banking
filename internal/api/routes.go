@@ -24,7 +24,7 @@ func Start() {
 		"add":      func(a, b int) int { return a + b },
 		"mul":      func(a, b int) int { return a * b },
 		"mulfloat": func(a, b float64) float64 { return a * b },
-		"datetime": func(dateTime time.Time) string { return dateTime.Format("July 02, 2006 at 3:04 PM") },
+		"datetime": func(dateTime time.Time) string { return dateTime.Format("January 02, 2006 at 3:04 PM") },
 	})
 	// Load Templates
 	router.LoadHTMLGlob("templates/**/*")
