@@ -108,6 +108,8 @@ func (h userHandler) UpdatePreferences(c *gin.Context) {
 		return
 	}
 
+	h.User.Theme = h.Form.Data["theme"]
+
 	if err := h.userService.Update(userID, &h.User); err != nil {
 		h.Form.Errors["general"] = "Something went wrong updating your preferences"
 		c.HTML(http.StatusUnprocessableEntity, "user_preferences_form", h)

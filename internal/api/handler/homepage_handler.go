@@ -144,7 +144,8 @@ func (h homepageHandler) SignUp(c *gin.Context) {
 }
 
 func (h homepageHandler) BankSignIn(c *gin.Context) {
-	h.Form = NewFormData()
+	h.Reset(c)
+
 	username := strings.ToLower(c.Param("username"))
 	bankSlug := strings.ToLower(c.Param("slug"))
 
