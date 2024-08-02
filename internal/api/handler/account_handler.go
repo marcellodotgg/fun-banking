@@ -145,6 +145,7 @@ func (h accountHandler) Update(c *gin.Context) {
 
 func (h accountHandler) GetTransactions(c *gin.Context) {
 	h.Reset(c)
+
 	accountID := c.Param("id")
 	pageNumber, _ := strconv.Atoi(c.Query("page"))
 
