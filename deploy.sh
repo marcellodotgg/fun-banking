@@ -34,4 +34,5 @@ docker run -d \
        -p 8082:8080 \
        -v $(pwd)/fun_banking.db:/app/fun_banking.db \
        -e DATABASE_URL=/app/fun_banking.db \
+       -e GIN_MODE=release \
        --name fun_banking_container fun_banking
