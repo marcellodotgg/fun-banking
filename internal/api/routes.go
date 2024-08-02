@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"time"
 
+	"github.com/gin-contrib/gzip"
+
 	"github.com/bytebury/fun-banking/internal/api/handler"
 	"github.com/bytebury/fun-banking/internal/api/middleware"
 	"github.com/bytebury/fun-banking/internal/utils"
@@ -15,6 +17,7 @@ import (
 var router = gin.Default()
 
 func Start() {
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
 	router.SetFuncMap(template.FuncMap{
 		"html":     func(text string) template.HTML { return template.HTML(text) },
 		"titleize": func(text string) string { return cases.Title(language.AmericanEnglish).String(text) },
