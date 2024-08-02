@@ -21,16 +21,14 @@ type siteInfo struct {
 }
 
 type homepageHandler struct {
+	pageObject
 	SiteInfo        siteInfo
-	SignedIn        bool
 	Bank            domain.Bank
 	Customer        domain.Customer
 	bankService     service.BankService
 	customerService service.CustomerService
 	userService     service.UserService
 	tokenService    service.TokenService
-	Form            FormData
-	Theme           string
 }
 
 func NewHomePageHandler() homepageHandler {
@@ -41,27 +39,22 @@ func NewHomePageHandler() homepageHandler {
 			BankCount:        0,
 			TransactionCount: 0,
 		},
-		SignedIn:        false,
 		Bank:            domain.Bank{},
 		Customer:        domain.Customer{},
 		bankService:     service.NewBankService(),
 		customerService: service.NewCustomerService(),
 		tokenService:    service.NewTokenService(),
 		userService:     service.NewUserService(),
-		Form:            NewFormData(),
-		Theme:           "light",
 	}
 }
 
 func (h homepageHandler) Homepage(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 
 	persistence.DB.Model(&domain.User{}).Count(&h.SiteInfo.UserCount)
 	persistence.DB.Model(&domain.Customer{}).Count(&h.SiteInfo.CustomerCount)
 	persistence.DB.Model(&domain.Bank{}).Count(&h.SiteInfo.BankCount)
 	persistence.DB.Model(&domain.Transaction{}).Count(&h.SiteInfo.TransactionCount)
-
-	h.SignedIn = c.GetString("user_id") != ""
 
 	if c.GetString("customer_id") != "" {
 		h.CustomerDashboard(c)
@@ -76,17 +69,17 @@ func (h homepageHandler) Homepage(c *gin.Context) {
 }
 
 func (h homepageHandler) TermsOfService(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "terms", h)
 }
 
 func (h homepageHandler) PrivacyPolicy(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "privacy", h)
 }
 
 func (h homepageHandler) VerifyEmail(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	userID, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
 	h.Form = NewFormData()
 
@@ -109,7 +102,7 @@ func (h homepageHandler) VerifyEmail(c *gin.Context) {
 }
 
 func (h homepageHandler) ResendVerifyEmail(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	var user domain.User
 	if err := h.userService.FindByEmail(h.Form.Data["email"], &user); err != nil {
@@ -129,7 +122,7 @@ func (h homepageHandler) ResendVerifyEmail(c *gin.Context) {
 }
 
 func (h homepageHandler) Dashboard(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "dashboard", h)
 }
 

@@ -12,9 +12,7 @@ import (
 )
 
 type transactionHandler struct {
-	SignedIn           bool
-	Form               FormData
-	ModalType          string
+	pageObject
 	transactionService service.TransactionService
 	accountService     service.AccountService
 	customerService    service.CustomerService
@@ -26,9 +24,6 @@ type transactionHandler struct {
 
 func NewTransactionHandler() transactionHandler {
 	return transactionHandler{
-		SignedIn:           true,
-		Form:               NewFormData(),
-		ModalType:          "",
 		Customer:           domain.Customer{},
 		Bank:               domain.Bank{},
 		accountService:     service.NewAccountService(),
@@ -39,23 +34,23 @@ func NewTransactionHandler() transactionHandler {
 	}
 }
 
-func (th transactionHandler) Create(c *gin.Context) {
-	th.Form = GetForm(c)
+func (h transactionHandler) Create(c *gin.Context) {
+	h.Reset(c)
 
 	var account domain.Account
-	if err := th.accountService.FindByID(th.Form.Data["account_id"], &account); err != nil {
-		th.Form.Errors["general"] = "Something went wrong creating your transaction"
-		c.HTML(http.StatusUnprocessableEntity, "transfer_money_form", th)
+	if err := h.accountService.FindByID(h.Form.Data["account_id"], &account); err != nil {
+		h.Form.Errors["general"] = "Something went wrong creating your transaction"
+		c.HTML(http.StatusUnprocessableEntity, "transfer_money_form", h)
 		return
 	}
 
-	th.Customer = account.Customer
+	h.Customer = account.Customer
 
-	amount, err := utils.GetDollarAmount(th.Form.Data["amount"])
+	amount, err := utils.GetDollarAmount(h.Form.Data["amount"])
 
 	if err != nil {
-		th.Form.Errors["amount"] = "Amount is not a valid number"
-		c.HTML(http.StatusUnprocessableEntity, "transfer_money_form", th.Customer)
+		h.Form.Errors["amount"] = "Amount is not a valid number"
+		c.HTML(http.StatusUnprocessableEntity, "transfer_money_form", h.Customer)
 		return
 	}
 
@@ -63,26 +58,24 @@ func (th transactionHandler) Create(c *gin.Context) {
 
 	transaction := domain.Transaction{
 		AccountID:   account.ID,
-		Amount:      th.getTransferAmount(amount, th.Form.Data["type"]),
-		Description: th.Form.Data["description"],
+		Amount:      h.getTransferAmount(amount, h.Form.Data["type"]),
+		Description: h.Form.Data["description"],
 		Status:      domain.TransactionPending,
 		UserID:      userID,
 	}
 
-	if err := th.transactionService.Create(&transaction); err != nil {
-		c.HTML(http.StatusUnprocessableEntity, "transfer_money_form", th.Customer)
+	if err := h.transactionService.Create(&transaction); err != nil {
+		c.HTML(http.StatusUnprocessableEntity, "transfer_money_form", h.Customer)
 		return
 	}
 
-	th.customerService.FindByID(strconv.Itoa(int(th.Customer.ID)), &th.Customer)
+	h.customerService.FindByID(strconv.Itoa(int(h.Customer.ID)), &h.Customer)
 
-	c.HTML(http.StatusOK, "transfer_money_form_oob", th.Customer)
+	c.HTML(http.StatusOK, "transfer_money_form_oob", h.Customer)
 }
 
 func (h transactionHandler) Approve(c *gin.Context) {
-	transactionID := c.Param("id")
-
-	if err := h.transactionService.Update(transactionID, c.GetString("user_id"), domain.TransactionApproved); err != nil {
+	if err := h.transactionService.Update(c.Param("id"), c.GetString("user_id"), domain.TransactionApproved); err != nil {
 		c.HTML(http.StatusBadRequest, "", h)
 		return
 	}
@@ -94,9 +87,7 @@ func (h transactionHandler) Approve(c *gin.Context) {
 }
 
 func (h transactionHandler) Decline(c *gin.Context) {
-	transactionID := c.Param("id")
-
-	if err := h.transactionService.Update(transactionID, c.GetString("user_id"), domain.TransactionDeclined); err != nil {
+	if err := h.transactionService.Update(c.Param("id"), c.GetString("user_id"), domain.TransactionDeclined); err != nil {
 		c.HTML(http.StatusBadRequest, "", h)
 		return
 	}
@@ -107,14 +98,17 @@ func (h transactionHandler) Decline(c *gin.Context) {
 }
 
 func (h transactionHandler) OpenBulkTransferModal(c *gin.Context) {
+	h.Reset(c)
+
 	h.ModalType = "bulk_transfer_modal"
-	h.Form = GetForm(c)
 	h.Form.Data["customer_ids"] = strings.Join(c.QueryArray("ids"), ",")
+
 	c.HTML(http.StatusOK, "modal", h)
 }
 
 func (h transactionHandler) BulkTransfer(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
+
 	customerIDs := strings.Split(h.Form.Data["customer_ids"], ",")
 
 	amount, _ := utils.GetDollarAmount(h.Form.Data["amount"])
@@ -152,7 +146,7 @@ func (h transactionHandler) BulkTransfer(c *gin.Context) {
 	c.HTML(http.StatusAccepted, "customers_oob", h)
 }
 
-func (th transactionHandler) getTransferAmount(amount float64, transferType string) float64 {
+func (h transactionHandler) getTransferAmount(amount float64, transferType string) float64 {
 	if transferType == "withdraw" {
 		return amount * -1
 	}

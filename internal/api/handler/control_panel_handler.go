@@ -12,29 +12,24 @@ import (
 )
 
 type controlPanelHandler struct {
-	SignedIn    bool
+	pageObject
 	SiteInfo    siteInfo
 	UserResults pagination.PagingInfo[domain.User]
-	ModalType   string
 	User        domain.User
 	userService service.UserService
-	Theme       string
 }
 
 func NewControlPanelHandler() controlPanelHandler {
 	return controlPanelHandler{
-		SignedIn:    true,
 		SiteInfo:    siteInfo{},
 		UserResults: pagination.PagingInfo[domain.User]{},
 		userService: service.NewUserService(),
-		ModalType:   "",
 		User:        domain.User{},
-		Theme:       "light",
 	}
 }
 
 func (h controlPanelHandler) AppInsights(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 
 	persistence.DB.Model(&domain.User{}).Count(&h.SiteInfo.UserCount)
 	persistence.DB.Model(&domain.Customer{}).Count(&h.SiteInfo.CustomerCount)
@@ -45,7 +40,7 @@ func (h controlPanelHandler) AppInsights(c *gin.Context) {
 }
 
 func (h controlPanelHandler) GetUsers(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 
 	pageNumber, err := strconv.Atoi(c.Query("page"))
 	search := c.Query("search")
@@ -65,10 +60,8 @@ func (h controlPanelHandler) GetUsers(c *gin.Context) {
 }
 
 func (h controlPanelHandler) OpenUserModal(c *gin.Context) {
-	userID := c.Param("id")
-
 	h.ModalType = "control_panel_user_modal"
-	h.userService.FindByID(userID, &h.User)
+	h.userService.FindByID(c.Param("id"), &h.User)
 
 	c.HTML(http.StatusOK, "modal", h)
 }
@@ -94,6 +87,6 @@ func (h controlPanelHandler) SearchUsers(c *gin.Context) {
 }
 
 func (h controlPanelHandler) Polls(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "control_panel_polls", h)
 }

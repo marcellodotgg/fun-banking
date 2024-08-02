@@ -11,15 +11,12 @@ import (
 )
 
 type customerHandler struct {
+	pageObject
 	bankService     service.BankService
 	customerService service.CustomerService
 	userService     service.UserService
-	ModalType       string
-	Form            FormData
 	Bank            domain.Bank
 	Customer        domain.Customer
-	SignedIn        bool
-	Theme           string
 }
 
 func NewCustomerHandler() customerHandler {
@@ -27,25 +24,21 @@ func NewCustomerHandler() customerHandler {
 		bankService:     service.NewBankService(),
 		customerService: service.NewCustomerService(),
 		userService:     service.NewUserService(),
-		ModalType:       "create_customer_modal",
-		Form:            NewFormData(),
 		Bank:            domain.Bank{},
-		SignedIn:        false,
-		Theme:           "light",
 	}
 }
 
 func (h customerHandler) OpenCreateModal(c *gin.Context) {
+	h.Reset(c)
+
 	h.ModalType = "create_customer_modal"
-	h.Form = NewFormData()
 	h.Form.Data["bank_id"] = c.Query("bank_id")
+
 	c.HTML(http.StatusOK, "modal", h)
 }
 
 func (h customerHandler) GetCustomer(c *gin.Context) {
-	h.Theme = c.GetString("theme")
-	id := c.Param("id")
-	h.SignedIn = c.GetString("user_id") != ""
+	h.Reset(c)
 
 	isCustomer := c.GetString("customer_id") == c.Param("id")
 	if !isCustomer && !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
@@ -53,7 +46,7 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 		return
 	}
 
-	if err := h.customerService.FindByID(id, &h.Customer); err != nil {
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
 		c.HTML(http.StatusNotFound, "not-found", h)
 		return
 	}
@@ -62,11 +55,11 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 }
 
 func (h customerHandler) OpenSettingsModal(c *gin.Context) {
-	id := c.Param("id")
-	h.ModalType = "customer_settings"
-	h.Form = NewFormData()
+	h.Reset(c)
 
-	h.customerService.FindByID(id, &h.Customer)
+	h.ModalType = "customer_settings"
+
+	h.customerService.FindByID(c.Param("id"), &h.Customer)
 
 	h.Form.Data["first_name"] = h.Customer.FirstName
 	h.Form.Data["last_name"] = h.Customer.LastName
@@ -76,7 +69,7 @@ func (h customerHandler) OpenSettingsModal(c *gin.Context) {
 }
 
 func (h customerHandler) Update(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You do not have access to do that"

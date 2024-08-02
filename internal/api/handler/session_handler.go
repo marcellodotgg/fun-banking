@@ -13,28 +13,25 @@ import (
 )
 
 type sessionHandler struct {
-	Form            FormData
+	pageObject
 	Bank            domain.Bank
-	SignedIn        bool
 	customerService service.CustomerService
 }
 
 func NewSessionHandler() sessionHandler {
 	return sessionHandler{
-		Form:            NewFormData(),
 		Bank:            domain.Bank{},
-		SignedIn:        false,
 		customerService: service.NewCustomerService(),
 	}
 }
 
 func (h sessionHandler) SignIn(c *gin.Context) {
-	h.Form = NewFormData()
+	h.Reset(c)
 	c.HTML(http.StatusOK, "sessions/signin", h)
 }
 
 func (h sessionHandler) CreateSession(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	username := strings.TrimSpace(strings.ToLower(h.Form.Data["email_or_username"]))
 	password := h.Form.Data["password"]
@@ -65,7 +62,7 @@ func (h sessionHandler) CreateSession(c *gin.Context) {
 }
 
 func (h sessionHandler) CreateCustomerSession(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	var customer domain.Customer
 	if err := h.customerService.FindByBankIDAndPIN(h.Form.Data["bank_id"], h.Form.Data["pin"], &customer); err != nil {

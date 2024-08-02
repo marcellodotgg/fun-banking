@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
@@ -27,6 +28,10 @@ func NewUserService() UserService {
 }
 
 func (s userService) Create(user *domain.User) error {
+	if len(user.Password) < 6 {
+		return errors.New("password too short")
+	}
+
 	passwordHash, err := s.hashPassword(user.Password)
 
 	if err != nil {

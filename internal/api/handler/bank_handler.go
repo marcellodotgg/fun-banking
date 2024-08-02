@@ -12,15 +12,12 @@ import (
 )
 
 type bankHandler struct {
+	pageObject
 	bankService     service.BankService
 	customerService service.CustomerService
 	userService     service.UserService
 	Banks           []domain.Bank
-	ModalType       string
-	Form            FormData
 	Bank            domain.Bank
-	SignedIn        bool
-	Theme           string
 }
 
 func NewBankHandler() bankHandler {
@@ -29,11 +26,7 @@ func NewBankHandler() bankHandler {
 		customerService: service.NewCustomerService(),
 		userService:     service.NewUserService(),
 		Banks:           []domain.Bank{},
-		ModalType:       "create_bank_modal",
-		Form:            NewFormData(),
 		Bank:            domain.Bank{},
-		SignedIn:        true,
-		Theme:           "light",
 	}
 }
 
@@ -43,7 +36,7 @@ func (h bankHandler) MyBanks(c *gin.Context) {
 }
 
 func (h bankHandler) CreateBank(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	userID, err := strconv.Atoi(c.GetString("user_id"))
 	if err != nil {
@@ -75,7 +68,7 @@ func (h bankHandler) CreateBank(c *gin.Context) {
 }
 
 func (h bankHandler) UpdateBank(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	bankID := c.Param("id")
 	userID := c.GetString("user_id")
@@ -123,20 +116,21 @@ func (h bankHandler) Delete(c *gin.Context) {
 }
 
 func (h bankHandler) OpenCreateModal(c *gin.Context) {
-	h.Form = NewFormData()
+	h.Reset(c)
 	h.ModalType = "create_bank_modal"
 	c.HTML(http.StatusOK, "modal", h)
 }
 
 func (h bankHandler) OpenCreateCustomerModal(c *gin.Context) {
+	h.Reset(c)
 	h.ModalType = "create_customer_modal"
-	h.Form = NewFormData()
 	h.bankService.FindByID(c.Param("id"), &h.Bank)
 	c.HTML(http.StatusOK, "modal", h)
 }
 
 func (h bankHandler) CreateCustomer(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
+
 	bankID, _ := strconv.Atoi(c.Param("id"))
 	userID := c.GetString("user_id")
 
@@ -183,7 +177,8 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 }
 
 func (h bankHandler) ViewBank(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
+
 	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
 		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
@@ -193,11 +188,10 @@ func (h bankHandler) ViewBank(c *gin.Context) {
 }
 
 func (h bankHandler) OpenSettingsModal(c *gin.Context) {
-	h.Form = NewFormData()
+	h.Reset(c)
 	h.ModalType = "update_bank_modal"
-	bankID := c.Param("id")
 
-	if err := h.bankService.FindByID(bankID, &h.Bank); err != nil {
+	if err := h.bankService.FindByID(c.Param("id"), &h.Bank); err != nil {
 		c.HTML(http.StatusNotFound, "modal", h)
 		return
 	}
@@ -209,21 +203,15 @@ func (h bankHandler) OpenSettingsModal(c *gin.Context) {
 }
 
 func (h bankHandler) CustomerSearch(c *gin.Context) {
-	bankID := c.Param("id")
-	searchStr := c.Query("name")
-
 	var customers []domain.Customer
-	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 5, &customers)
+	h.customerService.FindAllByBankIDAndName(c.Param("id"), c.Query("name"), 5, &customers)
 
 	c.HTML(http.StatusOK, "search_bank_customers", customers)
 }
 
 func (h bankHandler) FilterCustomers(c *gin.Context) {
-	bankID := c.Param("id")
-	searchStr := c.Query("search")
-
 	var customers []domain.Customer
-	h.customerService.FindAllByBankIDAndName(bankID, searchStr, 15, &customers)
+	h.customerService.FindAllByBankIDAndName(c.Param("id"), c.Query("search"), 15, &customers)
 
 	c.HTML(http.StatusOK, "customers_table", customers)
 }

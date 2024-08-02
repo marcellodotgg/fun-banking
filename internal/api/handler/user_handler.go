@@ -11,22 +11,17 @@ import (
 )
 
 type userHandler struct {
+	pageObject
 	userService  service.UserService
 	tokenService service.TokenService
-	Form         FormData
-	SignedIn     bool
 	User         domain.User
-	Theme        string
 }
 
 func NewUserHandler() userHandler {
 	return userHandler{
 		userService:  service.NewUserService(),
 		tokenService: service.NewTokenService(),
-		Form:         NewFormData(),
-		SignedIn:     false,
 		User:         domain.User{},
-		Theme:        "light",
 	}
 }
 
@@ -35,25 +30,11 @@ func (h userHandler) SignUp(c *gin.Context) {
 }
 
 func (h userHandler) Create(c *gin.Context) {
-	c.Request.ParseForm()
-
-	h.Form = NewFormData()
-
-	for key, values := range c.Request.PostForm {
-		if len(values) > 0 {
-			h.Form.Data[key] = values[0]
-		}
-	}
+	h.Reset(c)
 
 	if h.Form.Data["password"] != h.Form.Data["password_confirmation"] {
 		h.Form.Errors["general"] = "Passwords provided do not match"
 		h.Form.Errors["passwords_dont_match"] = "Passwords provided do not match"
-		c.HTML(http.StatusUnprocessableEntity, "users/signup_form", h)
-		return
-	}
-
-	if len(h.Form.Data["password"]) < 6 {
-		h.Form.Errors["password"] = "Passwords must be at least 6 characters"
 		c.HTML(http.StatusUnprocessableEntity, "users/signup_form", h)
 		return
 	}
@@ -66,11 +47,14 @@ func (h userHandler) Create(c *gin.Context) {
 		Password:  h.Form.Data["password"],
 	}
 	if err := h.userService.Create(&user); err != nil {
+		if strings.Contains(err.Error(), "password too short") {
+			h.Form.Errors["password"] = "Passwords must be at least 6 characters"
+		}
 		if strings.Contains(err.Error(), "UNIQUE") {
 			h.Form.Errors["general"] = "An account with that username or e-mail already exists"
 		} else if strings.Contains(err.Error(), "usernames can only contain letters or numbers") {
 			h.Form.Errors["username"] = "Usernames can only contain letters or numbers"
-		} else {
+		} else if len(h.Form.Errors) == 0 {
 			h.Form.Errors["general"] = "Something went wrong creating your account. If the problem persists, please contact us."
 		}
 		c.HTML(http.StatusUnprocessableEntity, "users/signup_form", h)
@@ -111,15 +95,14 @@ func (h userHandler) Preferences(c *gin.Context) {
 }
 
 func (h userHandler) UpdatePreferences(c *gin.Context) {
+	h.Reset(c)
+
 	userID := c.GetString("user_id")
 
 	if err := h.userService.FindByID(userID, &h.User); err != nil {
 		c.HTML(http.StatusNotFound, "not-found", nil)
 		return
 	}
-
-	h.Form = GetForm(c)
-	h.User.Theme = h.Form.Data["theme"]
 
 	if err := h.userService.Update(userID, &h.User); err != nil {
 		h.Form.Errors["general"] = "Something went wrong updating your preferences"
@@ -158,12 +141,12 @@ func (h userHandler) Update(c *gin.Context) {
 }
 
 func (h userHandler) ForgotPassword(c *gin.Context) {
-	h.Form = NewFormData()
+	h.Reset(c)
 	c.HTML(http.StatusOK, "forgot_password", h)
 }
 
 func (h userHandler) ResetPassword(c *gin.Context) {
-	h.Form = NewFormData()
+	h.Reset(c)
 
 	_, err := h.tokenService.GetUserIDFromToken(c.Query("token"))
 	if err != nil {
@@ -177,7 +160,7 @@ func (h userHandler) ResetPassword(c *gin.Context) {
 }
 
 func (h userHandler) UpdatePassword(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	if h.Form.Data["password"] != h.Form.Data["password_confirmation"] {
 		h.Form.Errors["general"] = "Passwords do not match."
@@ -209,7 +192,7 @@ func (h userHandler) UpdatePassword(c *gin.Context) {
 }
 
 func (h userHandler) SendForgotPasswordEmail(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	if err := h.userService.FindByEmail(h.Form.Data["email"], &h.User); err != nil {
 		h.Form.Data["success"] = "Sent password reset instructions to that e-mail if it exists"
@@ -228,8 +211,7 @@ func (h userHandler) SendForgotPasswordEmail(c *gin.Context) {
 }
 
 func (h userHandler) Notifications(c *gin.Context) {
-	h.Theme = c.GetString("theme")
-	h.SignedIn = true
+	h.Reset(c)
 	c.HTML(http.StatusOK, "notifications", h)
 }
 

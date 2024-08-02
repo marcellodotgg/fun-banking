@@ -59,10 +59,7 @@
               </svg>
               Copy Link
             </button>
-            <div
-              id="copied"
-              class="flex items-center gap-1 eyebrow cursor-default font-semibold hidden"
-            >
+            <div id="copied" class="items-center gap-1 eyebrow cursor-default font-semibold hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -230,8 +227,10 @@
 
               copyButton.classList.add("hidden");
               copied.classList.remove("hidden");
+              copied.classList.add("flex");
 
               setTimeout(() => {
+                copied.classList.remove("flex");
                 copied.classList.add("hidden");
                 copyButton.classList.remove("hidden");
               }, 4_000);
