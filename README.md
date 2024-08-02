@@ -40,6 +40,12 @@ Now, you can just run the following command and your server will automatically l
 air
 ```
 
+And in another terminal, listen to style changes
+
+```shell
+npx tailwindcss -i ./public/styles.css -o ./public/styles-local.min.css --watch
+```
+
 # Deployment
 
 Deployment is as easy as running the docker file via the `deploy.sh` script
