@@ -24,7 +24,11 @@
     <ul class="flex items-center gap-2 last:-mr-1.5">
       {{ if .SignedIn }}
       <li>
-        <a href="/notifications" class="relative block ghost p-1.5 rounded-[20px]">
+        <a
+          href="/notifications"
+          class="relative block ghost p-1.5 rounded-[20px]"
+          aria-label="Inbox"
+        >
           <div id="inbox-badge" hx-post="/notifications/has-pending" hx-trigger="load, every 30s">
             {{ template "inbox_badge" false }}
           </div>
@@ -49,6 +53,7 @@
           hx-post="/app-drawer/open"
           hx-swap="beforeend"
           hx-target="body"
+          aria-label="Menu Button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

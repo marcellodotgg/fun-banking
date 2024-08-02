@@ -1,12 +1,16 @@
 {{ define "my_banks" }} {{ if .Banks }}
-<ul class="flex flex-col gap-1 overflow-none">
+<div id="my_banks" class="flex flex-col gap-1 overflow-none text-sm">
   {{ range .Banks }}
-  <li class="flex items-center gap-1">
-    <img class="size-6 rounded-full border p-0.5" src="{{ .User.ImageURL }}" />
+  <div class="flex items-center gap-1">
+    <img
+      class="size-6 rounded-full border p-0.5"
+      src="{{ .User.ImageURL }}"
+      alt="{{.User.Username}} profile image"
+    />
     <a href="/banks/{{ .ID }}" class="link truncate"> {{ .User.Username }}/{{ .Slug }} </a>
-  </li>
+  </div>
   {{ end }}
-</ul>
+</div>
 {{ else }}
 <div class="text-base text-muted">It seems like you don't have any banks yet.</div>
 {{ end }} {{ end }}

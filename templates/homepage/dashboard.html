@@ -26,9 +26,9 @@
                 Create a Bank
               </button>
             </div>
-            <ul hx-get="banks" hx-trigger="load" class="text-sm">
+            <div hx-get="banks" hx-swap="outerHTML" hx-trigger="load" class="text-sm">
               Loading banks...
-            </ul>
+            </div>
           </div>
           <div class="card outlined flex flex-col items-center gap-2">
             <h1 class="font-extrabold">Help Support Fun Banking</h1>
