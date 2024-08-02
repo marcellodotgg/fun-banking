@@ -22,6 +22,7 @@
   --bg-modal: white;
   --thead-border: black;
   --eyebrow: rgb(30, 112, 25);
+  --shimmer: #dbdbdb;
 }
 
 :root[theme="dark"] {
@@ -48,6 +49,7 @@
   --bg-modal: var(--bg);
   --thead-border: rgba(193, 193, 193, 0.6);
   --eyebrow: rgb(153, 181, 153);
+  --shimmer: #474747;
 }
 
 textarea:disabled,
@@ -665,4 +667,8 @@ table tbody tr:hover {
 button.bulk-transfer {
   background: var(--warning);
   color: var(--default);
+}
+
+.shimmer {
+  background: var(--shimmer);
 }
