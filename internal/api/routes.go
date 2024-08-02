@@ -2,6 +2,7 @@ package api
 
 import (
 	"html/template"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/gzip"
@@ -17,6 +18,9 @@ import (
 var router = gin.Default()
 
 func Start() {
+	if os.Getenv("GIN_MODE") == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
 	router.SetFuncMap(template.FuncMap{
 		"html":     func(text string) template.HTML { return template.HTML(text) },
