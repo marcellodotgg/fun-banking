@@ -2,7 +2,7 @@
 FROM golang:1.21.3-alpine AS builder
 
 # Install necessary packages for building the Go application with CGO enabled
-RUN apk add --no-cache git gcc musl-dev nodejs npm
+RUN apk add --no-cache git gcc musl-dev
 
 # Enable CGO
 ENV CGO_ENABLED=1
@@ -16,10 +16,6 @@ RUN go mod download
 
 # Copy the source code into the container
 COPY . .
-
-# Build tailwind
-RUN npm install -D tailwindcss
-RUN npx tailwindcss -i ./public/styles.css -o ./public/styles.min.css --minify
 
 # Build the Go app
 RUN go build -o app ./cmd/fun-banking
