@@ -19,7 +19,7 @@ func (po *pageObject) Reset(c *gin.Context) {
 	po.SignedIn = c.GetString("user_id") != ""
 	po.Theme = c.GetString("theme")
 
-	if gin.Mode() == "release" {
+	if os.Getenv("GIN_MODE") == "release" {
 		po.Hash = os.Getenv("BUILD_HASH")
 	} else {
 		po.Hash = "local"

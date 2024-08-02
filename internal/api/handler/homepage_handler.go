@@ -127,7 +127,7 @@ func (h homepageHandler) Dashboard(c *gin.Context) {
 }
 
 func (h homepageHandler) CustomerDashboard(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	customerID := c.GetString("customer_id")
 
 	if err := h.customerService.FindByID(customerID, &h.Customer); err != nil {
@@ -139,7 +139,7 @@ func (h homepageHandler) CustomerDashboard(c *gin.Context) {
 }
 
 func (h homepageHandler) SignUp(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "signup.html", h)
 }
 

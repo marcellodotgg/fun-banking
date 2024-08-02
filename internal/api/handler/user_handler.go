@@ -67,6 +67,8 @@ func (h userHandler) Create(c *gin.Context) {
 }
 
 func (h userHandler) Settings(c *gin.Context) {
+	h.Reset(c)
+
 	userID := c.GetString("user_id")
 
 	if err := h.userService.FindByID(userID, &h.User); err != nil {
@@ -84,6 +86,8 @@ func (h userHandler) Settings(c *gin.Context) {
 }
 
 func (h userHandler) Preferences(c *gin.Context) {
+	h.Reset(c)
+
 	userID := c.GetString("user_id")
 
 	if err := h.userService.FindByID(userID, &h.User); err != nil {
