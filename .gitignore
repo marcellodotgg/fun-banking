@@ -33,3 +33,5 @@ tmp/
 
 .air.toml
 *.DS_Store
+
+public/styles.min.css

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --default: #222;
   --info: hsl(120, 20%, 88%);
