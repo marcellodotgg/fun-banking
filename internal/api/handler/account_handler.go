@@ -13,34 +13,27 @@ import (
 )
 
 type accountHandler struct {
-	SignedIn           bool
-	ModalType          string
-	Form               FormData
+	pageObject
 	Account            domain.Account
 	accountService     service.AccountService
 	transactionService service.TransactionService
 	customerService    service.CustomerService
 	userService        service.UserService
-	Theme              string
 }
 
 func NewAccountHandler() accountHandler {
 	return accountHandler{
-		SignedIn:           true,
-		ModalType:          "",
-		Form:               NewFormData(),
 		Account:            domain.Account{},
 		accountService:     service.NewAccountService(),
 		transactionService: service.NewTransactionService(),
 		customerService:    service.NewCustomerService(),
 		userService:        service.NewUserService(),
-		Theme:              "light",
 	}
 }
 
 func (h accountHandler) Get(c *gin.Context) {
-	h.Theme = c.GetString("theme")
-	h.SignedIn = c.GetString("user_id") != ""
+	h.Reset(c)
+
 	accountID := c.Param("id")
 	customerID, _ := strconv.Atoi(c.GetString("customer_id"))
 
@@ -60,26 +53,26 @@ func (h accountHandler) Get(c *gin.Context) {
 }
 
 func (h accountHandler) OpenSettingsModal(c *gin.Context) {
-	accountID := c.Param("id")
-	h.Form = NewFormData()
+	h.Reset(c)
+
 	h.ModalType = "account_settings"
-	h.accountService.FindByID(accountID, &h.Account)
+	h.accountService.FindByID(c.Param("id"), &h.Account)
 	h.Form.Data["name"] = h.Account.Name
 
 	c.HTML(http.StatusOK, "modal", h)
 }
 
 func (h accountHandler) OpenWithdrawOrDepositModal(c *gin.Context) {
-	accountID := c.Param("id")
-	h.Form = NewFormData()
+	h.Reset(c)
 	h.ModalType = "withdraw_or_deposit_modal"
-	h.accountService.FindByID(accountID, &h.Account)
+	h.accountService.FindByID(c.Param("id"), &h.Account)
 
 	c.HTML(http.StatusOK, "modal", h)
 }
 
 func (h accountHandler) WithdrawOrDeposit(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
+
 	accountID, _ := strconv.Atoi(c.Param("id"))
 	amount, _ := utils.GetDollarAmount(h.Form.Data["amount"])
 	userID, _ := utils.ConvertToIntPointer(c.GetString("user_id"))
@@ -131,7 +124,7 @@ func (h accountHandler) CashFlow(c *gin.Context) {
 }
 
 func (h accountHandler) Update(c *gin.Context) {
-	h.Form = GetForm(c)
+	h.Reset(c)
 
 	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You don't have access to do that"
@@ -151,7 +144,7 @@ func (h accountHandler) Update(c *gin.Context) {
 }
 
 func (h accountHandler) GetTransactions(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	accountID := c.Param("id")
 	pageNumber, _ := strconv.Atoi(c.Query("page"))
 
@@ -178,10 +171,10 @@ func (h accountHandler) GetTransactions(c *gin.Context) {
 }
 
 func (h accountHandler) OpenSendMoneyModal(c *gin.Context) {
-	accountID := c.Param("id")
+	h.Reset(c)
 	h.ModalType = "send_money_modal"
 
-	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
+	if err := h.accountService.FindByID(c.Param("id"), &h.Account); err != nil {
 		c.HTML(http.StatusNotFound, "not-found", nil)
 		return
 	}
@@ -191,7 +184,8 @@ func (h accountHandler) OpenSendMoneyModal(c *gin.Context) {
 
 func (h accountHandler) SendMoney(c *gin.Context) {
 	accountID := c.Param("id")
-	h.Form = GetForm(c)
+
+	h.Reset(c)
 	recipientID := h.Form.Data["recipient"]
 
 	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
@@ -215,7 +209,17 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 	if err := h.transactionService.SendMoney(h.Account, recipient, &transaction); err != nil {
 		if strings.Contains(err.Error(), "not enough money") {
 			h.Form.Errors["general"] = "You do not have enough money"
+			c.HTML(http.StatusUnprocessableEntity, "send_money_form", h)
+			return
 		}
+
+		if strings.Contains(err.Error(), "cannot be 0") {
+			h.Form.Errors["general"] = "Amount cannot be 0"
+			c.HTML(http.StatusUnprocessableEntity, "send_money_form", h)
+			return
+		}
+
+		h.Form.Errors["general"] = "Something went wrong sending money"
 		c.HTML(http.StatusUnprocessableEntity, "send_money_form", h)
 		return
 	}
