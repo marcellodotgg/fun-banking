@@ -222,9 +222,8 @@
           </script>
           <script>
             function copyToClipboard() {
-              navigator.clipboard.writeText(
-                "{{.WebsiteURL}}/{{.Bank.User.Username}}/{{.Bank.Slug}}"
-              );
+              const baseUrl = window.location.origin;
+              navigator.clipboard.writeText(baseUrl + "/{{.Bank.User.Username}}/{{.Bank.Slug}}");
 
               const copyButton = document.getElementById("share-button");
               const copied = document.getElementById("copied");

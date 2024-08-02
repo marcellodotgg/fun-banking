@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 
@@ -16,7 +15,6 @@ type bankHandler struct {
 	bankService     service.BankService
 	customerService service.CustomerService
 	userService     service.UserService
-	WebsiteURL      string
 	Banks           []domain.Bank
 	ModalType       string
 	Form            FormData
@@ -35,7 +33,6 @@ func NewBankHandler() bankHandler {
 		Form:            NewFormData(),
 		Bank:            domain.Bank{},
 		SignedIn:        true,
-		WebsiteURL:      os.Getenv("WEBSITE_URL"),
 		Theme:           "light",
 	}
 }
