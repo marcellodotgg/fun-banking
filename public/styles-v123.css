@@ -661,3 +661,8 @@ table tbody tr:hover {
 .eyebrow {
   color: var(--eyebrow);
 }
+
+button.bulk-transfer {
+  background: var(--warning);
+  color: var(--default);
+}

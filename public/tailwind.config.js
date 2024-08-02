@@ -1,9 +1,6 @@
 tailwind.config = {
   theme: {
     extend: {
-      colors: {
-        link: "hsl(120, 20%, 25%)",
-      },
       borderColor: {
         DEFAULT: "rgba(0, 0, 0, 0.15)",
       },
