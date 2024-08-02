@@ -11,31 +11,26 @@ import (
 )
 
 type announcementHandler struct {
-	SignedIn                bool
+	pageObject
 	CurrentUser             domain.User
-	Form                    FormData
 	Announcement            domain.Announcement
 	AnnouncementsPagination pagination.PagingInfo[domain.Announcement]
 	userService             service.UserService
 	announcementService     service.AnnouncementService
-	Theme                   string
 }
 
 func NewAnnouncementHandler() announcementHandler {
 	return announcementHandler{
-		SignedIn:                true,
 		CurrentUser:             domain.User{},
-		Form:                    NewFormData(),
 		Announcement:            domain.Announcement{},
 		AnnouncementsPagination: pagination.PagingInfo[domain.Announcement]{},
 		userService:             service.NewUserService(),
 		announcementService:     service.NewAnnoucementService(),
-		Theme:                   "light",
 	}
 }
 
 func (h announcementHandler) Dashboard(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "announcements_dashboard", h)
 }
 
@@ -46,7 +41,8 @@ func (h announcementHandler) RecentAnnouncements(c *gin.Context) {
 }
 
 func (h announcementHandler) FindAll(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
+
 	pageNumber, err := strconv.Atoi(c.Query("page"))
 
 	if err != nil {
@@ -107,11 +103,11 @@ func (h announcementHandler) Update(c *gin.Context) {
 }
 
 func (h announcementHandler) Edit(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
+
 	announcementID := c.Param("id")
 	h.announcementService.FindByID(announcementID, &h.Announcement)
 
-	h.Form = NewFormData()
 	h.Form.Data["id"] = strconv.Itoa(h.Announcement.ID)
 	h.Form.Data["title"] = h.Announcement.Title
 	h.Form.Data["description"] = h.Announcement.Description
@@ -120,14 +116,15 @@ func (h announcementHandler) Edit(c *gin.Context) {
 }
 
 func (h announcementHandler) FindByID(c *gin.Context) {
-	h.Theme = c.GetString("theme")
-	userID := c.GetString("user_id")
-	h.userService.FindByID(userID, &h.CurrentUser)
+	h.Reset(c)
+
+	h.userService.FindByID(c.GetString("user_id"), &h.CurrentUser)
 	h.announcementService.FindByID(c.Param("id"), &h.Announcement)
+
 	c.HTML(http.StatusOK, "announcement", h)
 }
 
 func (h announcementHandler) Destroy(c *gin.Context) {
-	h.Theme = c.GetString("theme")
+	h.Reset(c)
 	c.HTML(http.StatusOK, "index.html", h)
 }
