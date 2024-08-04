@@ -48,7 +48,7 @@
   of <strong>{{ .PagingInfo.TotalItems }}</strong> transactions
 </div>
 {{ end }}
-<div class="mt-4">
+<div class="mt-4 pagination">
   {{ if .PagingInfo.HasPreviousPage }}
   <button
     hx-get="/accounts/{{.AccountID}}/transactions?page={{sub .PagingInfo.PageNumber 1}}"

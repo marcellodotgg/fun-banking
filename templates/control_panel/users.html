@@ -114,7 +114,7 @@
   of <strong>{{ .TotalItems }}</strong> users
 </div>
 {{ end }}
-<div class="mt-4">
+<div class="pagination mt-4">
   {{ if .HasPreviousPage }}
   <a href="/control-panel/users?page={{ sub .PageNumber 1 }}">Previous</a>
   {{ end }} {{ if .HasNextPage }}

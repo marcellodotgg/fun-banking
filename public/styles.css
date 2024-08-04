@@ -27,6 +27,9 @@
   --thead-border: black;
   --eyebrow: rgb(30, 112, 25);
   --shimmer: #dbdbdb;
+  --bg-pagination-btn: #e7e7e7;
+  --bg-pagination-btn-hover: #ddd;
+  --pagination-btn: #222;
 }
 
 :root[theme="dark"] {
@@ -54,6 +57,9 @@
   --thead-border: rgba(193, 193, 193, 0.6);
   --eyebrow: rgb(153, 181, 153);
   --shimmer: #474747;
+  --bg-pagination-btn: #444;
+  --bg-pagination-btn-hover: #333;
+  --pagination-btn: var(--default);
 }
 
 textarea:disabled,
@@ -675,4 +681,25 @@ button.bulk-transfer {
 
 .shimmer {
   background: var(--shimmer);
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination a,
+.pagination button {
+  background: var(--bg-pagination-btn);
+  color: var(--pagination-btn);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  font-weight: 500;
+}
+
+.pagination a:hover,
+.pagination button:hover {
+  background: var(--bg-pagination-btn-hover);
 }

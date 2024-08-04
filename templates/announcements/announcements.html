@@ -33,20 +33,11 @@
           </li>
           {{ end }}
         </ol>
-        <div hx-boost="true" class="flex items-center justify-between">
+        <div hx-boost="true" class="pagination">
           {{ if .AnnouncementsPagination.HasPreviousPage }}
-          <a
-            class="px-4 py-2 rounded-[20px] bg-gray-100 hover:bg-gray-200 border"
-            href="/announcements?page={{sub .AnnouncementsPagination.PageNumber 1}}"
-            >Previous</a
-          >
+          <a href="/announcements?page={{sub .AnnouncementsPagination.PageNumber 1}}">Previous</a>
           {{ end }} {{ if .AnnouncementsPagination.HasNextPage }}
-          <a
-            class="px-4 py-1 rounded-[20px] bg-gray-100 hover:bg-gray-200 border"
-            href="/announcements?page={{add .AnnouncementsPagination.PageNumber 1}}"
-          >
-            Next
-          </a>
+          <a href="/announcements?page={{add .AnnouncementsPagination.PageNumber 1}}"> Next </a>
           {{ end }}
         </div>
       </section>
