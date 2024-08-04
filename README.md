@@ -37,13 +37,7 @@ Make sure that you update this in your `.air.toml` file
 Now, you can just run the following command and your server will automatically launch in watch mode.
 
 ```shell
-air
-```
-
-And in another terminal, listen to style changes
-
-```shell
-npx tailwindcss -i ./public/styles.css -o ./public/styles-local.min.css --watch
+./dev.sh
 ```
 
 # Deployment
