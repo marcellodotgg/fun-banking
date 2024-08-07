@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -79,11 +80,11 @@ func (s accountService) Transactions(accountID string, pagingInfo *pagination.Pa
 }
 
 func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Month, sum *float64) error {
-	monthStr := utils.ConvertMonthToNumeric(month)
+	period := fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(month))
 
 	return persistence.DB.
 		Model(&domain.Transaction{}).
-		Where("strftime('%m', created_at) = ? AND amount <= ? AND account_id = ?", monthStr, 0, accountID).
+		Where("strftime('%Y-%m', created_at) = ? AND amount <= ? AND account_id = ?", period, 0, accountID).
 		Where("status = ?", domain.TransactionApproved).
 		Select("sum(amount)").
 		Row().
@@ -91,11 +92,11 @@ func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Mon
 }
 
 func (s accountService) sumDepositsByAccount(accountID string, month time.Month, sum *float64) error {
-	monthStr := utils.ConvertMonthToNumeric(month)
+	period := fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(month))
 
 	return persistence.DB.
 		Model(&domain.Transaction{}).
-		Where("strftime('%m', created_at) = ? AND amount >= ? AND account_id = ?", monthStr, 0, accountID).
+		Where("strftime('%Y-%m', created_at) = ? AND amount >= ? AND account_id = ?", period, 0, accountID).
 		Where("status = ?", domain.TransactionApproved).
 		Select("sum(amount)").
 		Row().
