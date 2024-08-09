@@ -18,6 +18,7 @@ type AccountService interface {
 	UpdateBalance(id string, account *domain.Account) error
 	CashFlow(accountID string, cashflow *Cashflow) error
 	Transactions(accountID string, pagingInfo *pagination.PagingInfo[domain.Transaction]) error
+	TransactionsByPeriod(accountID string, period string, pagingInfo *pagination.PagingInfo[domain.Transaction]) error
 }
 
 type accountService struct{}
@@ -79,12 +80,24 @@ func (s accountService) Transactions(accountID string, pagingInfo *pagination.Pa
 		Find(&pagingInfo.Items, "account_id = ?", accountID).Error
 }
 
+func (s accountService) TransactionsByPeriod(accountID string, period string, pagingInfo *pagination.PagingInfo[domain.Transaction]) error {
+	if err := persistence.DB.Find(&domain.Transaction{}, "account_id = ?", accountID).Count(&pagingInfo.TotalItems).Error; err != nil {
+		return err
+	}
+	return persistence.DB.
+		Offset((pagingInfo.PageNumber-1)*pagingInfo.ItemsPerPage).
+		Limit(pagingInfo.ItemsPerPage).
+		Order("updated_at DESC").
+		Where("strftime('%Y-%m', updated_at) = ? AND account_id = ?", period, accountID).
+		Find(&pagingInfo.Items, "account_id = ?", accountID).Error
+}
+
 func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Month, sum *float64) error {
 	period := fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(month))
 
 	return persistence.DB.
 		Model(&domain.Transaction{}).
-		Where("strftime('%Y-%m', created_at) = ? AND amount <= ? AND account_id = ?", period, 0, accountID).
+		Where("strftime('%Y-%m', updated_at) = ? AND amount <= ? AND account_id = ?", period, 0, accountID).
 		Where("status = ?", domain.TransactionApproved).
 		Select("sum(amount)").
 		Row().
@@ -96,7 +109,7 @@ func (s accountService) sumDepositsByAccount(accountID string, month time.Month,
 
 	return persistence.DB.
 		Model(&domain.Transaction{}).
-		Where("strftime('%Y-%m', created_at) = ? AND amount >= ? AND account_id = ?", period, 0, accountID).
+		Where("strftime('%Y-%m', updated_at) = ? AND amount >= ? AND account_id = ?", period, 0, accountID).
 		Where("status = ?", domain.TransactionApproved).
 		Select("sum(amount)").
 		Row().
