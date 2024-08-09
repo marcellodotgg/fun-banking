@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
@@ -267,7 +266,8 @@ func (h accountHandler) Statements(c *gin.Context) {
 
 	h.StatementPeriod = c.Query("period")
 	if h.StatementPeriod == "" {
-		h.StatementPeriod = fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(time.Now().Month()))
+		month, year := utils.LastMonth()
+		h.StatementPeriod = fmt.Sprintf("%d-%02d", year, int(month))
 	}
 
 	h.accountService.TransactionsByPeriod(accountID, h.StatementPeriod, &h.PagingInfo)

@@ -8,7 +8,6 @@ import (
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
-	"github.com/bytebury/fun-banking/internal/utils"
 )
 
 type AccountService interface {
@@ -93,7 +92,7 @@ func (s accountService) TransactionsByPeriod(accountID string, period string, pa
 }
 
 func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Month, sum *float64) error {
-	period := fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(month))
+	period := fmt.Sprintf("%d-%02d", time.Now().Year(), int(month))
 
 	return persistence.DB.
 		Model(&domain.Transaction{}).
@@ -105,7 +104,7 @@ func (s accountService) sumWithdrawalsByAccount(accountID string, month time.Mon
 }
 
 func (s accountService) sumDepositsByAccount(accountID string, month time.Month, sum *float64) error {
-	period := fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(month))
+	period := fmt.Sprintf("%d-%02d", time.Now().Year(), int(month))
 
 	return persistence.DB.
 		Model(&domain.Transaction{}).

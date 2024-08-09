@@ -32,3 +32,17 @@ func LastTwelveMonths() [][]string {
 	}
 	return months
 }
+
+func LastMonth() (time.Month, int) {
+	month := time.Now().Month()
+	year := time.Now().Year()
+
+	if month-1 < time.January {
+		month = time.December
+		year = year - 1
+	} else {
+		month = month - 1
+	}
+
+	return month, year
+}
