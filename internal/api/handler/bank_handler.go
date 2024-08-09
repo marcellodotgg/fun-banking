@@ -73,7 +73,7 @@ func (h bankHandler) UpdateBank(c *gin.Context) {
 	bankID := c.Param("id")
 	userID := c.GetString("user_id")
 
-	if !h.hasAccess(bankID, userID) {
+	if !h.isOwner(bankID, userID) {
 		h.Form.Errors["general"] = "You don't have access to do that"
 		c.HTML(http.StatusUnauthorized, "update_bank_form", h)
 		return
@@ -99,7 +99,7 @@ func (h bankHandler) UpdateBank(c *gin.Context) {
 }
 
 func (h bankHandler) Delete(c *gin.Context) {
-	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+	if !h.isOwner(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You do not have access to do that"
 		c.HTML(http.StatusUnprocessableEntity, "update_bank_form", h)
 		return
@@ -134,7 +134,7 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 	bankID, _ := strconv.Atoi(c.Param("id"))
 	userID := c.GetString("user_id")
 
-	if !h.hasAccess(c.Param("id"), userID) {
+	if !h.isOwner(c.Param("id"), userID) {
 		h.Form.Errors["general"] = "You don't have access to do that"
 		c.HTML(http.StatusUnauthorized, "create_customer_form", h)
 		return
@@ -179,7 +179,7 @@ func (h bankHandler) CreateCustomer(c *gin.Context) {
 func (h bankHandler) ViewBank(c *gin.Context) {
 	h.Reset(c)
 
-	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+	if !h.isOwner(c.Param("id"), c.GetString("user_id")) {
 		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
 	}
@@ -216,7 +216,7 @@ func (h bankHandler) FilterCustomers(c *gin.Context) {
 	c.HTML(http.StatusOK, "customers_table", customers)
 }
 
-func (h bankHandler) hasAccess(bankID, userID string) bool {
+func (h bankHandler) isOwner(bankID, userID string) bool {
 	var bank domain.Bank
 	if err := h.bankService.FindByID(bankID, &bank); err != nil {
 		return false

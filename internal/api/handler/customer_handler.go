@@ -41,7 +41,7 @@ func (h customerHandler) GetCustomer(c *gin.Context) {
 	h.Reset(c)
 
 	isCustomer := c.GetString("customer_id") == c.Param("id")
-	if !isCustomer && !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+	if !isCustomer && !h.isOwner(c.Param("id"), c.GetString("user_id")) {
 		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
 	}
@@ -71,7 +71,7 @@ func (h customerHandler) OpenSettingsModal(c *gin.Context) {
 func (h customerHandler) Update(c *gin.Context) {
 	h.Reset(c)
 
-	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+	if !h.isOwner(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You do not have access to do that"
 		c.HTML(http.StatusOK, "customer_settings_form", h)
 		return
@@ -105,7 +105,7 @@ func (h customerHandler) Update(c *gin.Context) {
 }
 
 func (h customerHandler) Delete(c *gin.Context) {
-	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+	if !h.isOwner(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You do not have access to do that"
 		c.HTML(http.StatusUnprocessableEntity, "customer_settings_form", h)
 		return
@@ -127,7 +127,7 @@ func (h customerHandler) Delete(c *gin.Context) {
 	c.Header("HX-Redirect", fmt.Sprintf("/banks/%d", h.Customer.BankID))
 }
 
-func (h customerHandler) hasAccess(customerID, userID string) bool {
+func (h customerHandler) isOwner(customerID, userID string) bool {
 	var customer domain.Customer
 	if err := h.customerService.FindByID(customerID, &customer); err != nil {
 		return false
