@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
@@ -15,6 +17,9 @@ import (
 type accountHandler struct {
 	pageObject
 	Account            domain.Account
+	PagingInfo         pagination.PagingInfo[domain.Transaction]
+	StatementPeriod    string
+	LastTwelveMonths   [][]string
 	accountService     service.AccountService
 	transactionService service.TransactionService
 	customerService    service.CustomerService
@@ -24,6 +29,9 @@ type accountHandler struct {
 func NewAccountHandler() accountHandler {
 	return accountHandler{
 		Account:            domain.Account{},
+		PagingInfo:         pagination.PagingInfo[domain.Transaction]{},
+		StatementPeriod:    "",
+		LastTwelveMonths:   make([][]string, 0),
 		accountService:     service.NewAccountService(),
 		transactionService: service.NewTransactionService(),
 		customerService:    service.NewCustomerService(),
@@ -228,6 +236,46 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 	c.Header("HX-Redirect", "/accounts/"+accountID)
 }
 
+func (h accountHandler) Statements(c *gin.Context) {
+	h.Reset(c)
+
+	accountID := c.Param("id")
+
+	if !h.hasAccess(accountID, c.GetString("user_id")) {
+		c.HTML(http.StatusForbidden, "forbidden", h)
+		return
+	}
+
+	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", h)
+		return
+	}
+
+	pageNumber, err := strconv.Atoi(c.Query("page"))
+
+	if err != nil {
+		pageNumber = 1
+	}
+
+	h.PagingInfo = pagination.PagingInfo[domain.Transaction]{
+		ItemsPerPage: 10,
+		PageNumber:   pageNumber,
+		TotalItems:   0,
+		Items:        nil,
+	}
+
+	h.StatementPeriod = c.Query("period")
+	if h.StatementPeriod == "" {
+		h.StatementPeriod = fmt.Sprintf("%d-%s", time.Now().Year(), utils.ConvertMonthToNumeric(time.Now().Month()))
+	}
+
+	h.accountService.TransactionsByPeriod(accountID, h.StatementPeriod, &h.PagingInfo)
+
+	h.LastTwelveMonths = h.lastTwelveMonths()
+
+	c.HTML(http.StatusOK, "statements", h)
+}
+
 func (h accountHandler) hasAccess(accountID, userID string) bool {
 	var account domain.Account
 	if err := h.accountService.FindByID(accountID, &account); err != nil {
@@ -240,4 +288,32 @@ func (h accountHandler) hasAccess(accountID, userID string) bool {
 	}
 
 	return account.Customer.Bank.UserID == user.ID || user.IsAdmin()
+}
+
+func (h accountHandler) lastTwelveMonths() [][]string {
+	const monthsInYear = 12
+
+	months := make([][]string, 0, 13)
+
+	currentMonth := time.Now().Month()
+	currentYear := time.Now().Year()
+
+	for i := currentMonth; i >= currentMonth-monthsInYear; i-- {
+		if i < time.January {
+			year := currentYear - 1
+			month := monthsInYear + i
+
+			months = append(months, []string{
+				fmt.Sprintf("%d-%02d", year, month),
+				fmt.Sprintf("%s-%d", time.Month(month).String(), year),
+			})
+			continue
+		}
+
+		months = append(months, []string{
+			fmt.Sprintf("%d-%02d", currentYear, i),
+			fmt.Sprintf("%s-%d", time.Month(i).String(), currentYear),
+		})
+	}
+	return months
 }

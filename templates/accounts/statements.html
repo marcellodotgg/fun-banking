@@ -1,0 +1,144 @@
+{{ define "statements" }}
+<!DOCTYPE html>
+<html lang="en" theme="{{.Theme}}">
+  <head>
+    <title>Fun Banking | {{ .Account.Name }} Statements</title>
+    <meta name="description" content="Fun Banking - Statements from your account by month" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col gap-4 container mt-2 mb-4">
+      <section class="card outlined flex flex-col gap-2">
+        <div>
+          <p class="font-bold eyebrow">
+            {{ .Account.Customer.FullName }}
+            <span class="text-gray-800">/</span>
+            <span id="account-name">{{ .Account.Name }}</span>
+            <span class="text-gray-800">/</span>
+            <span>Statements</span>
+          </p>
+          <form class="mt-4 mb-2 font-bold">
+            <label for="period">Select Period</label>
+            <select
+              id="period"
+              name="period"
+              hx-get="/accounts/{{.Account.ID}}/statements?page=1"
+              hx-target="#statements_list"
+              hx-swap="outerHTML"
+              hx-select="#statements_list"
+              hx-replace-url="true"
+              hx-trigger="change"
+            >
+              {{ range .LastTwelveMonths }}
+              <option value="{{ index . 0}}">{{ index . 1 }}</option>
+              {{ end }}
+            </select>
+          </form>
+        </div>
+        <ul class="flex flex-wrap gap-2 items-center text-sm">
+          <li>
+            <a class="flex items-center gap-1 link-hover" href="/accounts/{{.Account.ID}}">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <div class="font-semibold">Back to Account</div>
+            </a>
+          </li>
+        </ul>
+      </section>
+      <section class="card outlined">
+        <h1 class="text-lg font-extrabold">Transactions from Period</h1>
+        {{ template "statements_list" . }}
+      </section>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
+{{ end }} {{ define "statements_list" }}
+<div id="statements_list">
+  <table class="w-full table-auto overflow-hidden">
+    <thead>
+      <tr>
+        <th class="p-2 text-left">Description</th>
+        <th class="p-2 text-right"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ if gt (len .PagingInfo.Items ) 0 }} {{ range .PagingInfo.Items }}
+      <tr class="hover:cursor-default {{ if .IsDeclined }} line-through {{ end }}">
+        <td class="text-left py-1.5 px-2">
+          {{ if .IsPending }}
+          <div class="text-muted">Processing waiting approval...</div>
+          {{ end }}
+          <div>{{ .Description }}</div>
+          <div class="text-xs text-muted">{{ datetime .UpdatedAt }}</div>
+        </td>
+        <td class="text-right px-2">
+          <div class="font-extrabold">
+            {{ if .IsPending }}
+            <span class="text-gray-700">{{ currency .Amount }}</span>
+            {{ else if gt .Amount 0.0 }}
+            <span class="text-emerald-700">{{ currency .Amount }}</span>
+            {{ else }}
+            <span class="text-red-700">{{ currency (mulfloat .Amount -1) }}</span>
+            {{ end }}
+          </div>
+          <div class="text-sm text-muted">{{ currency .Balance }}</div>
+        </td>
+      </tr>
+      {{ end }} {{ else }}
+      <tr>
+        <td colspan="2" class="text-left py-1.5 px-2 text-base text-muted">
+          You didn't do any transactions this month.
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+    <caption class="sr-only">
+      List of transactions belonging to this account for this statement period
+    </caption>
+  </table>
+  {{ if gt (len .PagingInfo.Items) 0 }}
+  <div class="text-sm mt-4">
+    Displaying
+    <strong> {{ .PagingInfo.DisplayRange }} </strong>
+    of <strong>{{ .PagingInfo.TotalItems }}</strong> transactions
+  </div>
+  {{ end }}
+  <div class="mt-4 pagination">
+    {{ if .PagingInfo.HasPreviousPage }}
+    <button
+      hx-get="/accounts/{{.Account.ID}}/statements?page={{sub .PagingInfo.PageNumber 1}}&period={{.StatementPeriod}}"
+      hx-target="#statements_list"
+      hx-swap="outerHTML"
+      hx-select="#statements_list"
+      hx-replace-url="true"
+    >
+      Previous
+    </button>
+    {{ end }} {{ if .PagingInfo.HasNextPage }}
+    <button
+      hx-get="/accounts/{{.Account.ID}}/statements?page={{add .PagingInfo.PageNumber 1}}&period={{.StatementPeriod}}"
+      hx-target="#statements_list"
+      hx-swap="outerHTML"
+      hx-select="#statements_list"
+      hx-replace-url="true"
+    >
+      Next
+    </button>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
