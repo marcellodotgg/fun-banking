@@ -38,7 +38,7 @@
   --warning: hsl(26, 69%, 20%);
   --success: hsl(133, 75%, 20%);
   --danger: hsl(0, 100%, 20%);
-  --danger-dark: hsl(0, 100%, 37%);
+  --danger-dark: hsl(0, 66%, 56%);
   --ghost: var(--info);
   --ghost-hover: hsl(120, 20%, 25%);
   --bg: #1b1c1d;
