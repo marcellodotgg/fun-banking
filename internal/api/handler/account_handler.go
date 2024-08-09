@@ -44,18 +44,19 @@ func (h accountHandler) Get(c *gin.Context) {
 
 	accountID := c.Param("id")
 	customerID, _ := strconv.Atoi(c.GetString("customer_id"))
+	userID := c.GetString("user_id")
 
 	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
 		c.HTML(http.StatusNotFound, "not-found", h)
 		return
 	}
 
-	if h.Account.CustomerID != customerID && !h.hasAccess(accountID, c.GetString("user_id")) {
+	if h.Account.CustomerID != customerID && !h.isOwner(accountID, userID) {
 		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
 	}
 
-	h.SignedIn = c.GetString("user_id") != ""
+	h.SignedIn = userID != ""
 
 	c.HTML(http.StatusOK, "account", h)
 }
@@ -134,7 +135,7 @@ func (h accountHandler) CashFlow(c *gin.Context) {
 func (h accountHandler) Update(c *gin.Context) {
 	h.Reset(c)
 
-	if !h.hasAccess(c.Param("id"), c.GetString("user_id")) {
+	if !h.isOwner(c.Param("id"), c.GetString("user_id")) {
 		h.Form.Errors["general"] = "You don't have access to do that"
 		c.HTML(http.StatusForbidden, "account_settings_form", h)
 		return
@@ -241,13 +242,13 @@ func (h accountHandler) Statements(c *gin.Context) {
 
 	accountID := c.Param("id")
 
-	if !h.hasAccess(accountID, c.GetString("user_id")) {
-		c.HTML(http.StatusForbidden, "forbidden", h)
+	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", h)
 		return
 	}
 
-	if err := h.accountService.FindByID(accountID, &h.Account); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", h)
+	if !h.isOwner(accountID, c.GetString("user_id")) && !h.isCustomer(accountID, c.GetString("customer_id")) {
+		c.HTML(http.StatusForbidden, "forbidden", h)
 		return
 	}
 
@@ -276,7 +277,7 @@ func (h accountHandler) Statements(c *gin.Context) {
 	c.HTML(http.StatusOK, "statements", h)
 }
 
-func (h accountHandler) hasAccess(accountID, userID string) bool {
+func (h accountHandler) isOwner(accountID, userID string) bool {
 	var account domain.Account
 	if err := h.accountService.FindByID(accountID, &account); err != nil {
 		return false
@@ -288,6 +289,15 @@ func (h accountHandler) hasAccess(accountID, userID string) bool {
 	}
 
 	return account.Customer.Bank.UserID == user.ID || user.IsAdmin()
+}
+
+func (h accountHandler) isCustomer(accountID, customerID string) bool {
+	var account domain.Account
+	if err := h.accountService.FindByID(accountID, &account); err != nil {
+		return false
+	}
+
+	return strconv.Itoa(account.CustomerID) == customerID
 }
 
 func (h accountHandler) lastTwelveMonths() [][]string {
