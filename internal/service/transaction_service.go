@@ -37,6 +37,12 @@ func NewTransactionService() TransactionService {
 
 func (ts transactionService) Create(transaction *domain.Transaction) error {
 	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		defer func() {
+			if r := recover(); r != nil {
+				tx.Rollback()
+			}
+		}()
+
 		accountID := strconv.Itoa(transaction.AccountID)
 
 		var account domain.Account
@@ -49,7 +55,8 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 			account.Balance = utils.SafelyAddDollars(account.Balance, transaction.Amount)
 			transaction.Balance = account.Balance
 
-			if err := ts.accountService.UpdateBalance(accountID, &account); err != nil {
+			if err := tx.Where("id = ?", accountID).Select("balance").Updates(&account).Error; err != nil {
+				tx.Rollback()
 				return err
 			}
 		}
@@ -58,7 +65,12 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 			transaction.Balance = account.Balance
 		}
 
-		return persistence.DB.Create(&transaction).Error
+		if err := tx.Create(&transaction).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		return nil
 	})
 }
 
