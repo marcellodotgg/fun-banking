@@ -10,13 +10,13 @@
     <div class="flex flex-col sm:flex-row gap-2 items-center shrink-0 justify-end text-sm">
       <button
         hx-patch="/transactions/{{ .ID }}/approve"
-        class="pill border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50"
+        class="pill px-3 py-1.5 border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50"
       >
         Approve
       </button>
       <button
         hx-patch="/transactions/{{.ID}}/decline"
-        class="pill border border-red-700 text-red-700 font-bold hover:bg-red-50"
+        class="pill px-3 py-1.5 border border-red-700 text-red-700 font-bold hover:bg-red-50"
       >
         Decline
       </button>
