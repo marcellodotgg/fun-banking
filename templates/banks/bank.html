@@ -165,7 +165,10 @@
             let isBulkTransferMode = false;
 
             function goToCustomer(id) {
-              if (!isBulkTransferMode) {
+              const bulkTransferEl = document.getElementById("bulk-transfer");
+              const bulkTransferMode = bulkTransferEl && bulkTransferEl.checked;
+
+              if (!bulkTransferMode) {
                 window.location.href = `/customers/${id}`;
               } else {
                 selectCustomerForBulkTransfer(id);
