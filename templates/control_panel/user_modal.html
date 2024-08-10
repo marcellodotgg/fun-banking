@@ -1,6 +1,11 @@
 {{ define "control_panel_user_modal" }}
 <section class="wrapper">
   <header>
+    <img
+      class="w-24 h-24 rounded-full mx-auto mb-4 border p-1.5"
+      src="{{ .User.ImageURL }}"
+      alt="profile image"
+    />
     <h1>Manage {{ .User.FullName }}</h1>
     <p class="text-muted">
       You can manage this user however you need to. Admins will not be able to update user
