@@ -27,5 +27,7 @@ func renderUnauthorized(c *gin.Context) {
 }
 
 func renderForbidden(c *gin.Context) {
-	c.HTML(http.StatusForbidden, "forbidden", nil)
+	h := handler.NewHomePageHandler()
+	h.Reset(c)
+	c.HTML(http.StatusForbidden, "forbidden", h)
 }
