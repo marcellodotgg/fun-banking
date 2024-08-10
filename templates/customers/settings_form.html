@@ -45,7 +45,7 @@
       placeholder="PIN"
       value="{{ .Form.Data.pin}}"
       required
-      autofocus
+      inputmode="numeric"
     />
     {{ if .Form.Errors.pin }}
     <div class="error-message">{{ .Form.Errors.pin }}</div>

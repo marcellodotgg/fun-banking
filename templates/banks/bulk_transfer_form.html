@@ -12,7 +12,14 @@
     </div>
     <div class="w-full">
       <label for="transaction_amount">Amount</label>
-      <input id="transaction_amount" name="amount" type="number" step=".01" required />
+      <input
+        id="transaction_amount"
+        name="amount"
+        type="number"
+        step=".01"
+        inputmode="decimal"
+        required
+      />
     </div>
   </div>
   <div>
@@ -23,6 +30,7 @@
       type="text"
       required
       placeholder="Short description for this"
+      autocomplete="off"
     />
   </div>
   <div class="actions">
