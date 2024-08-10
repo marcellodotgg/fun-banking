@@ -159,3 +159,8 @@ func (h homepageHandler) BankSignIn(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "customer_signin", h)
 }
+
+func (h homepageHandler) Premium(c *gin.Context) {
+	h.Reset(c)
+	c.HTML(http.StatusOK, "premium.html", h)
+}

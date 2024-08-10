@@ -64,7 +64,8 @@ func setupHomepageRoutes() {
 		GET("privacy", handler.PrivacyPolicy).
 		GET("verify-account", middleware.NoAuth(), handler.VerifyEmail).
 		POST("verify-account", middleware.NoAuth(), handler.ResendVerifyEmail).
-		GET(":username/:slug", middleware.NoAuth(), handler.BankSignIn)
+		GET(":username/:slug", middleware.NoAuth(), handler.BankSignIn).
+		GET("premium", middleware.UserAuth(), handler.Premium)
 }
 
 func setupSessionRoutes() {
