@@ -208,6 +208,27 @@
       <section class="mx-auto my-4">
         <a href="#" class="pill btn-premium px-4 py-3"> Get Premium Today </a>
       </section>
+      <div id="paypal-button-container-P-9PT91290XA375380PM24RVHQ"></div>
+      <script
+        src="https://www.paypal.com/sdk/js?client-id=AbvrSGuPg4W-R_B8mHtbJOiweVUGWYzzU7y67SNHNTaVP9oFjDgoF0M_ghoofK-m6ws8d61Pfh3COsgy&vault=true&intent=subscription&disable-funding=paylater"
+        data-sdk-integration-source="button-factory"
+      ></script>
+      <script>
+        paypal
+          .Buttons({
+            style: { shape: "pill", color: "gold", layout: "vertical" },
+            createSubscription: function (data, actions) {
+              return actions.subscription.create({
+                plan_id: "P-9PT91290XA375380PM24RVHQ",
+                custom_id: "marcello",
+              });
+            },
+            onApprove: function (data, actions) {
+              alert(data.subscriptionID); // You can add optional success message for the subscriber here
+            },
+          })
+          .render("#paypal-button-container-P-9PT91290XA375380PM24RVHQ"); // Renders the PayPal button
+      </script>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
   </body>

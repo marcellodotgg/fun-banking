@@ -204,6 +204,5 @@ func setupPayPalWebHooks() {
 	paypalHandler := handler.NewPayPalHandler()
 
 	router.Group("paypal").
-		POST("subscribe", paypalHandler.Subcribe).
 		POST("webhook", paypalHandler.HandleWebhook)
 }
