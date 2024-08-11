@@ -18,6 +18,9 @@ EMAIL_PORT=587
 WEBSITE_URL=http://localhost:8080
 COOKIE_URL=localhost:8080 # or .fun-banking.com
 BUILD_HASH=some_generated_hash
+PAYPAL_CLIENT_ID=xxxxxx
+PAYPAL_SECRET=xxxxxx
+PREMIUM_PLAN_ID=P-9PT91290XA375380PM24RVHQ
 ```
 
 # Local Environment

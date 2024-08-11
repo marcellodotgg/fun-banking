@@ -7,16 +7,18 @@ import (
 )
 
 type pageObject struct {
-	Form      FormData
-	SignedIn  bool
-	Theme     string
-	Hash      string
-	ModalType string
+	Form          FormData
+	SignedIn      bool
+	Theme         string
+	Hash          string
+	ModalType     string
+	CurrentUserID string
 }
 
 func (po *pageObject) Reset(c *gin.Context) {
 	po.Form = GetForm(c)
 	po.SignedIn = c.GetString("user_id") != ""
+	po.CurrentUserID = c.GetString("user_id")
 	po.Theme = c.GetString("theme")
 
 	if os.Getenv("GIN_MODE") == "release" {
