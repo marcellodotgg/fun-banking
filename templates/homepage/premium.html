@@ -17,7 +17,7 @@
           <div>Unlock the full potential of Fun Banking with Premium.</div>
         </div>
         <div class="flex flex-col gap-1 text-center">
-          <a href="#" class="pill btn-premium px-4 py-2"> Unlock for $5.00/month* </a>
+          <button class="pill btn-premium px-4 py-2">Unlock for $5.00/month*</button>
           <div class="text-muted text-xs">*plus applicable taxes</div>
         </div>
       </section>
@@ -205,10 +205,10 @@
           </tbody>
         </table>
       </section>
-      <section class="mx-auto my-4">
-        <a href="#" class="pill btn-premium px-4 py-3"> Get Premium Today </a>
-      </section>
-      <div id="paypal-button-container-{{.PremiumPlanID}}"></div>
+      <div
+        id="paypal-button-container-{{.PremiumPlanID}}"
+        class="mx-auto w-full md:w-[400px]"
+      ></div>
       <script
         src="https://www.paypal.com/sdk/js?client-id={{.PayPalClientID}}&vault=true&intent=subscription&disable-funding=paylater"
         data-sdk-integration-source="button-factory"
