@@ -51,6 +51,7 @@ func Start() {
 	setupNotificationRoutes()
 	setupControlPanelRoutes()
 	setupAnnouncementRoutes()
+	setupPayPalWebHooks()
 	// Run the application
 	router.Run()
 }
@@ -197,4 +198,12 @@ func setupAnnouncementRoutes() {
 		GET("", middleware.UserAuth(), announcements.FindAll).
 		GET(":id", middleware.UserAuth(), announcements.FindByID).
 		POST("recent", middleware.UserAuth(), announcements.RecentAnnouncements)
+}
+
+func setupPayPalWebHooks() {
+	paypalHandler := handler.NewPayPalHandler()
+
+	router.Group("paypal").
+		POST("subscribe", paypalHandler.Subcribe).
+		POST("webhook", paypalHandler.HandleWebhook)
 }
