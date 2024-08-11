@@ -4,44 +4,38 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bytebury/fun-banking/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/plutov/paypal/v4"
 )
 
 type payPalHandler struct {
-	client        *paypal.Client
-	payPalService service.PayPal
+}
+
+type payPalResource struct {
+	CustomID string `json:"custom_id"`
+}
+
+type webhook struct {
+	ID           string         `json:"id"`
+	CreateTime   string         `json:"create_time"`
+	ResourceType string         `json:"resource_type"`
+	EventType    string         `json:"event_type"`
+	Summary      string         `json:"summary"`
+	Resource     payPalResource `json:"resource"`
 }
 
 func NewPayPalHandler() payPalHandler {
-	payPalService := service.PayPal{}
-	client := payPalService.CreateClient()
-
-	return payPalHandler{
-		client,
-		payPalService,
-	}
-}
-
-func (p payPalHandler) Subcribe(c *gin.Context) {
-	subscription, err := service.PayPal{}.CreateSubscription(p.client, "P-6D041016744961740M235G4Y")
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, subscription)
+	return payPalHandler{}
 }
 
 func (p payPalHandler) HandleWebhook(c *gin.Context) {
-	var webhookEvent paypal.WebhookEventType
-	if err := c.BindJSON(&webhookEvent); err != nil {
+	var webhook webhook
+	if err := c.BindJSON(&webhook); err != nil {
+		fmt.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	fmt.Println(webhookEvent)
+	fmt.Println(webhook)
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
