@@ -30,6 +30,9 @@
   --bg-pagination-btn: #e7e7e7;
   --bg-pagination-btn-hover: #ddd;
   --pagination-btn: #222;
+  --premium: hsl(271, 81%, 56%);
+  --premium-hover: hsl(271, 81%, 50%);
+  --premium-opaque: hsla(282, 100%, 63%, 0.15);
 }
 
 :root[theme="dark"] {
@@ -60,6 +63,9 @@
   --bg-pagination-btn: #444;
   --bg-pagination-btn-hover: #333;
   --pagination-btn: var(--default);
+  --premium: hsl(271, 81%, 56%);
+  --premium-hover: hsl(271, 81%, 50%);
+  --premium-opaque: hsla(282, 100%, 63%, 0.15);
 }
 
 textarea:disabled,
@@ -265,6 +271,10 @@ button.filled:hover {
   background: var(--bg-card);
   border-width: 1px;
   border-color: var(--border-color);
+}
+
+.card.premium.outlined {
+  background: var(--premium-opaque);
 }
 
 .app-drawer {
@@ -702,4 +712,18 @@ button.bulk-transfer {
 .pagination a:hover,
 .pagination button:hover {
   background: var(--bg-pagination-btn-hover);
+}
+
+.btn-premium {
+  font-weight: 900;
+  color: white;
+  background-color: var(--premium);
+}
+
+.btn-premium:hover {
+  background-color: var(--premium-hover);
+}
+
+table.premium .premium {
+  color: var(--premium);
 }
