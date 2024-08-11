@@ -64,6 +64,7 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 	// Count the users first
 	persistence.DB.
 		Model(domain.User{}).
+		Preload("Subscriptions").
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").
 		Or("first_name LIKE ?", "%"+search+"%").
@@ -72,6 +73,7 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 	// Find the users
 	persistence.DB.
+		Preload("Subscriptions").
 		Order("created_at DESC").
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").

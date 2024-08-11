@@ -724,6 +724,10 @@ button.bulk-transfer {
   background-color: var(--premium-hover);
 }
 
+svg.premium {
+  color: var(--premium);
+}
+
 table.premium .premium {
   color: var(--premium);
 }
