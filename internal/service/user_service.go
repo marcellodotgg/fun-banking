@@ -49,7 +49,13 @@ func (s userService) Create(user *domain.User) error {
 }
 
 func (s userService) FindByID(id string, user *domain.User) error {
-	return persistence.DB.Preload("Banks").Preload("Subscriptions").First(&user, "id = ?", id).Error
+	return persistence.DB.
+		Preload("Banks").
+		Preload("Subscriptions", func(db *gorm.DB) *gorm.DB {
+			// Order subscriptions in reverse
+			return db.Order("id DESC")
+		}).
+		First(&user, "id = ?", id).Error
 }
 
 func (s userService) FindByEmail(email string, user *domain.User) error {
