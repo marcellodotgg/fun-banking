@@ -74,7 +74,7 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 	persistence.DB.
 		Preload("Subscriptions", func(db *gorm.DB) *gorm.DB {
 			// Order subscriptions in reverse
-			return db.Order("created_at DESC")
+			return db.Order("id DESC")
 		}).
 		Order("created_at DESC").
 		Where("username LIKE ?", "%"+search+"%").
