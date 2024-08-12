@@ -9,6 +9,7 @@ import (
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type UserService interface {
@@ -63,8 +64,6 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 	// Count the users first
 	persistence.DB.
-		Model(domain.User{}).
-		Preload("Subscriptions").
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").
 		Or("first_name LIKE ?", "%"+search+"%").
@@ -73,7 +72,10 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 	// Find the users
 	persistence.DB.
-		Preload("Subscriptions").
+		Preload("Subscriptions", func(db *gorm.DB) *gorm.DB {
+			// Order subscriptions in reverse
+			return db.Order("created_at DESC")
+		}).
 		Order("created_at DESC").
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").
