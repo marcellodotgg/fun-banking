@@ -70,6 +70,7 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 	// Count the users first
 	persistence.DB.
+		Model(domain.User{}).
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").
 		Or("first_name LIKE ?", "%"+search+"%").
@@ -78,10 +79,6 @@ func (s userService) Search(search string, pagingInfo *pagination.PagingInfo[dom
 
 	// Find the users
 	persistence.DB.
-		Preload("Subscriptions", func(db *gorm.DB) *gorm.DB {
-			// Order subscriptions in reverse
-			return db.Order("id DESC")
-		}).
 		Order("created_at DESC").
 		Where("username LIKE ?", "%"+search+"%").
 		Or("email LIKE ?", "%"+search+"%").
