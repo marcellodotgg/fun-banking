@@ -96,6 +96,10 @@ func setupUserRoutes() {
 		Group("users").
 		PUT("", handler.Create).
 		PATCH("", middleware.UserAuth(), handler.Update)
+
+	router.Group("subscriptions", middleware.AdminOnly()).
+		GET("", handler.MySubscriptions).
+		POST(":id/cancel", handler.CancelSubscription)
 }
 
 func setupNotificationRoutes() {

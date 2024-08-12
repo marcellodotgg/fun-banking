@@ -40,8 +40,11 @@
         <div id="settings" class="details">
           <div class="summary" onclick="toggleAccordion('settings')">Settings</div>
           <ul>
-            <li><a href="/settings">Profile</a></li>
             <li><a href="/preferences">Preferences</a></li>
+            <li><a href="/settings">Profile</a></li>
+            {{ if .CurrentUser.IsAdmin }}
+            <li><a href="/subscriptions">Subscriptions</a></li>
+            {{ end }}
           </ul>
         </div>
       </li>

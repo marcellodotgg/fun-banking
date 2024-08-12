@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" theme="{{.User.Theme}}">
+  <head>
+    <title>Fun Banking | Subscriptions</title>
+    <meta name="description" content="Fun Banking - Manage your subscriptions" />
+    {{ template "layout/head" . }}
+  </head>
+  <body>
+    {{ template "layout/navbar" . }}
+    <main class="flex flex-col items-center container mt-2 mb-4">
+      <section class="card outlined w-full flex flex-col gap-4">
+        <div>
+          <h1 class="text-lg font-extrabold">Subscription History</h1>
+          <div class="text-muted">Below is a list of your subscriptions with Fun Banking.</div>
+          <table class="w-full mt-4">
+            <thead>
+              <tr>
+                <th class="text-left">Subscription</th>
+                <th class="text-left">Updated</th>
+                <th class="text-left">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ range .User.Subscriptions }}
+              <tr>
+                <td>{{ .SubscriptionID }} (Premium)</td>
+                <td>{{ datetime .UpdatedAt }}</td>
+                <td>{{ .Status }}</td>
+              </tr>
+              {{ end }}
+            </tbody>
+          </table>
+        </div>
+        <section>
+          <h2 class="text-base font-extrabold">Cancel Subscription</h2>
+          <div class="text-muted">
+            You can cancel your monthly subscription at any time. If you choose to cancel, you will
+            be able to use your subscription until the billing cycle ends.
+          </div>
+          <button
+            hx-post="/subscriptions/{{ (index .User.Subscriptions 0).ID }}/cancel"
+            hx-confirm="Are you sure you want to cancel your current subscription?"
+            hx-swap="none"
+            class="filled pill py-2 px-4 font-semibold mt-4"
+          >
+            Cancel Current Subscription
+          </button>
+        </section>
+      </section>
+    </main>
+    {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
+  </body>
+</html>
