@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
@@ -37,21 +38,39 @@ func NewTransactionService() TransactionService {
 }
 
 func (ts transactionService) AutoPay(autoPay domain.AutoPay) error {
-	var account domain.Account
-	if err := persistence.DB.
-		Preload("Customer").
-		Preload("Customer.Bank").
-		First(&account, "id = ?", autoPay.AccountID).Error; err != nil {
-		return err
-	}
+	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		var account domain.Account
+		if err := persistence.DB.
+			Preload("Customer").
+			Preload("Customer.Bank").
+			First(&account, "id = ?", autoPay.AccountID).Error; err != nil {
+			return err
+		}
 
-	transaction := domain.Transaction{
-		AccountID:   autoPay.AccountID,
-		Amount:      autoPay.Amount,
-		Description: autoPay.Description,
-		UserID:      &account.Customer.Bank.UserID,
-	}
-	return ts.Create(&transaction)
+		transaction := domain.Transaction{
+			AccountID:   autoPay.AccountID,
+			Amount:      autoPay.Amount,
+			Description: autoPay.Description,
+			UserID:      &account.Customer.Bank.UserID,
+		}
+
+		if err := ts.Create(&transaction); err != nil {
+			return err
+		}
+
+		nextRunDate := time.Now()
+
+		switch autoPay.Cadence {
+		case "day":
+			nextRunDate = nextRunDate.AddDate(0, 0, 1)
+		case "week":
+			nextRunDate = nextRunDate.AddDate(0, 0, 7)
+		case "month":
+			nextRunDate = nextRunDate.AddDate(0, 1, 0)
+		}
+
+		return persistence.DB.Model(&autoPay).Select("NextRunDate").Updates(domain.AutoPay{NextRunDate: nextRunDate}).Error
+	})
 }
 
 func (ts transactionService) Create(transaction *domain.Transaction) error {

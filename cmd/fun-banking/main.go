@@ -37,7 +37,10 @@ func fulfillAutoPay() {
 	persistence.DB.Transaction(func(tx *gorm.DB) error {
 		var autoPays []domain.AutoPay
 
-		persistence.DB.Find(&autoPays, "active = 1 AND strftime('%Y-%m-%d', start_date) <= ?", time.Now().Format("2006-01-02"))
+		persistence.DB.
+			Where("active = 1").
+			Where("strftime('%Y-%m-%d', next_run_date) <= ?", time.Now().Format("2006-01-02")).
+			Find(&autoPays)
 
 		if len(autoPays) == 0 {
 			return nil

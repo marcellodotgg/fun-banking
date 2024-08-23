@@ -66,6 +66,7 @@ func (h accountHandler) CreateAutoPay(c *gin.Context) {
 	autoPay := domain.AutoPay{
 		Cadence:     h.Form.Data["cadence"],
 		StartDate:   startDate,
+		NextRunDate: startDate,
 		Amount:      amount,
 		Description: h.Form.Data["description"],
 		AccountID:   accountId,
