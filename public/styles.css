@@ -152,6 +152,14 @@ input[type="email"] {
   width: 100%;
 }
 
+input[type="date"] {
+  color: var(--default);
+}
+
+:root[theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 button[type="submit"] {
   font-weight: 900;
   color: white;
