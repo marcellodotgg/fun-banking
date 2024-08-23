@@ -143,6 +143,7 @@ textarea,
 input[type="text"],
 input[type="number"],
 input[type="password"],
+input[type="date"],
 input[type="search"],
 input[type="email"] {
   border-width: 1px;

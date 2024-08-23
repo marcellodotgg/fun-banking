@@ -1,0 +1,12 @@
+{{ define "create_auto_pay" }}
+<section class="wrapper">
+  <header>
+    <h1>Setup Auto Pay</h1>
+    <p class="text-muted">
+      You can set up auto pay for this account. These can be withdrawals or deposits that recur
+      until you disable them. Auto Pay will reflect at 12:00 AM UTC.
+    </p>
+  </header>
+  {{ template "create_auto_pay_form.html" . }}
+</section>
+{{ end }}

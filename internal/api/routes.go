@@ -32,6 +32,7 @@ func Start() {
 		"mul":      func(a, b int) int { return a * b },
 		"mulfloat": func(a, b float64) float64 { return a * b },
 		"datetime": func(dateTime time.Time) string { return dateTime.Format("January 02, 2006 at 3:04 PM") },
+		"date":     func(date time.Time) string { return date.Format("January 02, 2006") },
 	})
 	// Load Templates
 	router.LoadHTMLGlob("templates/**/*")
@@ -155,7 +156,11 @@ func setupAccountRoutes() {
 		PUT(":id/withdraw-or-deposit", middleware.AnyAuth(), account.WithdrawOrDeposit).
 		GET(":id/send-money", middleware.AnyAuth(), account.OpenSendMoneyModal).
 		PUT(":id/send-money", middleware.AnyAuth(), account.SendMoney).
-		GET(":id/statements", middleware.AnyAuth(), account.Statements)
+		GET(":id/statements", middleware.AnyAuth(), account.Statements).
+		POST(":id/auto-pay", middleware.UserAuth(), account.OpenAutoPayModal).
+		GET(":id/auto-pay", middleware.UserAuth(), account.AutoPay).
+		PUT(":id/auto-pay", middleware.UserAuth(), account.CreateAutoPay).
+		PATCH(":id/auto-pay/:auto_pay_id", middleware.UserAuth(), account.UpdateAutoPay)
 }
 
 func setupTransactionRoutes() {

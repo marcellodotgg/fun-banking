@@ -21,6 +21,7 @@ type TransactionService interface {
 	Update(id, userID, status string) error
 	SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error
 	BulkTransfer(customerIDs []string, transaction *domain.Transaction) error
+	AutoPay(autoPay domain.AutoPay) error
 }
 
 type transactionService struct {
@@ -33,6 +34,24 @@ func NewTransactionService() TransactionService {
 		accountService:  NewAccountService(),
 		customerService: NewCustomerService(),
 	}
+}
+
+func (ts transactionService) AutoPay(autoPay domain.AutoPay) error {
+	var account domain.Account
+	if err := persistence.DB.
+		Preload("Customer").
+		Preload("Customer.Bank").
+		First(&account, "id = ?", autoPay.AccountID).Error; err != nil {
+		return err
+	}
+
+	transaction := domain.Transaction{
+		AccountID:   autoPay.AccountID,
+		Amount:      autoPay.Amount,
+		Description: autoPay.Description,
+		UserID:      &account.Customer.Bank.UserID,
+	}
+	return ts.Create(&transaction)
 }
 
 func (ts transactionService) Create(transaction *domain.Transaction) error {
