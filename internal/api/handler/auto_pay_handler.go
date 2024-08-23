@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -90,7 +89,15 @@ func (h accountHandler) CreateAutoPay(c *gin.Context) {
 func (h accountHandler) UpdateAutoPay(c *gin.Context) {
 	h.Reset(c)
 
-	fmt.Println(h.Form)
+	var autoPay domain.AutoPay
+	if err := persistence.DB.First(&autoPay, "id = ?", c.Param("auto_pay_id")).Error; err != nil {
+		c.HTML(http.StatusNotFound, "not-found", h)
+		return
+	}
+
+	persistence.DB.Model(&autoPay).Select("Active").Updates(domain.AutoPay{Active: h.Form.Data["checked"] == "on"})
+	persistence.DB.Find(&h.AutoPays, "account_id = ?", c.Param("id"))
+	h.accountService.FindByID(c.Param("id"), &h.Account)
 
 	c.HTML(http.StatusOK, "auto_pay_oob.html", h)
 }

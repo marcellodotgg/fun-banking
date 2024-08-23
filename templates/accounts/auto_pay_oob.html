@@ -19,7 +19,7 @@
         <label class="switch mt-2" for="active-{{ .ID }}">
           <input
             id="active-{{ .ID }}"
-            name="active"
+            name="checked"
             type="checkbox"
             hx-patch="/accounts/{{$.Account.ID}}/auto-pay/{{ .ID }}"
             {{
