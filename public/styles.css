@@ -143,12 +143,21 @@ textarea,
 input[type="text"],
 input[type="number"],
 input[type="password"],
+input[type="date"],
 input[type="search"],
 input[type="email"] {
   border-width: 1px;
   padding: 8px 15px;
   border-radius: 20px;
   width: 100%;
+}
+
+input[type="date"] {
+  color: var(--default);
+}
+
+:root[theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }
 
 button[type="submit"] {

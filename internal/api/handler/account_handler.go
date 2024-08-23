@@ -16,6 +16,7 @@ import (
 type accountHandler struct {
 	pageObject
 	Account            domain.Account
+	AutoPays           []domain.AutoPay
 	PagingInfo         pagination.PagingInfo[domain.Transaction]
 	StatementPeriod    string
 	LastTwelveMonths   [][]string
@@ -28,6 +29,7 @@ type accountHandler struct {
 func NewAccountHandler() accountHandler {
 	return accountHandler{
 		Account:            domain.Account{},
+		AutoPays:           []domain.AutoPay{},
 		PagingInfo:         pagination.PagingInfo[domain.Transaction]{},
 		StatementPeriod:    "",
 		LastTwelveMonths:   make([][]string, 0),

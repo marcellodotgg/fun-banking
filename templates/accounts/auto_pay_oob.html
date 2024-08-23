@@ -1,0 +1,45 @@
+<table id="auto-pay-list" class="w-full" hx-swap-oob="true">
+  <thead>
+    <tr>
+      <th class="p-2 text-left">Details</th>
+      <th class="pr-2 text-right">Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ if gt (len .AutoPays) 0 }} {{ range .AutoPays }}
+    <tr>
+      <td class="py-2 pl-2">
+        <div class="text-muted text-xs">
+          Repeats every {{ .Cadence }} starting {{ date .StartDate }}
+        </div>
+        <div class="font-bold">{{ currency .Amount }}</div>
+        <div class="text-muted">{{ .Description }}</div>
+      </td>
+      <td class="px-2 flex justify-end">
+        <label class="switch mt-2" for="active-{{ .ID }}">
+          <input
+            id="active-{{ .ID }}"
+            name="checked"
+            type="checkbox"
+            hx-patch="/accounts/{{$.Account.ID}}/auto-pay/{{ .ID }}"
+            {{
+            if
+            .Active
+            }}
+            checked
+            {{
+            end
+            }}
+          />
+        </label>
+      </td>
+    </tr>
+    {{ end }} {{ else }}
+    <tr>
+      <td colspan="2" class="text-muted p-2">
+        There are currently no Auto Pay rules set for this Account.
+      </td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>

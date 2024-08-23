@@ -29,6 +29,9 @@
     {{ if eq .ModalType "bulk_transfer_modal" }}
     {{ template "bulk_transfer_modal" . }}
     {{ end }}
+    {{ if eq .ModalType "create_auto_pay" }}
+    {{ template "create_auto_pay" . }}
+    {{ end }}
   </div>
 </div>
 {{ end }}
