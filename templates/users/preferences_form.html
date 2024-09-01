@@ -5,6 +5,7 @@
     <select id="theme" name="theme" hx-patch="/preferences" hx-swap="outerHTML" hx-target="#user_preferences_form" hx-trigger="change">
       <option value="light" {{ if eq .User.Theme "light" }} selected {{ end }}>Light</option>
       <option value="dark" {{ if eq .User.Theme "dark" }} selected {{ end }}>Dark</option>
+      <option value="mountain-dew" {{ if eq .User.Theme "mountain-dew" }} selected {{ end }}>Mountain Dew (Premium)</option>
     </select>
   </div>
 </form>

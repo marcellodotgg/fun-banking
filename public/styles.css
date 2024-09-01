@@ -142,6 +142,41 @@
   --primary-btn-hover: hsl(223, 66%, 43%);
 }
 
+:root[theme="mountain-dew"] {
+  --default: #fff;
+  --info: #9f5664;
+  --warning: #cd0029;
+  --success: #00b300;
+  --danger: hsl(0, 100%, 90%);
+  --danger-dark: hsl(0, 100%, 37%);
+  --ghost: hsla(119, 87%, 41%, 0.25);
+  --ghost-hover: hsla(109, 87%, 44%, 0.5);
+  --bg: #000;
+  --bg-card: #222;
+  --link: #ffdd00;
+  --border-color: rgba(0, 0, 0, 0.15);
+  --outline: hsl(106, 61%, 85%);
+  --table-row-hover: hsla(105, 5%, 35%, 0.4);
+  --muted-color: #b8b8b8;
+  --underlay: rgba(0, 0, 0, 0.5);
+  --app-drawer-hover: hsla(116, 66%, 48%, 0.15);
+  --bg-footer: #222;
+  --text-footer: #00b300;
+  --bg-input: #000;
+  --bg-modal: #222;
+  --thead-border: black;
+  --eyebrow: #00b300;
+  --shimmer: #dbdbdb;
+  --bg-pagination-btn: #e7e7e7;
+  --bg-pagination-btn-hover: #ddd;
+  --pagination-btn: #222;
+  --premium: hsl(271, 81%, 56%);
+  --premium-hover: hsl(271, 81%, 50%);
+  --premium-opaque: hsla(282, 100%, 63%, 0.15);
+  --primary-btn: #00b300;
+  --primary-btn-hover: #008d00;
+}
+
 textarea:disabled,
 button:disabled,
 input:disabled {
@@ -343,6 +378,7 @@ button.filled:hover {
 
 a.btn-primary,
 button.btn-primary {
+  border-radius: 20px;
   font-weight: 900;
   color: white;
   background: var(--primary-btn);
