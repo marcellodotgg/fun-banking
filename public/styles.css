@@ -9,7 +9,7 @@
   --success: hsl(133, 75%, 88%);
   --danger: hsl(0, 100%, 90%);
   --danger-dark: hsl(0, 100%, 37%);
-  --ghost: hsl(120, 20%, 88%);
+  --ghost: var(--info);
   --ghost-hover: hsl(120, 20%, 83%);
   --bg: hsl(120, 20%, 96%);
   --bg-card: white;
@@ -33,6 +33,8 @@
   --premium: hsl(271, 81%, 56%);
   --premium-hover: hsl(271, 81%, 50%);
   --premium-opaque: hsla(282, 100%, 63%, 0.15);
+  --primary-btn: rgb(4, 120, 87);
+  --primary-btn-hover: rgb(6, 95, 70);
 }
 
 :root[theme="dark"] {
@@ -66,6 +68,113 @@
   --premium: hsl(271, 81%, 56%);
   --premium-hover: hsl(271, 81%, 50%);
   --premium-opaque: hsla(282, 100%, 63%, 0.15);
+  --primary-btn: rgb(4, 120, 87);
+  --primary-btn-hover: rgb(6, 95, 70);
+}
+
+:root[theme="blue-dark"] {
+  --default: #dfdfdf;
+  --info: hsl(226, 42%, 26%);
+  --warning: hsl(26, 69%, 20%);
+  --success: hsl(133, 75%, 20%);
+  --danger: hsl(0, 100%, 20%);
+  --danger-dark: hsl(0, 66%, 56%);
+  --ghost: hsla(226, 42%, 26%, 0.5);
+  --ghost-hover: hsla(226, 42%, 18%, 0.75);
+  --bg: #1b1c1d;
+  --bg-card: #111;
+  --link: hsl(225, 32%, 75%);
+  --outline: hsl(0, 0%, 27%);
+  --border-color: rgba(255, 255, 255, 0.15);
+  --table-row-hover: hsla(226, 42%, 26%, 0.15);
+  --muted-color: #888;
+  --bg-footer: #151616;
+  --underlay: rgba(0, 0, 0, 0.5);
+  --app-drawer-hover: hsla(226, 42%, 26%, 0.3);
+  --text-footer: hsl(225, 32%, 75%);
+  --bg-input: #000;
+  --bg-modal: var(--bg);
+  --thead-border: rgba(193, 193, 193, 0.6);
+  --eyebrow: rgb(75, 127, 199);
+  --shimmer: #474747;
+  --bg-pagination-btn: #444;
+  --bg-pagination-btn-hover: #333;
+  --pagination-btn: var(--default);
+  --premium: hsl(271, 81%, 56%);
+  --premium-hover: hsl(271, 81%, 50%);
+  --premium-opaque: hsla(282, 100%, 63%, 0.15);
+  --primary-btn: hsl(226, 42%, 26%);
+  --primary-btn-hover: hsl(226, 42%, 22%);
+}
+
+:root[theme="blue-light"] {
+  --default: #222;
+  --info: hsl(215, 60%, 85%);
+  --warning: hsl(9, 69%, 88%);
+  --success: hsl(133, 75%, 88%);
+  --danger: hsl(0, 100%, 90%);
+  --danger-dark: hsl(0, 100%, 37%);
+  --ghost: hsla(223, 66%, 48%, 0.25);
+  --ghost-hover: hsla(223, 66%, 48%, 0.5);
+  --bg: hsl(210, 33%, 94%);
+  --bg-card: white;
+  --link: hsl(223, 71%, 45%);
+  --border-color: rgba(0, 0, 0, 0.15);
+  --outline: hsl(215, 60%, 85%);
+  --table-row-hover: hsla(222, 21%, 88%, 0.4);
+  --muted-color: #4b5563;
+  --underlay: rgba(0, 0, 0, 0.5);
+  --app-drawer-hover: hsla(223, 66%, 48%, 0.15);
+  --bg-footer: hsl(210, 33%, 88%);
+  --text-footer: hsl(223, 66%, 48%);
+  --bg-input: white;
+  --bg-modal: white;
+  --thead-border: black;
+  --eyebrow: hsl(223, 66%, 48%);
+  --shimmer: #dbdbdb;
+  --bg-pagination-btn: #e7e7e7;
+  --bg-pagination-btn-hover: #ddd;
+  --pagination-btn: #222;
+  --premium: hsl(271, 81%, 56%);
+  --premium-hover: hsl(271, 81%, 50%);
+  --premium-opaque: hsla(282, 100%, 63%, 0.15);
+  --primary-btn: hsl(223, 66%, 48%);
+  --primary-btn-hover: hsl(223, 66%, 43%);
+}
+
+:root[theme="mountain-dew"] {
+  --default: #fff;
+  --info: #9f5664;
+  --warning: #cd0029;
+  --success: #00b300;
+  --danger: hsl(0, 100%, 90%);
+  --danger-dark: hsl(0, 100%, 37%);
+  --ghost: hsla(119, 87%, 41%, 0.25);
+  --ghost-hover: hsla(109, 87%, 44%, 0.5);
+  --bg: #000;
+  --bg-card: #222;
+  --link: #ffdd00;
+  --border-color: rgba(0, 0, 0, 0.15);
+  --outline: hsl(106, 61%, 85%);
+  --table-row-hover: hsla(105, 5%, 35%, 0.4);
+  --muted-color: #b8b8b8;
+  --underlay: rgba(0, 0, 0, 0.5);
+  --app-drawer-hover: hsla(116, 66%, 48%, 0.15);
+  --bg-footer: #222;
+  --text-footer: #00b300;
+  --bg-input: #000;
+  --bg-modal: #222;
+  --thead-border: black;
+  --eyebrow: #00b300;
+  --shimmer: #dbdbdb;
+  --bg-pagination-btn: #e7e7e7;
+  --bg-pagination-btn-hover: #ddd;
+  --pagination-btn: #222;
+  --premium: hsl(271, 81%, 56%);
+  --premium-hover: hsl(271, 81%, 50%);
+  --premium-opaque: hsla(282, 100%, 63%, 0.15);
+  --primary-btn: #00b300;
+  --primary-btn-hover: #008d00;
 }
 
 textarea:disabled,
@@ -143,21 +252,12 @@ textarea,
 input[type="text"],
 input[type="number"],
 input[type="password"],
-input[type="date"],
 input[type="search"],
 input[type="email"] {
   border-width: 1px;
   padding: 8px 15px;
   border-radius: 20px;
   width: 100%;
-}
-
-input[type="date"] {
-  color: var(--default);
-}
-
-:root[theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
 }
 
 button[type="submit"] {
@@ -274,6 +374,19 @@ button {
 
 button.filled:hover {
   background: var(--ghost-hover);
+}
+
+a.btn-primary,
+button.btn-primary {
+  border-radius: 20px;
+  font-weight: 900;
+  color: white;
+  background: var(--primary-btn);
+}
+
+a.btn-primary:hover,
+button.btn-primary:hover {
+  background: var(--primary-btn-hover);
 }
 
 .card.outlined {
@@ -638,8 +751,8 @@ label.switch:has(input:not(:checked))::before {
 }
 
 label.switch:has(input:checked) {
-  background: #047857;
-  border-color: #047857;
+  background: var(--primary-btn);
+  border-color: var(--primary-btn);
 }
 
 label.switch:has(input:checked)::before {
