@@ -32,7 +32,7 @@
   {{ end }}
   <div>
     <label for="pin">Enter Your PIN</label>
-    <input id="pin" name="pin" type="password" autocomplete="off" />
+    <input id="pin" name="pin" type="password" autocomplete="off" inputmode="numeric" />
   </div>
   <input name="bank_id" type="hidden" value="{{ .Form.Data.bank_id }}" />
   <div>
