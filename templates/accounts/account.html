@@ -19,6 +19,9 @@
           <h1 id="account-balance" class="font-extrabold text-2xl leading-1">
             {{ currency .Account.Balance }}
           </h1>
+          <p id="account-description" class="text-muted">
+            {{ if .Account.Description }} {{ .Account.Description }} {{ end }}
+          </p>
         </div>
         <ul class="flex flex-wrap gap-2 items-center text-sm">
           <li>

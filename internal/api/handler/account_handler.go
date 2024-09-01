@@ -143,6 +143,7 @@ func (h accountHandler) Update(c *gin.Context) {
 	}
 
 	h.Account.Name = h.Form.Data["name"]
+	h.Account.Description = h.Form.Data["description"]
 	if err := h.accountService.Update(c.Param("id"), &h.Account); err != nil {
 		h.Form.Errors["general"] = "Something happened trying to update your account"
 		c.HTML(http.StatusUnprocessableEntity, "account_settings_form", h)

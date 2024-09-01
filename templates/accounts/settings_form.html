@@ -17,8 +17,13 @@
       placeholder="Name"
       value="{{ .Form.Data.name }}"
       maxlength="25"
-      autofocus
     />
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" autocomplete="off">
+{{ .Form.Data.description}}</textarea
+    >
   </div>
   <div class="actions">
     <button type="submit" class="btn-primary">
