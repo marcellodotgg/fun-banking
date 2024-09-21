@@ -18,17 +18,16 @@ const (
 
 type User struct {
 	Audit
-	Username      string `gorm:"unique; not null"`
-	Email         string `gorm:"unique; not null"`
-	FirstName     string `gorm:"not null; size:20"`
-	LastName      string `gorm:"not null; size:20"`
-	Role          string `gorm:"not null; default:FREE"`
-	Password      string `json:"-" gorm:"not null"`
-	Banks         []Bank
-	ImageURL      string `gorm:"not null; default:https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg"`
-	Verified      bool   `gorm:"not null;default:0"`
-	Theme         string `gorm:"not null;default:light"`
-	Subscriptions []Subscription
+	Username  string `gorm:"unique; not null"`
+	Email     string `gorm:"unique; not null"`
+	FirstName string `gorm:"not null; size:20"`
+	LastName  string `gorm:"not null; size:20"`
+	Role      string `gorm:"not null; default:FREE"`
+	Password  string `json:"-" gorm:"not null"`
+	Banks     []Bank
+	ImageURL  string `gorm:"not null; default:https://static.vecteezy.com/system/resources/previews/009/292/244/large_2x/default-avatar-icon-of-social-media-user-vector.jpg"`
+	Verified  bool   `gorm:"not null;default:0"`
+	Theme     string `gorm:"not null;default:light"`
 }
 
 func (u User) FullName() string {
@@ -41,13 +40,6 @@ func (u User) IsAdmin() bool {
 
 func (u User) IsFree() bool {
 	return u.Role == UserRoleFree
-}
-
-func (u User) IsPremium() bool {
-	if len(u.Subscriptions) == 0 {
-		return false
-	}
-	return u.Subscriptions[0].Status == "APPROVAL_PENDING" || u.Subscriptions[0].Status == "ACTIVE"
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {

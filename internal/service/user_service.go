@@ -9,7 +9,6 @@ import (
 	"github.com/bytebury/fun-banking/internal/infrastructure/pagination"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 type UserService interface {
@@ -51,10 +50,6 @@ func (s userService) Create(user *domain.User) error {
 func (s userService) FindByID(id string, user *domain.User) error {
 	return persistence.DB.
 		Preload("Banks").
-		Preload("Subscriptions", func(db *gorm.DB) *gorm.DB {
-			// Order subscriptions in reverse
-			return db.Order("id DESC")
-		}).
 		First(&user, "id = ?", id).Error
 }
 

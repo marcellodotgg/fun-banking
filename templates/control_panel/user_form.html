@@ -4,7 +4,6 @@
     <label for="role">User Role</label>
     <select id="role" name="role">
       <option value="FREE" {{ if .User.IsFree }} selected {{ end }}>Free</option>
-      <option value="PREMIUM" {{ if eq .User.Role "PREMIUM" }} selected {{ end }}>Premium</option>
       <option value="ADMIN" {{ if .User.IsAdmin }} selected {{ end }}>Admin</option>
     </select>
   </div>

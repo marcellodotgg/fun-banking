@@ -12,18 +12,16 @@ import (
 
 type userHandler struct {
 	pageObject
-	userService         service.UserService
-	subscriptionService service.SubscriptionService
-	tokenService        service.TokenService
-	User                domain.User
+	userService  service.UserService
+	tokenService service.TokenService
+	User         domain.User
 }
 
 func NewUserHandler() userHandler {
 	return userHandler{
-		userService:         service.NewUserService(),
-		tokenService:        service.NewTokenService(),
-		subscriptionService: service.NewSubscriptionService(),
-		User:                domain.User{},
+		userService:  service.NewUserService(),
+		tokenService: service.NewTokenService(),
+		User:         domain.User{},
 	}
 }
 
@@ -242,35 +240,4 @@ func (h userHandler) HasPendingTransactions(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "inbox_badge", len(transactions))
-}
-
-func (h userHandler) MySubscriptions(c *gin.Context) {
-	h.Reset(c)
-
-	userID := c.GetString("user_id")
-
-	if err := h.userService.FindByID(userID, &h.User); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", h)
-		return
-	}
-
-	c.HTML(http.StatusOK, "my_subscriptions.html", h)
-}
-
-func (h userHandler) CancelSubscription(c *gin.Context) {
-	h.Reset(c)
-
-	userID := c.GetString("user_id")
-
-	if err := h.userService.FindByID(userID, &h.User); err != nil {
-		c.HTML(http.StatusNotFound, "not-found", h)
-		return
-	}
-
-	if err := h.subscriptionService.Cancel(c.Param("id")); err != nil {
-		c.HTML(http.StatusOK, "my_subscriptions.html", h)
-		return
-	}
-
-	c.HTML(http.StatusOK, "my_subscriptions.html", h)
 }

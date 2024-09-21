@@ -52,7 +52,6 @@ func Start() {
 	setupNotificationRoutes()
 	setupControlPanelRoutes()
 	setupAnnouncementRoutes()
-	setupPayPalWebHooks()
 	// Run the application
 	router.Run()
 }
@@ -66,8 +65,7 @@ func setupHomepageRoutes() {
 		GET("privacy", handler.PrivacyPolicy).
 		GET("verify-account", middleware.NoAuth(), handler.VerifyEmail).
 		POST("verify-account", middleware.NoAuth(), handler.ResendVerifyEmail).
-		GET(":username/:slug", middleware.NoAuth(), handler.BankSignIn).
-		GET("premium", middleware.AdminOnly(), handler.Premium)
+		GET(":username/:slug", middleware.NoAuth(), handler.BankSignIn)
 }
 
 func setupSessionRoutes() {
@@ -97,10 +95,6 @@ func setupUserRoutes() {
 		Group("users").
 		PUT("", handler.Create).
 		PATCH("", middleware.UserAuth(), handler.Update)
-
-	router.Group("subscriptions", middleware.AdminOnly()).
-		GET("", handler.MySubscriptions).
-		POST(":id/cancel", handler.CancelSubscription)
 }
 
 func setupNotificationRoutes() {
@@ -207,11 +201,4 @@ func setupAnnouncementRoutes() {
 		GET("", middleware.UserAuth(), announcements.FindAll).
 		GET(":id", middleware.UserAuth(), announcements.FindByID).
 		POST("recent", middleware.UserAuth(), announcements.RecentAnnouncements)
-}
-
-func setupPayPalWebHooks() {
-	paypalHandler := handler.NewPayPalHandler()
-
-	router.Group("paypal").
-		POST("webhook", paypalHandler.HandleWebhook)
 }

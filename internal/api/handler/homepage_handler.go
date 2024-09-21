@@ -30,8 +30,6 @@ type homepageHandler struct {
 	customerService service.CustomerService
 	userService     service.UserService
 	tokenService    service.TokenService
-	PremiumPlanID   string
-	PayPalClientID  string
 }
 
 func NewHomePageHandler() homepageHandler {
@@ -48,8 +46,6 @@ func NewHomePageHandler() homepageHandler {
 		customerService: service.NewCustomerService(),
 		tokenService:    service.NewTokenService(),
 		userService:     service.NewUserService(),
-		PremiumPlanID:   os.Getenv("PREMIUM_PLAN_ID"),
-		PayPalClientID:  os.Getenv("PAYPAL_CLIENT_ID"),
 	}
 }
 
@@ -163,10 +159,4 @@ func (h homepageHandler) BankSignIn(c *gin.Context) {
 	h.Form.Data["bank_id"] = strconv.Itoa(int(h.Bank.ID))
 
 	c.HTML(http.StatusOK, "customer_signin", h)
-}
-
-func (h homepageHandler) Premium(c *gin.Context) {
-	h.Reset(c)
-	h.userService.FindByID(h.CurrentUserID, &h.User)
-	c.HTML(http.StatusOK, "premium.html", h)
 }

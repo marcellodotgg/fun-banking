@@ -52,7 +52,7 @@
 <script
   id="gtag_manager"
   async
-  src="https://www.googletagmanager.com/gtag/js?id=G-7SJ7G9JDPD"
+  src="https://www.googletagmanager.com/gtag/js?id={{ .GoogleAnalyticsID }}"
 ></script>
 <script id="gtag" strategy="beforeInteractive">
   window.dataLayer = window.dataLayer || [];
@@ -60,6 +60,6 @@
     dataLayer.push(arguments);
   }
   gtag("js", new Date());
-  gtag("config", "G-7SJ7G9JDPD");
+  gtag("config", "{{ .GoogleAnalyticsID }}");
 </script>
 {{ end }}
