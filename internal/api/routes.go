@@ -2,6 +2,7 @@ package api
 
 import (
 	"html/template"
+	"net/http"
 	"os"
 	"time"
 
@@ -38,6 +39,7 @@ func Start() {
 	router.LoadHTMLGlob("templates/**/*")
 	// Load Static Files
 	router.Static("/static", "public/")
+	router.StaticFS("/.well-known/acme-challenge", http.Dir("/var/www/html/.well-known/acme-challenge"))
 	// Middleware
 	router.Use(middleware.Audit(), middleware.CustomerAudit(), middleware.PreferencesAudit())
 	// Setup Routes
