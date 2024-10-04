@@ -135,6 +135,8 @@ func setupCustomerRoutes() {
 		GET(":id", middleware.AnyAuth(), handler.GetCustomer).
 		PATCH(":id", middleware.UserAuth(), handler.Update).
 		DELETE(":id", middleware.UserAuth(), handler.Delete).
+		GET(":id/open-account", middleware.UserAuth(), handler.OpenAccountModal).
+		PUT(":id/open-account", middleware.UserAuth(), handler.OpenAccount).
 		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal)
 }
 

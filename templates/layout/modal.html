@@ -1,37 +1,40 @@
 {{ define "modal" }}
 <div id="modal" class="modal">
-  <div class="modal-underlay" onclick="closeModal()"></div>
-  <div class="modal-content card mt-12 mx-4">
-    {{ if eq .ModalType "create_bank_modal" }} 
-      {{ template "create_bank_modal" . }} 
-    {{ end }} 
-    {{ if eq .ModalType "create_customer_modal" }} 
-      {{ template "create_customer_modal" . }} 
-    {{ end }}
-    {{ if eq .ModalType "update_bank_modal" }} 
-      {{ template "update_bank_modal" . }} 
-    {{ end }}
-    {{ if eq .ModalType "customer_settings" }} 
-      {{ template "customer_settings" . }} 
-    {{ end }} 
-    {{ if eq .ModalType "account_settings" }}
-      {{ template "account_settings" . }}
-    {{ end }}
-    {{ if eq .ModalType "withdraw_or_deposit_modal" }}
-    {{ template "withdraw_or_deposit_modal" . }}
-    {{ end }} 
-    {{ if eq .ModalType "send_money_modal" }}
-    {{ template "send_money_modal" . }}
-    {{ end }} 
-    {{ if eq .ModalType "control_panel_user_modal" }}
-    {{ template "control_panel_user_modal" . }}
-    {{ end }}
-    {{ if eq .ModalType "bulk_transfer_modal" }}
-    {{ template "bulk_transfer_modal" . }}
-    {{ end }}
-    {{ if eq .ModalType "create_auto_pay" }}
-    {{ template "create_auto_pay" . }}
-    {{ end }}
-  </div>
+    <div class="modal-underlay" onclick="closeModal()"></div>
+    <div class="modal-content card mt-12 mx-4">
+        {{ if eq .ModalType "create_bank_modal" }}
+        {{ template "create_bank_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "create_customer_modal" }}
+        {{ template "create_customer_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "update_bank_modal" }}
+        {{ template "update_bank_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "customer_settings" }}
+        {{ template "customer_settings" . }}
+        {{ end }}
+        {{ if eq .ModalType "account_settings" }}
+        {{ template "account_settings" . }}
+        {{ end }}
+        {{ if eq .ModalType "withdraw_or_deposit_modal" }}
+        {{ template "withdraw_or_deposit_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "send_money_modal" }}
+        {{ template "send_money_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "control_panel_user_modal" }}
+        {{ template "control_panel_user_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "bulk_transfer_modal" }}
+        {{ template "bulk_transfer_modal" . }}
+        {{ end }}
+        {{ if eq .ModalType "create_auto_pay" }}
+        {{ template "create_auto_pay" . }}
+        {{ end }}
+        {{ if eq .ModalType "create_account" }}
+        {{ template "account/create_modal" . }}
+        {{ end }}
+    </div>
 </div>
 {{ end }}

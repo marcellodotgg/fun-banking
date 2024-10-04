@@ -14,6 +14,7 @@ type customerHandler struct {
 	pageObject
 	bankService     service.BankService
 	customerService service.CustomerService
+	accountService  service.AccountService
 	userService     service.UserService
 	Bank            domain.Bank
 	Customer        domain.Customer
@@ -24,6 +25,7 @@ func NewCustomerHandler() customerHandler {
 		bankService:     service.NewBankService(),
 		customerService: service.NewCustomerService(),
 		userService:     service.NewUserService(),
+		accountService:  service.NewAccountService(),
 		Bank:            domain.Bank{},
 	}
 }
@@ -125,6 +127,42 @@ func (h customerHandler) Delete(c *gin.Context) {
 
 	c.Header("HX-Trigger", "closeModal")
 	c.Header("HX-Redirect", fmt.Sprintf("/banks/%d", h.Customer.BankID))
+}
+
+func (h customerHandler) OpenAccountModal(c *gin.Context) {
+	h.Reset(c)
+	h.ModalType = "create_account"
+	h.customerService.FindByID(c.Param("id"), &h.Customer)
+
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+func (h customerHandler) OpenAccount(c *gin.Context) {
+	h.Reset(c)
+
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
+		h.Form.Errors["general"] = "Something went wrong creating the account"
+		c.HTML(http.StatusOK, "account/create_form", h)
+		return
+	}
+
+	account := domain.Account{
+		CustomerID: h.Customer.ID,
+		Name:       h.Form.Data["name"],
+	}
+
+	if err := h.accountService.Create(&account); err != nil {
+		if strings.Contains(err.Error(), "maximum") {
+			h.Form.Errors["general"] = "You have already met the maximum amount of accounts"
+		} else {
+			h.Form.Errors["general"] = "Something went wrong creating the account"
+		}
+
+		c.HTML(http.StatusOK, "account/create_form", h)
+		return
+	}
+
+	c.Header("HX-Redirect", fmt.Sprintf("/accounts/%d", account.ID))
 }
 
 func (h customerHandler) isOwner(customerID, userID string) bool {

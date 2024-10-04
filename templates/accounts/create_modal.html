@@ -1,0 +1,10 @@
+{{ define "account/create_modal" }}
+<section class="wrapper">
+    <header>
+        <h1>Open an Account</h1>
+        <p class="text-muted">Create an account. Customers can only have at most 2 accounts each. At this time, you will
+            not be able to close an account once you open it.</p>
+    </header>
+    {{ template "account/create_form" . }}
+</section>
+{{ end }}
