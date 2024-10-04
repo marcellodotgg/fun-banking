@@ -1,0 +1,23 @@
+{{ define "account/create_form" }}
+<form hx-put="/customers/{{ .Customer.ID }}/open-account" hx-swap="outerHTML" hx-disabled-elt="input, select, button">
+    {{ if .Form.Errors.general }}
+    <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
+    {{ end }}
+    <div class="flex flex-col">
+        <label for="description">Account Name</label>
+        <input id="name" name="name" type="text" placeholder="Account Name" autocomplete="off"
+            value="{{ .Form.Data.name }}" required maxlength="15" minlength="3" />
+        {{ if .Form.Errors.name }}
+        <div class="error-message">{{ .Form.Errors.name }}</div>
+        {{ end }}
+    </div>
+    <div class="actions">
+        <button type="submit" class="btn-primary">
+            <div class="htmx-toggle">Open Account</div>
+            <div class="htmx-indicator">Working on it...</div>
+        </button>
+        <button type="reset" onclick="closeModal()">Cancel</button>
+    </div>
+</form>
+
+{{ end }}

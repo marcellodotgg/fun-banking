@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -34,6 +35,17 @@ func (s accountService) FindByID(id string, account *domain.Account) error {
 }
 
 func (s accountService) Create(account *domain.Account) error {
+	const MAX_ACCOUNTS = 2
+
+	var customer domain.Customer
+	if err := persistence.DB.Preload("Accounts").First(&customer, "id = ?", account.CustomerID).Error; err != nil {
+		return err
+	}
+
+	if len(customer.Accounts) >= MAX_ACCOUNTS {
+		return errors.New("maximum number of accounts has been reached")
+	}
+
 	if err := persistence.DB.Create(&account).Error; err != nil {
 		return err
 	}
