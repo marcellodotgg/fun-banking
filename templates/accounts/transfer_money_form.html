@@ -1,0 +1,38 @@
+{{ define "account/transfer_money_form" }}
+<form hx-put="/accounts/transfer" hx-swap="outerHTML" hx-disabled-elt="input, select, button">
+    {{ if .Form.Errors.general }}
+    <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
+    {{ end }}
+    <div class="w-full">
+        <label for="from_account">From Account</label>
+        <input id="from_account" name="from_account" type="text" autocomplete="off"
+            value="{{ .Form.Data.from_account }}" required />
+        {{ if .Form.Errors.from_account }}
+        <div class="error-message">{{ .Form.Errors.from_account }}</div>
+        {{ end }}
+    </div>
+    <div class="w-full">
+        <label for="to_account">To Account</label>
+        <input id="to_account" name="to_account" type="text" autocomplete="off" value="{{ .Form.Data.from_account }}"
+            required />
+        {{ if .Form.Errors.to_account }}
+        <div class="error-message">{{ .Form.Errors.to_account }}</div>
+        {{ end }}
+    </div>
+    <div class="w-full">
+        <label for="amount">Amount</label>
+        <input id="amount" name="amount" type="number" step=".01" autocomplete="off" value="{{ .Form.Data.amount }}"
+            inputmode="decimal" required />
+        {{ if .Form.Errors.amount }}
+        <div class="error-message">{{ .Form.Errors.amount }}</div>
+        {{ end }}
+    </div>
+    <div class="actions">
+        <button type="submit" class="btn-primary">
+            <div class="htmx-toggle">Transfer</div>
+            <div class="htmx-indicator">Transferring...</div>
+        </button>
+        <button type="reset" onclick="closeModal()">Cancel</button>
+    </div>
+</form>
+{{ end }}

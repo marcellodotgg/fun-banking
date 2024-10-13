@@ -239,6 +239,19 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 	c.Header("HX-Redirect", "/accounts/"+accountID)
 }
 
+// TODO(marcello): move these to the customer.
+func (h accountHandler) OpenTransferMoneyModal(c *gin.Context) {
+	h.Reset(c)
+	h.ModalType = "transfer_money_modal"
+
+	if err := h.accountService.FindByID(c.Param("id"), &h.Account); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "modal", h)
+}
+
 // TODO(marcello): send money from account to account
 //
 //	I need to confirm that the accounts are the same owner
