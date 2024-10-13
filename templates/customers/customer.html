@@ -25,6 +25,7 @@
                     <strong id="customer-net-worth">{{ currency .Customer.NetWorth }}</strong>
                     Net worth
                 </div>
+                {{ if .SignedIn }}
                 <div class="flex items-center gap-1 rounded-[20px] px-3 py-1 filled">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-5">
@@ -34,6 +35,7 @@
                     <strong><span id="customer-pin">{{ .Customer.PIN }}</span></strong>
                     PIN
                 </div>
+                {{ end }}
             </div>
             <ul class="flex flex-wrap gap-2 items-center text-sm mt-2">
                 {{ if .SignedIn }}
@@ -76,6 +78,7 @@
             </ul>
         </section>
         <div class="flex flex-col md:flex-row gap-4">
+            {{ if .SignedIn }}
             <section class="flex flex-col gap-2 card outlined grow">
                 <div>
                     <h1 class="text-lg font-extrabold">Transfer Money</h1>
@@ -85,6 +88,7 @@
                 </div>
                 <div id="transfer-money-form">{{ template "transfer_money_form" .Customer }}</div>
             </section>
+            {{ end }}
             <section class="flex flex-col gap-2 card outlined">
                 <div>
                     <h1 class="text-lg font-extrabold">Banking</h1>
