@@ -158,7 +158,8 @@ func setupAccountRoutes() {
 		POST(":id/auto-pay", middleware.UserAuth(), account.OpenAutoPayModal).
 		GET(":id/auto-pay", middleware.UserAuth(), account.AutoPay).
 		PUT(":id/auto-pay", middleware.UserAuth(), account.CreateAutoPay).
-		PATCH(":id/auto-pay/:auto_pay_id", middleware.UserAuth(), account.UpdateAutoPay)
+		PATCH(":id/auto-pay/:auto_pay_id", middleware.UserAuth(), account.UpdateAutoPay).
+		PUT(":id/transfer/:to", middleware.AnyAuth(), account.TransferMoney)
 }
 
 func setupTransactionRoutes() {

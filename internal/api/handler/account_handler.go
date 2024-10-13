@@ -239,6 +239,14 @@ func (h accountHandler) SendMoney(c *gin.Context) {
 	c.Header("HX-Redirect", "/accounts/"+accountID)
 }
 
+// TODO(marcello): send money from account to account
+//
+//	I need to confirm that the accounts are the same owner
+//	I need to do that part in the service though.
+func (h accountHandler) TransferMoney(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "coming soon"})
+}
+
 func (h accountHandler) Statements(c *gin.Context) {
 	h.Reset(c)
 
