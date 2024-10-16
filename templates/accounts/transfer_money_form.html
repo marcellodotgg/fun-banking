@@ -4,6 +4,12 @@
     <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
     {{ end }}
     <div class="w-full">
+        <!--
+            TODO(Marcello): I need to convert these to select dropdowns 
+                            when you update one dropdown, it should update
+                            the form to automatically select the other account
+                            that is available
+        -->
         <label for="from_account">From Account</label>
         <input id="from_account" name="from_account" type="text" autocomplete="off"
             value="{{ .Form.Data.from_account }}" required />
