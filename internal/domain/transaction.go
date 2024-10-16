@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	TransactionPending  = "PENDING"
-	TransactionApproved = "APPROVED"
-	TransactionDeclined = "DECLINED"
+	TransactionPending     = "PENDING"
+	TransactionApproved    = "APPROVED"
+	TransactionDeclined    = "DECLINED"
+	MAX_TRANSACTION_AMOUNT = 25_000_000
 )
 
 type Transaction struct {
@@ -41,7 +42,7 @@ func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
 		return errors.New("amount cannot be 0")
 	}
 
-	if t.Amount > 25_000_000 {
+	if t.Amount > MAX_TRANSACTION_AMOUNT {
 		return errors.New("amount cannot be greater than 25,000,000")
 	}
 

@@ -22,7 +22,7 @@
     <div class="w-full">
         <label for="amount">Amount</label>
         <input id="amount" name="amount" type="number" step=".01" autocomplete="off" value="{{ .Form.Data.amount }}"
-            inputmode="decimal" required />
+            inputmode="decimal" max="{{ .MAX_TRANSACTION_AMOUNT }}" required />
         {{ if .Form.Errors.amount }}
         <div class="error-message">{{ .Form.Errors.amount }}</div>
         {{ end }}

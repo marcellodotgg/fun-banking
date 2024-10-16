@@ -12,21 +12,23 @@ import (
 
 type customerHandler struct {
 	pageObject
-	bankService     service.BankService
-	customerService service.CustomerService
-	accountService  service.AccountService
-	userService     service.UserService
-	Bank            domain.Bank
-	Customer        domain.Customer
+	bankService            service.BankService
+	customerService        service.CustomerService
+	accountService         service.AccountService
+	userService            service.UserService
+	Bank                   domain.Bank
+	Customer               domain.Customer
+	MAX_TRANSACTION_AMOUNT int
 }
 
 func NewCustomerHandler() customerHandler {
 	return customerHandler{
-		bankService:     service.NewBankService(),
-		customerService: service.NewCustomerService(),
-		userService:     service.NewUserService(),
-		accountService:  service.NewAccountService(),
-		Bank:            domain.Bank{},
+		bankService:            service.NewBankService(),
+		customerService:        service.NewCustomerService(),
+		userService:            service.NewUserService(),
+		accountService:         service.NewAccountService(),
+		Bank:                   domain.Bank{},
+		MAX_TRANSACTION_AMOUNT: domain.MAX_TRANSACTION_AMOUNT,
 	}
 }
 
