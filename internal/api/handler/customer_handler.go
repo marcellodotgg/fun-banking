@@ -165,6 +165,26 @@ func (h customerHandler) OpenAccount(c *gin.Context) {
 	c.Header("HX-Redirect", fmt.Sprintf("/accounts/%d", account.ID))
 }
 
+func (h customerHandler) OpenTransferMoneyModal(c *gin.Context) {
+	h.Reset(c)
+	h.ModalType = "transfer_money_modal"
+
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+// TODO(marcello): send money from account to account
+//
+//	I need to confirm that the accounts are the same owner
+//	I need to do that part in the service though.
+func (h customerHandler) TransferMoney(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "coming soon"})
+}
+
 func (h customerHandler) isOwner(customerID, userID string) bool {
 	var customer domain.Customer
 	if err := h.customerService.FindByID(customerID, &customer); err != nil {

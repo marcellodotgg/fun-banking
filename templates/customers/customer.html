@@ -89,7 +89,7 @@
                 <div id="transfer-money-form">{{ template "transfer_money_form" .Customer }}</div>
             </section>
             {{ end }}
-            <button hx-post="/accounts/open-transfer-modal" hx-target="body" hx-swap="beforeend"
+            <button hx-post="/customers/{{ .Customer.ID }}/open-transfer-modal" hx-target="body" hx-swap="beforeend"
                 class="pill font-bold filled w-full py-3 md:py-4">
                 Transfer Money
             </button>
