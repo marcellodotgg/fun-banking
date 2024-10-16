@@ -137,7 +137,9 @@ func setupCustomerRoutes() {
 		DELETE(":id", middleware.UserAuth(), handler.Delete).
 		GET(":id/open-account", middleware.UserAuth(), handler.OpenAccountModal).
 		PUT(":id/open-account", middleware.UserAuth(), handler.OpenAccount).
-		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal)
+		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
+		POST(":id/open-transfer-modal", middleware.AnyAuth(), handler.OpenTransferMoneyModal).
+		PUT(":id/transfer", middleware.AnyAuth(), handler.TransferMoney)
 }
 
 func setupAccountRoutes() {

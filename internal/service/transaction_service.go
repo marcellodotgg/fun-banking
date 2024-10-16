@@ -20,6 +20,7 @@ type Cashflow struct {
 type TransactionService interface {
 	Create(transaction *domain.Transaction) error
 	Update(id, userID, status string) error
+	TransferMoney(from domain.Account, to domain.Account, transaction *domain.Transaction) error
 	SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error
 	BulkTransfer(customerIDs []string, transaction *domain.Transaction) error
 	AutoPay(autoPay domain.AutoPay) error
@@ -109,6 +110,46 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 		}
 
 		return nil
+	})
+}
+
+func (s transactionService) TransferMoney(from domain.Account, to domain.Account, transaction *domain.Transaction) error {
+	return persistence.DB.Transaction(func(tx *gorm.DB) error {
+		if from.Balance < transaction.Amount {
+			return errors.New("not enough money")
+		}
+
+		amount := transaction.Amount
+
+		from.Balance = utils.SafelySubtractDollars(from.Balance, amount)
+
+		transaction.Amount = amount * -1
+		transaction.Balance = from.Balance
+		transaction.AccountID = from.ID
+		transaction.Description = fmt.Sprintf("Money transfer to %s", to.Name)
+		transaction.Status = domain.TransactionApproved
+
+		if err := s.accountService.UpdateBalance(strconv.Itoa(from.ID), &from); err != nil {
+			return err
+		}
+
+		if err := persistence.DB.Create(&transaction).Error; err != nil {
+			return err
+		}
+
+		to.Balance = utils.SafelyAddDollars(to.Balance, amount)
+
+		transaction.Amount = amount
+		transaction.Balance = to.Balance
+		transaction.AccountID = to.ID
+		transaction.Description = fmt.Sprintf("Money transfer from %s", from.Name)
+		transaction.Status = domain.TransactionApproved
+
+		if err := s.accountService.UpdateBalance(strconv.Itoa(from.ID), &from); err != nil {
+			return err
+		}
+
+		return persistence.DB.Create(&transaction).Error
 	})
 }
 
