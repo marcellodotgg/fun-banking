@@ -2,7 +2,10 @@ module github.com/bytebury/fun-banking
 
 go 1.21.3
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/gin-gonic/gin v1.10.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+)
 
 require (
 	github.com/jinzhu/inflection v1.0.0 // indirect

@@ -6,8 +6,8 @@ import (
 	"github.com/bytebury/fun-banking/internal/domain"
 	"github.com/bytebury/fun-banking/internal/infrastructure/auth"
 	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 func Audit() gin.HandlerFunc {
