@@ -20,7 +20,7 @@ type Cashflow struct {
 type TransactionService interface {
 	Create(transaction *domain.Transaction) error
 	Update(id, userID, status string) error
-	TransferMoney(from domain.Account, to domain.Account, transaction *domain.Transaction) error
+	TransferMoney(from domain.Account, to domain.Account, amount float64) error
 	SendMoney(fromAccount domain.Account, recipient domain.Customer, transaction *domain.Transaction) error
 	BulkTransfer(customerIDs []string, transaction *domain.Transaction) error
 	AutoPay(autoPay domain.AutoPay) error
@@ -113,9 +113,9 @@ func (ts transactionService) Create(transaction *domain.Transaction) error {
 	})
 }
 
-func (s transactionService) TransferMoney(from domain.Account, to domain.Account, transaction *domain.Transaction) error {
+func (s transactionService) TransferMoney(from domain.Account, to domain.Account, amount float64) error {
 	return persistence.DB.Transaction(func(tx *gorm.DB) error {
-		if from.Balance < transaction.Amount {
+		if from.Balance < amount {
 			return errors.New("not enough money")
 		}
 
@@ -127,7 +127,7 @@ func (s transactionService) TransferMoney(from domain.Account, to domain.Account
 			return errors.New("cannot transfer to other customers accounts")
 		}
 
-		amount := transaction.Amount
+		transaction := domain.Transaction{}
 
 		from.Balance = utils.SafelySubtractDollars(from.Balance, amount)
 
@@ -153,7 +153,7 @@ func (s transactionService) TransferMoney(from domain.Account, to domain.Account
 		transaction.Description = fmt.Sprintf("Money transfer from %s", from.Name)
 		transaction.Status = domain.TransactionApproved
 
-		if err := s.accountService.UpdateBalance(strconv.Itoa(from.ID), &from); err != nil {
+		if err := s.accountService.UpdateBalance(strconv.Itoa(to.ID), &to); err != nil {
 			return err
 		}
 
