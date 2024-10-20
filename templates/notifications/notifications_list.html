@@ -1,32 +1,29 @@
 {{ define "notifications_list" }} {{ if gt (len .) 0 }}
 <ul class="flex flex-col gap-2">
-  {{ range . }}
-  <li class="flex items-center gap-3 border-t pt-3">
-    <div class="flex flex-col w-full">
-      <div class="text-muted">{{ .Account.Customer.FullName }} &mdash; {{ .Account.Name }}</div>
-      <div class="text-xl font-extrabold">{{ currency .Amount }}</div>
-      <div class="text-muted"><strong>Note: </strong>{{ .Description }}</div>
-    </div>
-    <div class="flex flex-col sm:flex-row gap-2 items-center shrink-0 justify-end text-sm">
-      <button
-        hx-patch="/transactions/{{ .ID }}/approve"
-        class="pill px-3 py-1.5 border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50"
-      >
-        Approve
-      </button>
-      <button
-        hx-patch="/transactions/{{.ID}}/decline"
-        class="pill px-3 py-1.5 border border-red-700 text-red-700 font-bold hover:bg-red-50"
-      >
-        Decline
-      </button>
-    </div>
-  </li>
-  {{ end }}
+    {{ range . }}
+    <li class="flex items-center gap-3 border-t pt-3">
+        <div class="flex flex-col w-full">
+            <div class="text-muted">{{ .Account.Customer.FullName }} &mdash; {{ .Account.Name }}</div>
+            <div class="text-xl font-extrabold">{{ currency .Amount }}</div>
+            <div class="text-muted"><strong>Note: </strong>{{ .Description }}</div>
+            <time class="text-muted text-xs">{{ datetime .CreatedAt }}</time>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 items-center shrink-0 justify-end text-sm">
+            <button hx-patch="/transactions/{{ .ID }}/approve"
+                class="pill px-3 py-1.5 border border-emerald-700 text-emerald-700 font-bold hover:bg-emerald-50">
+                Approve
+            </button>
+            <button hx-patch="/transactions/{{.ID}}/decline"
+                class="pill px-3 py-1.5 border border-red-700 text-red-700 font-bold hover:bg-red-50">
+                Decline
+            </button>
+        </div>
+    </li>
+    {{ end }}
 </ul>
 {{ else }}
 <div>
-  <p>You're all caught up on approvals! Kudos for staying on top of everything. 👏</p>
+    <p>You're all caught up on approvals! Kudos for staying on top of everything. 👏</p>
 </div>
 {{ end }} {{ end }} {{ define "notifications_list_oob" }}
 <div hx-swap-oob="true" id="notifications">{{ template "notifications_list" . }}</div>
