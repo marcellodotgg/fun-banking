@@ -119,6 +119,10 @@ func (s transactionService) TransferMoney(from domain.Account, to domain.Account
 			return errors.New("not enough money")
 		}
 
+		if from.ID == to.ID {
+			return errors.New("cannot transfer to same account")
+		}
+
 		amount := transaction.Amount
 
 		from.Balance = utils.SafelySubtractDollars(from.Balance, amount)

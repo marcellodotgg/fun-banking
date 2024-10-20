@@ -4,23 +4,25 @@
     <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
     {{ end }}
     <div class="w-full">
-        <!--
-            TODO(Marcello): I need to convert these to select dropdowns 
-                            when you update one dropdown, it should update
-                            the form to automatically select the other account
-                            that is available
-        -->
         <label for="from_account">From Account</label>
-        <input id="from_account" name="from_account" type="text" autocomplete="off"
-            value="{{ .Form.Data.from_account }}" required />
+        <select id="from_account" name="from_account">
+            <option selected disabled value="">Select an Account...</option>
+            {{ range .Customer.Accounts }}
+            <option value="{{ .ID }}">{{ .Name }}</option>
+            {{ end }}
+        </select>
         {{ if .Form.Errors.from_account }}
         <div class="error-message">{{ .Form.Errors.from_account }}</div>
         {{ end }}
     </div>
     <div class="w-full">
         <label for="to_account">To Account</label>
-        <input id="to_account" name="to_account" type="text" autocomplete="off" value="{{ .Form.Data.from_account }}"
-            required />
+        <select id="to_account" name="to_account">
+            <option selected disabled value="">Select an Account...</option>
+            {{ range .Customer.Accounts }}
+            <option value="{{ .ID }}">{{ .Name }}</option>
+            {{ end }}
+        </select>
         {{ if .Form.Errors.to_account }}
         <div class="error-message">{{ .Form.Errors.to_account }}</div>
         {{ end }}
