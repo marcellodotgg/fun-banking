@@ -1,5 +1,5 @@
 {{ define "account/transfer_money_form" }}
-<form hx-put="/accounts/transfer" hx-swap="outerHTML" hx-disabled-elt="input, select, button">
+<form hx-put="/customers/{{ .Customer.ID }}/transfer" hx-swap="outerHTML" hx-disabled-elt="input, select, button">
     {{ if .Form.Errors.general }}
     <div class="alert-banner warning">{{ .Form.Errors.general }}</div>
     {{ end }}

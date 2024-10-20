@@ -123,6 +123,10 @@ func (s transactionService) TransferMoney(from domain.Account, to domain.Account
 			return errors.New("cannot transfer to same account")
 		}
 
+		if from.CustomerID != to.CustomerID {
+			return errors.New("cannot transfer to other customers accounts")
+		}
+
 		amount := transaction.Amount
 
 		from.Balance = utils.SafelySubtractDollars(from.Balance, amount)
