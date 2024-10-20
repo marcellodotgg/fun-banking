@@ -3,30 +3,36 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/bytebury/fun-banking/internal/domain"
+	"github.com/bytebury/fun-banking/internal/infrastructure/persistence"
 	"github.com/bytebury/fun-banking/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 type customerHandler struct {
 	pageObject
-	bankService     service.BankService
-	customerService service.CustomerService
-	accountService  service.AccountService
-	userService     service.UserService
-	Bank            domain.Bank
-	Customer        domain.Customer
+	bankService            service.BankService
+	customerService        service.CustomerService
+	accountService         service.AccountService
+	transactionService     service.TransactionService
+	userService            service.UserService
+	Bank                   domain.Bank
+	Customer               domain.Customer
+	MAX_TRANSACTION_AMOUNT int
 }
 
 func NewCustomerHandler() customerHandler {
 	return customerHandler{
-		bankService:     service.NewBankService(),
-		customerService: service.NewCustomerService(),
-		userService:     service.NewUserService(),
-		accountService:  service.NewAccountService(),
-		Bank:            domain.Bank{},
+		bankService:            service.NewBankService(),
+		customerService:        service.NewCustomerService(),
+		userService:            service.NewUserService(),
+		accountService:         service.NewAccountService(),
+		transactionService:     service.NewTransactionService(),
+		Bank:                   domain.Bank{},
+		MAX_TRANSACTION_AMOUNT: domain.MAX_TRANSACTION_AMOUNT,
 	}
 }
 
@@ -163,6 +169,50 @@ func (h customerHandler) OpenAccount(c *gin.Context) {
 	}
 
 	c.Header("HX-Redirect", fmt.Sprintf("/accounts/%d", account.ID))
+}
+
+func (h customerHandler) OpenTransferMoneyModal(c *gin.Context) {
+	h.Reset(c)
+	h.ModalType = "transfer_money_modal"
+
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
+		c.HTML(http.StatusNotFound, "not-found", nil)
+		return
+	}
+
+	c.HTML(http.StatusOK, "modal", h)
+}
+
+// TODO(marcello): send money from account to account
+//
+//	I need to confirm that the accounts are the same owner
+//	I need to do that part in the service though.
+func (h customerHandler) TransferMoney(c *gin.Context) {
+	h.Reset(c)
+
+	var fromAccount domain.Account
+	var toAccount domain.Account
+
+	if err := persistence.DB.First(&fromAccount, "id = ?", h.Form.Data["from_account"]).Error; err != nil {
+		// error
+	}
+
+	if err := persistence.DB.First(&toAccount, "id = ?", h.Form.Data["to_account"]).Error; err != nil {
+		// error
+	}
+
+	amount, err := strconv.ParseFloat(h.Form.Data["amount"], 64)
+
+	if err != nil {
+		// error
+	}
+
+	if err := h.transactionService.TransferMoney(fromAccount, toAccount, amount); err != nil {
+		// error
+	}
+
+	c.JSON(http.StatusOK, gin.H{"value": amount})
+
 }
 
 func (h customerHandler) isOwner(customerID, userID string) bool {

@@ -1,168 +1,108 @@
 {{ define "account" }}
 <!DOCTYPE html>
 <html lang="en" theme="{{.Theme}}">
-  <head>
+
+<head>
     <title>Fun Banking | {{ .Account.Customer.FirstName}}'s {{ .Account.Name }}</title>
     <meta name="description" content="Fun Banking - TODO" />
     {{ template "layout/head" . }}
-  </head>
-  <body>
+</head>
+
+<body>
     {{ template "layout/navbar" . }}
     <main class="flex flex-col gap-4 container mt-2 mb-4">
-      <section class="card outlined flex flex-col gap-2">
-        <div>
-          <p class="font-bold eyebrow">
-            {{ .Account.Customer.FullName }}
-            <span class="text-gray-800">/</span>
-            <span id="account-name">{{ .Account.Name }}</span>
-          </p>
-          <h1 id="account-balance" class="font-extrabold text-2xl leading-1">
-            {{ currency .Account.Balance }}
-          </h1>
-          <p id="account-description" class="text-muted">
-            {{ if .Account.Description }} {{ .Account.Description }} {{ end }}
-          </p>
-        </div>
-        <ul class="flex flex-wrap gap-2 items-center text-sm">
-          <li>
-            <a
-              class="flex items-center gap-1 link-hover"
-              href="/customers/{{.Account.Customer.ID}}"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <div class="font-semibold">Back to Overview</div>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/accounts/{{.Account.ID}}/statements"
-              class="flex items-center gap-1 link-hover font-semibold"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m9 14.25 6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                />
-              </svg>
-              Statements
-            </a>
-          </li>
-          {{ if .SignedIn }}
-          <li>
-            <a
-              href="/accounts/{{ .Account.ID }}/auto-pay"
-              class="flex items-center gap-1 link-hover font-semibold"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                />
-              </svg>
-              Auto Payments
-            </a>
-          </li>
-          <li>
-            <button
-              id="open-settings"
-              hx-post="/accounts/{{ .Account.ID }}/settings"
-              hx-target="body"
-              hx-swap="beforeend"
-              class="flex items-center gap-1 link-hover font-semibold"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-              </svg>
-              Settings
+        <section class="card outlined flex flex-col gap-2">
+            <div>
+                <p class="font-bold eyebrow">
+                    {{ .Account.Customer.FullName }}
+                    <span class="text-gray-800">/</span>
+                    <span id="account-name">{{ .Account.Name }}</span>
+                </p>
+                <h1 id="account-balance" class="font-extrabold text-2xl leading-1">
+                    {{ currency .Account.Balance }}
+                </h1>
+                <p id="account-description" class="text-muted">
+                    {{ if .Account.Description }} {{ .Account.Description }} {{ end }}
+                </p>
+            </div>
+            <ul class="flex flex-wrap gap-2 items-center text-sm">
+                <li>
+                    <a class="flex items-center gap-1 link-hover" href="/customers/{{.Account.Customer.ID}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <div class="font-semibold">Back to Overview</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/accounts/{{.Account.ID}}/statements"
+                        class="flex items-center gap-1 link-hover font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m9 14.25 6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Statements
+                    </a>
+                </li>
+                {{ if .SignedIn }}
+                <li>
+                    <a href="/accounts/{{ .Account.ID }}/auto-pay"
+                        class="flex items-center gap-1 link-hover font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Auto Payments
+                    </a>
+                </li>
+                <li>
+                    <button id="open-settings" hx-post="/accounts/{{ .Account.ID }}/settings" hx-target="body"
+                        hx-swap="beforeend" class="flex items-center gap-1 link-hover font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                        Settings
+                    </button>
+                </li>
+                {{ end }}
+            </ul>
+        </section>
+        <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-bold">
+            <button hx-post="/accounts/{{.Account.ID}}/withdraw-or-deposit" hx-target="body" hx-swap="beforeend"
+                class="pill filled w-full py-3 md:py-4">
+                Withdraw or Deposit
             </button>
-          </li>
-          {{ end }}
-        </ul>
-      </section>
-      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-bold">
-        <button
-          hx-post="/accounts/{{.Account.ID}}/withdraw-or-deposit"
-          hx-target="body"
-          hx-swap="beforeend"
-          class="pill filled w-full py-3 md:py-4"
-        >
-          Withdraw or Deposit
-        </button>
-        <button
-          hx-get="/accounts/{{.Account.ID}}/send-money"
-          hx-target="body"
-          hx-swap="beforeend"
-          class="pill filled w-full py-3 md:py-4"
-        >
-          Send Money
-        </button>
-      </section>
-      <section class="flex flex-col gap-4 card outlined">
-        <h1 class="text-lg font-extrabold">This Month</h1>
-        <div id="cashflow-charts" hx-get="/accounts/{{ .Account.ID }}/cash-flow" hx-trigger="load">
-          Crunching the latest data...
-        </div>
-      </section>
-      <section class="card outlined">
-        <h1 class="text-lg font-extrabold">Transactions (All Time)</h1>
-        <span class="text-muted">
-          To view monthly statements, go to the "Statements" link at the top
-        </span>
-        <div
-          id="transactions-list"
-          hx-get="/accounts/{{ .Account.ID }}/transactions"
-          hx-trigger="load"
-        >
-          Loading...
-        </div>
-      </section>
+            <button hx-get="/accounts/{{.Account.ID}}/send-money" hx-target="body" hx-swap="beforeend"
+                class="pill filled w-full py-3 md:py-4">
+                Send Money
+            </button>
+        </section>
+        <section class="flex flex-col gap-4 card outlined">
+            <h1 class="text-lg font-extrabold">This Month</h1>
+            <div id="cashflow-charts" hx-get="/accounts/{{ .Account.ID }}/cash-flow" hx-trigger="load">
+                Crunching the latest data...
+            </div>
+        </section>
+        <section class="card outlined">
+            <h1 class="text-lg font-extrabold">Transactions (All Time)</h1>
+            <span class="text-muted">
+                To view monthly statements, go to the "Statements" link at the top
+            </span>
+            <div id="transactions-list" hx-get="/accounts/{{ .Account.ID }}/transactions" hx-trigger="load">
+                Loading...
+            </div>
+        </section>
     </main>
     {{ template "layout/footer" . }} {{ template "layout/scripts" . }}
-  </body>
+</body>
+
 </html>
 {{ end }}
