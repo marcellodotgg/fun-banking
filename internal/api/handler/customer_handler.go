@@ -190,29 +190,59 @@ func (h customerHandler) OpenTransferMoneyModal(c *gin.Context) {
 func (h customerHandler) TransferMoney(c *gin.Context) {
 	h.Reset(c)
 
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
+		h.Form.Errors["general"] = "Could not find customer"
+		c.HTML(http.StatusNotFound, "account/transfer-money-form", h)
+		return
+	}
+
 	var fromAccount domain.Account
 	var toAccount domain.Account
 
 	if err := persistence.DB.First(&fromAccount, "id = ?", h.Form.Data["from_account"]).Error; err != nil {
-		// error
+		h.Form.Errors["general"] = "Account does not exist"
+		c.HTML(http.StatusNotFound, "account/transfer-money-form", h)
+		return
 	}
 
 	if err := persistence.DB.First(&toAccount, "id = ?", h.Form.Data["to_account"]).Error; err != nil {
-		// error
+		h.Form.Errors["general"] = "Account does not exist"
+		c.HTML(http.StatusNotFound, "account/transfer_money_form", h)
+		return
 	}
 
 	amount, err := strconv.ParseFloat(h.Form.Data["amount"], 64)
 
 	if err != nil {
-		// error
+		h.Form.Errors["amount"] = "Invalid currency value"
+		c.HTML(http.StatusUnprocessableEntity, "account/transfer_money_form", h)
 	}
 
 	if err := h.transactionService.TransferMoney(fromAccount, toAccount, amount); err != nil {
-		// error
+		switch err := err.Error(); err {
+		case "not enough money":
+			h.Form.Errors["from_account"] = "You do not have enough money in this account"
+			c.HTML(http.StatusUnprocessableEntity, "account/transfer_money_form", h)
+			return
+		case "cannot transfer to same account":
+			h.Form.Errors["to_account"] = "You cannot transfer money to the same account"
+			c.HTML(http.StatusUnprocessableEntity, "account/transfer_money_form", h)
+			return
+		case "cannot transfer to other customers accounts":
+			h.Form.Errors["general"] = "You do not have enough money in this account"
+			c.HTML(http.StatusUnprocessableEntity, "account/transfer_money_form", h)
+			return
+		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{"value": amount})
+	if err := h.customerService.FindByID(c.Param("id"), &h.Customer); err != nil {
+		h.Form.Errors["general"] = "Could not find customer"
+		c.HTML(http.StatusNotFound, "account/transfer-money-form", h)
+		return
+	}
 
+	c.Header("HX-Trigger", "closeModal")
+	c.HTML(http.StatusOK, "account/transfer_money_oob", h)
 }
 
 func (h customerHandler) isOwner(customerID, userID string) bool {

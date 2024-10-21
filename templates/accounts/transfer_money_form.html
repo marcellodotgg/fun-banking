@@ -6,9 +6,12 @@
     <div class="w-full">
         <label for="from_account">From Account</label>
         <select id="from_account" name="from_account">
+            {{ if not .Form.Data.from_account }}
             <option selected disabled value="">Select an Account...</option>
+            {{ end }}
             {{ range .Customer.Accounts }}
-            <option value="{{ .ID }}">{{ .Name }}</option>
+            <option value="{{ .ID }}" {{ if streq $.Form.Data.from_account .ID }} selected {{ end }}>{{ .Name }}
+            </option>
             {{ end }}
         </select>
         {{ if .Form.Errors.from_account }}
@@ -18,9 +21,11 @@
     <div class="w-full">
         <label for="to_account">To Account</label>
         <select id="to_account" name="to_account">
+            {{ if not .Form.Data.to_account }}
             <option selected disabled value="">Select an Account...</option>
+            {{ end }}
             {{ range .Customer.Accounts }}
-            <option value="{{ .ID }}">{{ .Name }}</option>
+            <option value="{{ .ID }}" {{ if streq $.Form.Data.to_account .ID }} selected {{ end }}>{{ .Name }}</option>
             {{ end }}
         </select>
         {{ if .Form.Errors.to_account }}

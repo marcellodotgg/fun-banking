@@ -127,37 +127,39 @@ func (s transactionService) TransferMoney(from domain.Account, to domain.Account
 			return errors.New("cannot transfer to other customers accounts")
 		}
 
-		transaction := domain.Transaction{}
+		fromTransaction := domain.Transaction{}
 
 		from.Balance = utils.SafelySubtractDollars(from.Balance, amount)
 
-		transaction.Amount = amount * -1
-		transaction.Balance = from.Balance
-		transaction.AccountID = from.ID
-		transaction.Description = fmt.Sprintf("Money transfer to %s", to.Name)
-		transaction.Status = domain.TransactionApproved
+		fromTransaction.Amount = amount * -1
+		fromTransaction.Balance = from.Balance
+		fromTransaction.AccountID = from.ID
+		fromTransaction.Description = fmt.Sprintf("Money transfer to %s", to.Name)
+		fromTransaction.Status = domain.TransactionApproved
 
 		if err := s.accountService.UpdateBalance(strconv.Itoa(from.ID), &from); err != nil {
 			return err
 		}
 
-		if err := persistence.DB.Create(&transaction).Error; err != nil {
+		if err := persistence.DB.Create(&fromTransaction).Error; err != nil {
 			return err
 		}
 
+		toTransaction := domain.Transaction{}
+
 		to.Balance = utils.SafelyAddDollars(to.Balance, amount)
 
-		transaction.Amount = amount
-		transaction.Balance = to.Balance
-		transaction.AccountID = to.ID
-		transaction.Description = fmt.Sprintf("Money transfer from %s", from.Name)
-		transaction.Status = domain.TransactionApproved
+		toTransaction.Amount = amount
+		toTransaction.Balance = to.Balance
+		toTransaction.AccountID = to.ID
+		toTransaction.Description = fmt.Sprintf("Money transfer from %s", from.Name)
+		toTransaction.Status = domain.TransactionApproved
 
 		if err := s.accountService.UpdateBalance(strconv.Itoa(to.ID), &to); err != nil {
 			return err
 		}
 
-		return persistence.DB.Create(&transaction).Error
+		return persistence.DB.Create(&toTransaction).Error
 	})
 }
 
