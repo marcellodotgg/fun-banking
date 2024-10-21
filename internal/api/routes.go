@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"os"
@@ -34,6 +35,7 @@ func Start() {
 		"mulfloat": func(a, b float64) float64 { return a * b },
 		"datetime": func(dateTime time.Time) string { return dateTime.Format("January 02, 2006 at 3:04 PM") },
 		"date":     func(date time.Time) string { return date.Format("January 02, 2006") },
+		"streq":    func(a, b interface{}) bool { return fmt.Sprintf("%v", a) == fmt.Sprintf("%v", b) },
 	})
 	// Load Templates
 	router.LoadHTMLGlob("templates/**/*")
@@ -137,7 +139,9 @@ func setupCustomerRoutes() {
 		DELETE(":id", middleware.UserAuth(), handler.Delete).
 		GET(":id/open-account", middleware.UserAuth(), handler.OpenAccountModal).
 		PUT(":id/open-account", middleware.UserAuth(), handler.OpenAccount).
-		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal)
+		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
+		POST(":id/open-transfer-modal", middleware.AnyAuth(), handler.OpenTransferMoneyModal).
+		PUT(":id/transfer", middleware.AnyAuth(), handler.TransferMoney)
 }
 
 func setupAccountRoutes() {

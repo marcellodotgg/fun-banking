@@ -35,6 +35,9 @@
         {{ if eq .ModalType "create_account" }}
         {{ template "account/create_modal" . }}
         {{ end }}
+        {{ if eq .ModalType "transfer_money_modal" }}
+        {{ template "account/transfer_modal" . }}
+        {{ end }}
     </div>
 </div>
 {{ end }}
