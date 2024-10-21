@@ -1,0 +1,9 @@
+{{ define "account/transfer_modal" }}
+<section class="wrapper">
+    <header>
+        <h1>Transfer Money</h1>
+        <p class="text-muted">Transfer money from or to another account that is yours.</p>
+    </header>
+    <div id="account-settings-form">{{ template "account/transfer_money_form" . }}</div>
+</section>
+{{ end }}

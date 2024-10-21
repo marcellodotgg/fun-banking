@@ -101,6 +101,11 @@
                         hx-swap="beforeend" class="btn-primary px-3 py-1.5 text-sm">Open
                         Account</button>
                 </div>
+                {{ else }}
+                <button hx-post="/customers/{{ .Customer.ID }}/open-transfer-modal" hx-target="body" hx-swap="beforeend"
+                    class="pill font-bold filled w-full mt-2 py-2 md:py-2">
+                    Transfer Money
+                </button>
                 {{ end }}
             </section>
         </div>
