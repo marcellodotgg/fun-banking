@@ -216,6 +216,10 @@ func (h customerHandler) TransferMoney(c *gin.Context) {
 
 	if err := h.transactionService.TransferMoney(fromAccount, toAccount, amount); err != nil {
 		switch err := err.Error(); err {
+		case "amount must be greater than 0":
+			h.Form.Errors["amount"] = "Amount must be greater than 0"
+			c.HTML(http.StatusUnprocessableEntity, "account/transfer_money_form", h)
+			return
 		case "not enough money":
 			h.Form.Errors["from_account"] = "You do not have enough money in this account"
 			c.HTML(http.StatusUnprocessableEntity, "account/transfer_money_form", h)
