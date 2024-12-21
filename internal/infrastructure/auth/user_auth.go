@@ -26,7 +26,7 @@ func (a userAuth) Login(usernameOrEmail, password string) (string, error) {
 	if !user.Verified {
 		return "", errors.New("not verified")
 	}
-	
+
 	if !a.verifyPassword(password, user.Password) {
 		return "", errors.New("INVALID password")
 	}
