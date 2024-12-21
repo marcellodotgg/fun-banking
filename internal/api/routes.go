@@ -86,7 +86,7 @@ func setupSessionRoutes() {
 func setupUserRoutes() {
 	handler := handler.NewUserHandler()
 
-	router.GET("signup", middleware.NoAuth(), handler.SignUp)
+	router.GET("signup", middleware.FeatureToggleAuth(), middleware.NoAuth(), handler.SignUp)
 	router.GET("settings", middleware.UserAuth(), handler.Settings)
 	router.GET("preferences", middleware.UserAuth(), handler.Preferences)
 	router.PATCH("preferences", middleware.UserAuth(), handler.UpdatePreferences)
@@ -118,15 +118,15 @@ func setupBankRoutes() {
 		Group("banks").
 		GET("", middleware.UserAuth(), bank.MyBanks).
 		PUT("", middleware.UserAuth(), bank.CreateBank).
-		POST("create", middleware.UserAuth(), bank.OpenCreateModal).
+		POST("create", middleware.FeatureToggleAuth(), middleware.UserAuth(), bank.OpenCreateModal).
 		GET(":id", middleware.UserAuth(), bank.ViewBank).
 		PATCH(":id", middleware.UserAuth(), bank.UpdateBank).
 		DELETE(":id", middleware.UserAuth(), bank.Delete).
 		POST(":id/settings", middleware.UserAuth(), bank.OpenSettingsModal).
 		GET(":id/customers", middleware.AnyAuth(), bank.CustomerSearch).
 		GET(":id/customers-filter", middleware.UserAuth(), bank.FilterCustomers).
-		POST(":id/create-customer", middleware.UserAuth(), bank.OpenCreateCustomerModal).
-		PUT(":id/create-customer", middleware.UserAuth(), bank.CreateCustomer)
+		POST(":id/create-customer", middleware.FeatureToggleAuth(), middleware.UserAuth(), bank.OpenCreateCustomerModal).
+		PUT(":id/create-customer", middleware.FeatureToggleAuth(), middleware.UserAuth(), bank.CreateCustomer)
 }
 
 func setupCustomerRoutes() {
@@ -137,11 +137,11 @@ func setupCustomerRoutes() {
 		GET(":id", middleware.AnyAuth(), handler.GetCustomer).
 		PATCH(":id", middleware.UserAuth(), handler.Update).
 		DELETE(":id", middleware.UserAuth(), handler.Delete).
-		GET(":id/open-account", middleware.UserAuth(), handler.OpenAccountModal).
-		PUT(":id/open-account", middleware.UserAuth(), handler.OpenAccount).
+		GET(":id/open-account", middleware.FeatureToggleAuth(), middleware.UserAuth(), handler.OpenAccountModal).
+		PUT(":id/open-account", middleware.FeatureToggleAuth(), middleware.UserAuth(), handler.OpenAccount).
 		POST(":id/settings", middleware.UserAuth(), handler.OpenSettingsModal).
-		POST(":id/open-transfer-modal", middleware.AnyAuth(), handler.OpenTransferMoneyModal).
-		PUT(":id/transfer", middleware.AnyAuth(), handler.TransferMoney)
+		POST(":id/open-transfer-modal", middleware.FeatureToggleAuth(), middleware.AnyAuth(), handler.OpenTransferMoneyModal).
+		PUT(":id/transfer", middleware.FeatureToggleAuth(), middleware.AnyAuth(), handler.TransferMoney)
 }
 
 func setupAccountRoutes() {
@@ -155,14 +155,14 @@ func setupAccountRoutes() {
 		POST(":id/settings", middleware.UserAuth(), account.OpenSettingsModal).
 		GET(":id/cash-flow", middleware.AnyAuth(), account.CashFlow).
 		POST(":id/withdraw-or-deposit", middleware.AnyAuth(), account.OpenWithdrawOrDepositModal).
-		PUT(":id/withdraw-or-deposit", middleware.AnyAuth(), account.WithdrawOrDeposit).
+		PUT(":id/withdraw-or-deposit", middleware.FeatureToggleAuth(), middleware.AnyAuth(), account.WithdrawOrDeposit).
 		GET(":id/send-money", middleware.AnyAuth(), account.OpenSendMoneyModal).
 		PUT(":id/send-money", middleware.AnyAuth(), account.SendMoney).
 		GET(":id/statements", middleware.AnyAuth(), account.Statements).
-		POST(":id/auto-pay", middleware.UserAuth(), account.OpenAutoPayModal).
+		POST(":id/auto-pay", middleware.FeatureToggleAuth(), middleware.UserAuth(), account.OpenAutoPayModal).
 		GET(":id/auto-pay", middleware.UserAuth(), account.AutoPay).
-		PUT(":id/auto-pay", middleware.UserAuth(), account.CreateAutoPay).
-		PATCH(":id/auto-pay/:auto_pay_id", middleware.UserAuth(), account.UpdateAutoPay)
+		PUT(":id/auto-pay", middleware.FeatureToggleAuth(), middleware.UserAuth(), account.CreateAutoPay).
+		PATCH(":id/auto-pay/:auto_pay_id", middleware.FeatureToggleAuth(), middleware.UserAuth(), account.UpdateAutoPay)
 }
 
 func setupTransactionRoutes() {
@@ -170,11 +170,11 @@ func setupTransactionRoutes() {
 
 	router.
 		Group("transactions").
-		PUT("", middleware.AnyAuth(), handler.Create).
-		PATCH(":id/approve", middleware.UserAuth(), handler.Approve).
-		PATCH(":id/decline", middleware.UserAuth(), handler.Decline).
+		PUT("", middleware.FeatureToggleAuth(), middleware.AnyAuth(), handler.Create).
+		PATCH(":id/approve", middleware.FeatureToggleAuth(), middleware.UserAuth(), handler.Approve).
+		PATCH(":id/decline", middleware.FeatureToggleAuth(), middleware.UserAuth(), handler.Decline).
 		GET("open-bulk-transfer", middleware.UserAuth(), handler.OpenBulkTransferModal).
-		PUT("bulk", middleware.UserAuth(), handler.BulkTransfer)
+		PUT("bulk", middleware.FeatureToggleAuth(), middleware.UserAuth(), handler.BulkTransfer)
 }
 
 func setupAppDrawerRoutes() {
