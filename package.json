@@ -1,0 +1,22 @@
+{
+  "name": "fun-banking",
+  "version": "1.0.0",
+  "description": "The official Fun Banking rewrite with Go, HTMX, and SQLite. This inspiration came from needed server-side rendering to boost performance and SEO, as well as needing to keep our cost down so that we can be in business; thus the \"boring\" architecture.",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcellodotgg/fun-banking.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcellodotgg/fun-banking/issues"
+  },
+  "homepage": "https://github.com/marcellodotgg/fun-banking#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
